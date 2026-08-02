@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+
+# Turborepo
+.turbo/
+
+# Build outputs
+dist/
+build/
+
+# Environment variables
+.env
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
+
+# Claude Code local settings
+**/.claude/settings.local.json
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

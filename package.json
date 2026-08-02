@@ -1,0 +1,8 @@
+{
+  "name": "family-closet",
+  "private": true,
+  "scripts": {
+    "build": "pnpm --filter web build",
+    "dev": "pnpm --filter web dev"
+  }
+}

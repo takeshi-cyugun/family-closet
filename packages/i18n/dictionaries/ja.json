@@ -1,0 +1,24 @@
+{
+  "common": {
+    "appName": "ファミリークロゼット",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "loading": "読み込み中..."
+  },
+  "nav": {
+    "dashboard": "一覧",
+    "add": "追加",
+    "settings": "設定"
+  },
+  "plans": {
+    "fitting": "フィッティング (14日間お試し)",
+    "chest": "チェスト (最大5名 / 50着)",
+    "walkIn": "ウォークイン (無制限)"
+  },
+  "roles": {
+    "owner": "代表者",
+    "member": "メンバー"
+  }
+}

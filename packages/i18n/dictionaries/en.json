@@ -1,0 +1,24 @@
+{
+  "common": {
+    "appName": "Family Closet",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading..."
+  },
+  "nav": {
+    "dashboard": "Items",
+    "add": "Add",
+    "settings": "Settings"
+  },
+  "plans": {
+    "fitting": "Fitting (14-day Trial)",
+    "chest": "Chest (Max 5 members / 50 items)",
+    "walkIn": "Walk-in (Unlimited)"
+  },
+  "roles": {
+    "owner": "Owner",
+    "member": "Member"
+  }
+}
