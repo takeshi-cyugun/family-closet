@@ -234,14 +234,20 @@ otp_length = 6
 otp_expiry = 3600
 
 # Use a production-ready SMTP server
-# [auth.email.smtp]
-# enabled = true
-# host = "smtp.sendgrid.net"
-# port = 587
-# user = "apikey"
-# pass = "env(SENDGRID_API_KEY)"
-# admin_email = "admin@email.com"
-# sender_name = "Admin"
+# さくらインターネット(レンタルサーバー、初期ドメイン doocmo.sakura.ne.jp)の独自ドメインメールを中継に使用。
+# 本番プロジェクトへの反映は `supabase config push` ではなく、Supabase Dashboard
+# (Authentication → Emails → SMTP Settings) で直接同じ値を入力する運用にしている。
+# 理由: このファイルはローカル開発(`supabase start`)にも使う共有ファイルのため、
+# ここを enabled = true にすると、ローカルでも local_smtp(疑似受信箱)ではなく実メール送信を
+# 試みてしまう。そのためローカルでは enabled = false のままにし、以下はDashboard入力用の控えとして残す。
+[auth.email.smtp]
+enabled = false
+host = "doocmo.sakura.ne.jp"
+port = 587
+user = "info@family-closet.com" # SMTP認証用の既存メールボックス(noreply@は未作成のため、こちらを使用。Fromはadmin_emailのnoreply@のまま)
+pass = "env(SAKURA_SMTP_PASSWORD)"
+admin_email = "noreply@family-closet.com" # 送信ヘッダーのFrom。SMTP認証アドレスと異なっていてよい
+sender_name = "ファミリークロゼット"
 
 # Uncomment to customize email template
 # [auth.email.template.invite]

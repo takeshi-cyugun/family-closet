@@ -19,6 +19,8 @@ export const createSupabaseAuthClient = () => {
 };
 
 // Drizzle ORM クライアント生成
+// prepare: false — SupabaseのコネクションプーラーをTransactionモード(ポート6543)で使う場合、
+// prepared statementに対応していないため必須。直結(5432)でも副作用はないため常時無効化しておく。
 const connectionString = process.env.DATABASE_URL!;
-const client = postgres(connectionString);
+const client = postgres(connectionString, { prepare: false });
 export const db = drizzle(client, { schema });
