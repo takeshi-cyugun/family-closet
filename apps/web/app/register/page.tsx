@@ -1,14 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { FamilyIdField } from "./_components/FamilyIdField";
 import type { FamilyIdStatus } from "./_components/FamilyIdField";
-import { MOCK_GUEST_ITEM_COUNT, MOCK_HAS_GUEST_SESSION } from "./_data/mock";
+import { registerFamily } from "../actions/registerFamily";
+import { getSettingsData } from "../actions/settings";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 const MEMBER_ID_PATTERN = /^[a-zA-Z0-9_-]{2,20}$/;
+
+type Plan = "chest" | "walk_in";
 
 type Errors = Partial<
   Record<"email" | "password" | "passwordConfirm" | "familyId" | "memberId" | "displayName" | "agreeTerms", string>
@@ -22,12 +25,27 @@ export default function RegisterPage() {
   const [familyIdStatus, setFamilyIdStatus] = useState<FamilyIdStatus>("idle");
   const [memberId, setMemberId] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [plan, setPlan] = useState<Plan>("chest");
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [migrateGuestData, setMigrateGuestData] = useState(MOCK_HAS_GUEST_SESSION);
+
+  const [hasGuestSession, setHasGuestSession] = useState(false);
+  const [guestItemCount, setGuestItemCount] = useState(0);
+  const [migrateGuestData, setMigrateGuestData] = useState(false);
 
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [createdFamilyId, setCreatedFamilyId] = useState<string | null>(null);
+
+  useEffect(() => {
+    getSettingsData().then((settings) => {
+      if (settings?.isGuest) {
+        setHasGuestSession(true);
+        setGuestItemCount(settings.itemCount);
+        setMigrateGuestData(true);
+      }
+    });
+  }, []);
 
   function validate(): Errors {
     const next: Errors = {};
@@ -49,9 +67,26 @@ export default function RegisterPage() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    setSubmitError(null);
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    const result = await registerFamily({
+      email,
+      password,
+      familyId,
+      memberId,
+      displayName: displayName.trim(),
+      plan,
+      migrateGuestData: hasGuestSession && migrateGuestData,
+    });
+
     setSubmitting(false);
+
+    if (!result.success) {
+      setSubmitError(result.error);
+      return;
+    }
+
     setCreatedFamilyId(familyId);
   }
 
@@ -63,18 +98,21 @@ export default function RegisterPage() {
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           ファミリーID「{createdFamilyId}」を作成しました。
           <br />
-          {email} 宛に本人確認用のメールを送信しましたので、メール内のリンクをご確認ください。
+          {email} 宛に確認メールを送信しましたので、メール内のリンクをクリックしてください。
         </p>
-        {migrateGuestData && MOCK_HAS_GUEST_SESSION && (
+        {hasGuestSession && migrateGuestData && (
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            お試し利用中の洋服データ{MOCK_GUEST_ITEM_COUNT}着を引き継ぎました。
+            お試し利用中の洋服データ{guestItemCount}着を引き継ぎました。
           </p>
         )}
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          メール確認が完了するまでログインできません。
+        </p>
         <Link
-          href="/dashboard"
+          href="/"
           className="mt-2 rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white dark:bg-white dark:text-black"
         >
-          ダッシュボードへ進む
+          トップに戻る
         </Link>
       </div>
     );
@@ -188,7 +226,35 @@ export default function RegisterPage() {
             )}
           </div>
 
-          {MOCK_HAS_GUEST_SESSION && (
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium">プラン選択</span>
+            <label className="flex items-start gap-2 text-sm">
+              <input
+                type="radio"
+                name="plan"
+                checked={plan === "chest"}
+                onChange={() => setPlan("chest")}
+                className="mt-0.5 h-4 w-4 shrink-0"
+              />
+              <span>
+                チェストプラン（無料・メンバー5人まで・50着まで）
+              </span>
+            </label>
+            <label className="flex items-start gap-2 text-sm">
+              <input
+                type="radio"
+                name="plan"
+                checked={plan === "walk_in"}
+                onChange={() => setPlan("walk_in")}
+                className="mt-0.5 h-4 w-4 shrink-0"
+              />
+              <span>
+                ウォークインプラン（有料・メンバー数/着数無制限）
+              </span>
+            </label>
+          </div>
+
+          {hasGuestSession && (
             <label className="flex items-start gap-2 text-sm">
               <input
                 type="checkbox"
@@ -197,7 +263,7 @@ export default function RegisterPage() {
                 className="mt-0.5 h-4 w-4 shrink-0"
               />
               <span>
-                お試し利用中のデータ({MOCK_GUEST_ITEM_COUNT}着)を引き継ぐ
+                お試し利用中のデータ({guestItemCount}着)を引き継ぐ
               </span>
             </label>
           )}
@@ -217,6 +283,8 @@ export default function RegisterPage() {
           {errors.agreeTerms && (
             <p className="-mt-4 text-xs text-red-600 dark:text-red-400">{errors.agreeTerms}</p>
           )}
+
+          {submitError && <p className="text-xs text-red-600 dark:text-red-400">{submitError}</p>}
 
           <button
             type="submit"

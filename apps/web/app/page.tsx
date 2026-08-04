@@ -10,19 +10,14 @@ import type { LanguageCode } from "./_lib/i18n";
 
 const FEATURES = [
   {
-    icon: "🤖",
-    title: "AI自動タグ付け",
-    description: "写真を撮るだけでカテゴリや色をAIが自動認識。入力の手間を省きます。",
-  },
-  {
     icon: "👨‍👩‍👧‍👦",
     title: "家族で共有",
     description: "誰のどの服が使用中か保管中かを、家族みんなでいつでも確認できます。",
   },
   {
-    icon: "🌐",
-    title: "多言語対応",
-    description: "日本語・English・中文（简体/繁體）に対応。家族それぞれの言語で利用できます。",
+    icon: "🤖",
+    title: "AI自動タグ付け",
+    description: "写真を撮るだけでカテゴリや色をAIが自動認識。入力の手間を省きます。",
   },
 ] as const;
 

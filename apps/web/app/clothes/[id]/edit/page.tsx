@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ClothesForm } from "../../_components/ClothesForm";
-import { findClothesById } from "../../../_lib/clothes";
+import { getClothesDetail } from "../../../actions/clothes";
 
 export default async function EditClothesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const item = findClothesById(id);
-  if (!item) notFound();
+  const data = await getClothesDetail(id);
+  if (!data) notFound();
+  const item = data.item;
 
   return (
     <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">

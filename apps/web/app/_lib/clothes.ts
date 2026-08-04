@@ -37,6 +37,7 @@ export type MemberRole = "admin" | "member";
 
 export type Member = {
   id: string;
+  memberId: string;
   name: string;
   role: MemberRole;
 };
@@ -70,6 +71,28 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const STATUSES: ClothesStatus[] = ["使用中", "保管中", "譲渡/廃棄予定"];
+
+export type DbClothesStatus = "in_use" | "stored" | "disposal_planned";
+
+const DB_TO_UI_STATUS: Record<DbClothesStatus, ClothesStatus> = {
+  in_use: "使用中",
+  stored: "保管中",
+  disposal_planned: "譲渡/廃棄予定",
+};
+
+const UI_TO_DB_STATUS: Record<ClothesStatus, DbClothesStatus> = {
+  使用中: "in_use",
+  保管中: "stored",
+  "譲渡/廃棄予定": "disposal_planned",
+};
+
+export function mapDbStatusToUiStatus(status: string): ClothesStatus {
+  return DB_TO_UI_STATUS[status as DbClothesStatus] ?? "使用中";
+}
+
+export function mapUiStatusToDbStatus(status: ClothesStatus): DbClothesStatus {
+  return UI_TO_DB_STATUS[status];
+}
 
 export const SEASONS: Season[] = ["通年", "春", "夏", "秋", "冬", "春夏", "秋冬"];
 
@@ -113,17 +136,11 @@ export function getCategoryIcon(category: string): string {
 }
 
 export const mockMembers: Member[] = [
-  { id: "dad", name: "パパ", role: "admin" },
-  { id: "mom", name: "ママ", role: "member" },
-  { id: "elder-daughter", name: "長女", role: "member" },
-  { id: "son", name: "長男", role: "member" },
+  { id: "dad", memberId: "dad", name: "パパ", role: "admin" },
+  { id: "mom", memberId: "mom", name: "ママ", role: "member" },
+  { id: "elder-daughter", memberId: "elder-daughter", name: "長女", role: "member" },
+  { id: "son", memberId: "son", name: "長男", role: "member" },
 ];
-
-export function addMember(input: { id: string; name: string }): Member {
-  const created: Member = { id: input.id, name: input.name, role: "member" };
-  mockMembers.push(created);
-  return created;
-}
 
 export const mockClothes: ClothesItem[] = [
   { id: "1", name: "ダウンコート", category: "コート", color: "ネイビー", ownerId: "dad", status: "使用中", season: "冬", size: "L" },

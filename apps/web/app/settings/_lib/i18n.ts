@@ -1,6 +1,6 @@
 import type { LanguageCode } from "../../_lib/i18n";
 import type { MemberRole } from "../../_lib/clothes";
-import type { PlanTier } from "../_data/mock";
+import type { PlanTier } from "../_data/constants";
 
 export type SettingsDictionary = {
   pageTitle: string;

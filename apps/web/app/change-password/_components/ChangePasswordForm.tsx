@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { clearForcePasswordChange, getPendingLogin } from "../../_lib/session";
+import { changePassword } from "../../actions/changePassword";
 
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
@@ -15,17 +15,14 @@ export function ChangePasswordForm() {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function validate(): Errors {
     const next: Errors = {};
-    const pending = getPendingLogin();
 
     if (!currentPassword) {
       next.currentPassword = "現在のパスワードを入力してください";
-    } else if (pending && currentPassword !== pending.currentPassword) {
-      next.currentPassword = "現在のパスワードが正しくありません";
     }
-
     if (!PASSWORD_PATTERN.test(newPassword)) {
       next.newPassword = "8文字以上の英数字混合で入力してください";
     }
@@ -42,11 +39,16 @@ export function ChangePasswordForm() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    setSubmitError(null);
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    const result = await changePassword(currentPassword, newPassword);
     setSubmitting(false);
 
-    clearForcePasswordChange();
+    if (!result.success) {
+      setSubmitError(result.error);
+      return;
+    }
+
     router.push("/dashboard");
   }
 
@@ -98,6 +100,8 @@ export function ChangePasswordForm() {
           <p className="text-xs text-red-600 dark:text-red-400">{errors.newPasswordConfirm}</p>
         )}
       </div>
+
+      {submitError && <p className="text-xs text-red-600 dark:text-red-400">{submitError}</p>}
 
       <button
         type="submit"

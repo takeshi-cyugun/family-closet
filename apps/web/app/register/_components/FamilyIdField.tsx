@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { checkFamilyIdAvailability } from "../_data/mock";
+import { checkFamilyIdAvailability } from "../../actions/registerFamily";
 
 const FAMILY_ID_PATTERN = /^[a-zA-Z0-9-]{3,32}$/;
 

@@ -3,17 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-  STATUSES,
-  deleteClothesItem,
-  getCategoryIcon,
-  mockMembers,
-  updateClothesItem,
-} from "../../../_lib/clothes";
+import { STATUSES, getCategoryIcon, mapUiStatusToDbStatus } from "../../../_lib/clothes";
 import type { ClothesItem, ClothesStatus } from "../../../_lib/clothes";
+import { deleteClothes, updateClothesStatus } from "../../../actions/clothes";
 
 type ClothesDetailProps = {
   item: ClothesItem;
+  ownerName: string;
+  familyId: string;
   prevId: string | null;
   nextId: string | null;
   closeTo: "back" | string;
@@ -61,27 +58,41 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function ClothesDetailContent({ item: initialItem, prevId, nextId, closeTo }: ClothesDetailProps) {
+export function ClothesDetailContent({
+  item: initialItem,
+  ownerName,
+  familyId,
+  prevId,
+  nextId,
+  closeTo,
+}: ClothesDetailProps) {
   const router = useRouter();
   const [item, setItem] = useState(initialItem);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
-
-  const owner = mockMembers.find((member) => member.id === item.ownerId);
+  const [statusUpdating, setStatusUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   function handleClose() {
     if (closeTo === "back") router.back();
     else router.push(closeTo);
   }
 
-  function handleStatusChange(status: ClothesStatus) {
-    if (status === item.status) return;
-    const updated = updateClothesItem(item.id, { ...item, status });
-    if (updated) setItem(updated);
+  async function handleStatusChange(status: ClothesStatus) {
+    if (status === item.status || statusUpdating) return;
+    setStatusUpdating(true);
+    const result = await updateClothesStatus(item.id, familyId, mapUiStatusToDbStatus(status));
+    setStatusUpdating(false);
+    if (result.success) setItem((prev) => ({ ...prev, status }));
   }
 
-  function handleDelete() {
-    deleteClothesItem(item.id);
-    router.push("/dashboard");
+  async function handleDelete() {
+    setDeleting(true);
+    const result = await deleteClothes(item.id, familyId);
+    if (result.success) {
+      router.push("/dashboard");
+    } else {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -121,8 +132,9 @@ export function ClothesDetailContent({ item: initialItem, prevId, nextId, closeT
             <button
               key={status}
               type="button"
+              disabled={statusUpdating}
               onClick={() => handleStatusChange(status)}
-              className={`rounded-full px-3 py-1.5 text-sm font-medium ${
+              className={`rounded-full px-3 py-1.5 text-sm font-medium disabled:opacity-50 ${
                 status === item.status
                   ? STATUS_BADGE_CLASS[status]
                   : "bg-black/5 text-neutral-500 dark:bg-white/10 dark:text-neutral-400"
@@ -135,7 +147,7 @@ export function ClothesDetailContent({ item: initialItem, prevId, nextId, closeT
 
         <dl className="mt-4 divide-y divide-black/10 text-sm dark:divide-white/10">
           <Row label="カテゴリ" value={item.category || "-"} />
-          <Row label="オーナー" value={owner?.name ?? "不明"} />
+          <Row label="オーナー" value={ownerName} />
           <Row label="シーズン" value={item.season} />
           <Row label="サイズ" value={item.size} />
           <Row label="登録日" value={item.createdAt ?? "-"} />
@@ -166,17 +178,19 @@ export function ClothesDetailContent({ item: initialItem, prevId, nextId, closeT
             <div className="flex gap-2">
               <button
                 type="button"
+                disabled={deleting}
                 onClick={() => setConfirmingDelete(false)}
-                className="flex-1 rounded-md border border-black/10 py-2 text-sm dark:border-white/15"
+                className="flex-1 rounded-md border border-black/10 py-2 text-sm disabled:opacity-50 dark:border-white/15"
               >
                 キャンセル
               </button>
               <button
                 type="button"
+                disabled={deleting}
                 onClick={handleDelete}
-                className="flex-1 rounded-md bg-red-600 py-2 text-sm font-medium text-white"
+                className="flex-1 rounded-md bg-red-600 py-2 text-sm font-medium text-white disabled:opacity-50"
               >
-                削除する
+                {deleting ? "削除中..." : "削除する"}
               </button>
             </div>
           </div>

@@ -9,7 +9,9 @@ import type { FilterState } from "./_components/FilterBar";
 import { ClothesGrid } from "./_components/ClothesGrid";
 import { Pagination } from "./_components/Pagination";
 import { GuestTrialBanner } from "./_components/GuestTrialBanner";
-import { mockClothes, mockMembers } from "../_lib/clothes";
+import { getClothesForFamily } from "../actions/clothes";
+import { getFamilyMembers } from "../actions/members";
+import type { ClothesItem, Member } from "../_lib/clothes";
 import { useLanguage } from "../_lib/LanguageContext";
 import { getDashboardDictionary } from "./_lib/i18n";
 
@@ -19,14 +21,30 @@ export default function DashboardPage() {
   const [selectedMemberId, setSelectedMemberId] = useState(ALL_ID);
   const [filter, setFilter] = useState<FilterState>(EMPTY_FILTER);
   const [page, setPage] = useState(1);
+  const [clothes, setClothes] = useState<ClothesItem[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const { language } = useLanguage();
   const t = getDashboardDictionary(language);
 
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([getClothesForFamily(), getFamilyMembers()]).then(([items, familyMembers]) => {
+      if (cancelled) return;
+      setClothes(items);
+      setMembers(familyMembers);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const filteredClothes = useMemo(() => {
     const keyword = filter.keyword.trim().toLowerCase();
 
-    return mockClothes.filter((item) => {
+    return clothes.filter((item) => {
       if (selectedMemberId !== ALL_ID && item.ownerId !== selectedMemberId) return false;
       if (filter.category && item.category !== filter.category) return false;
       if (filter.status && item.status !== filter.status) return false;
@@ -38,7 +56,7 @@ export default function DashboardPage() {
       }
       return true;
     });
-  }, [selectedMemberId, filter]);
+  }, [clothes, selectedMemberId, filter]);
 
   useEffect(() => {
     setPage(1);
@@ -55,7 +73,7 @@ export default function DashboardPage() {
     <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
       <Header />
       <GuestTrialBanner />
-      <MemberTabs members={mockMembers} selectedId={selectedMemberId} onSelect={setSelectedMemberId} />
+      <MemberTabs members={members} selectedId={selectedMemberId} onSelect={setSelectedMemberId} />
       <FilterBar filter={filter} onChange={setFilter} />
 
       <p className="px-4 pt-3 text-xs text-neutral-500 dark:text-neutral-400">
@@ -63,7 +81,13 @@ export default function DashboardPage() {
       </p>
 
       <main className="flex flex-1 flex-col">
-        <ClothesGrid items={pagedClothes} members={mockMembers} />
+        {loading ? (
+          <div className="flex flex-1 items-center justify-center px-4 py-16 text-center text-sm text-neutral-500 dark:text-neutral-400">
+            読み込み中...
+          </div>
+        ) : (
+          <ClothesGrid items={pagedClothes} members={members} />
+        )}
       </main>
 
       <Pagination currentPage={currentPage} totalPages={totalPages} onChange={setPage} />

@@ -35,6 +35,7 @@ export const members = pgTable('members', {
     .notNull(),
   memberId: text('member_id').notNull(), // 例: "dad", "taro"
   displayName: text('display_name').notNull(), // 表示名（例: "パパ"）
+  authUserId: uuid('auth_user_id').unique(), // Supabase auth.users.id との紐付け（ゲストはnull）
   role: memberRoleEnum('role').default('member').notNull(), // 'owner': 代表者 / 'member': 一般メンバー
   preferredLanguage: text('preferred_language').default('ja').notNull(), // パターンB用 (ja, en, zh-CN)
   isFirstLogin: boolean('is_first_login').default(true).notNull(),
@@ -51,6 +52,7 @@ export const clothes = pgTable('clothes', {
   ownerMemberId: uuid('owner_member_id')
     .references(() => members.id, { onDelete: 'cascade' })
     .notNull(),
+  name: text('name').notNull(),
   imageUrl: text('image_url').notNull(),
   thumbnailUrl: text('thumbnail_url'),
   category: text('category').notNull(), // 例: "コート", "トップス"
@@ -77,6 +79,13 @@ export const subscriptions = pgTable('subscriptions', {
   currentPeriodEnd: timestamp('current_period_end'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// 5. ログイン失敗履歴 (login_attempts) — ブルートフォース対策（IP・アカウント単位の一時ロック用）
+export const loginAttempts = pgTable('login_attempts', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  identifier: text('identifier').notNull(), // 例: "account:familyId:memberId" / "ip:1.2.3.4"
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 // リレーション定義

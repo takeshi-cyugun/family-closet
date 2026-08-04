@@ -1,28 +1,30 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { addMember, mockMembers } from "../../_lib/clothes";
+import { addMember } from "../../actions/addMember";
+import { getFamilyMembers } from "../../actions/members";
 import type { Member } from "../../_lib/clothes";
-import { MOCK_PLAN, issueInitialPassword } from "../_data/mock";
 import { useSettingsLanguage } from "../_lib/LanguageContext";
 
 const MEMBER_ID_PATTERN = /^[a-zA-Z0-9_-]{2,20}$/;
 
 type MemberSectionProps = {
   members: Member[];
+  memberLimit: number;
   onMembersChange: (members: Member[]) => void;
 };
 
-export function MemberSection({ members, onMembersChange }: MemberSectionProps) {
+export function MemberSection({ members, memberLimit, onMembersChange }: MemberSectionProps) {
   const { t } = useSettingsLanguage();
   const [name, setName] = useState("");
   const [memberId, setMemberId] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [issued, setIssued] = useState<{ memberId: string; password: string } | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const atLimit = members.length >= MOCK_PLAN.memberLimit;
+  const atLimit = members.length >= memberLimit;
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setIssued(null);
 
@@ -34,16 +36,24 @@ export function MemberSection({ members, onMembersChange }: MemberSectionProps) 
       setError(t.memberSection.errors.invalidMemberId);
       return;
     }
-    if (members.some((member) => member.id === memberId)) {
+    if (members.some((member) => member.memberId === memberId)) {
       setError(t.memberSection.errors.duplicateMemberId);
       return;
     }
 
-    const created = addMember({ id: memberId, name: name.trim() });
-    const password = issueInitialPassword();
-    onMembersChange([...mockMembers]);
-    setIssued({ memberId: created.id, password });
     setError(null);
+    setSubmitting(true);
+    const result = await addMember({ memberId, displayName: name.trim() });
+    setSubmitting(false);
+
+    if (!result.success) {
+      setError(result.error);
+      return;
+    }
+
+    const refreshed = await getFamilyMembers();
+    onMembersChange(refreshed);
+    setIssued({ memberId: result.memberId, password: result.password });
     setName("");
     setMemberId("");
   }
@@ -57,7 +67,7 @@ export function MemberSection({ members, onMembersChange }: MemberSectionProps) 
           <li key={member.id} className="flex items-center justify-between py-2 text-sm">
             <span>
               {member.name}
-              <span className="ml-1.5 text-neutral-500 dark:text-neutral-400">({member.id})</span>
+              <span className="ml-1.5 text-neutral-500 dark:text-neutral-400">({member.memberId})</span>
             </span>
             <span className="rounded-full bg-black/5 px-2.5 py-1 text-xs font-medium text-neutral-600 dark:bg-white/10 dark:text-neutral-300">
               {t.memberSection.role[member.role]}
@@ -67,7 +77,7 @@ export function MemberSection({ members, onMembersChange }: MemberSectionProps) 
       </ul>
 
       <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
-        {t.memberSection.countLabel(members.length, MOCK_PLAN.memberLimit)}
+        {t.memberSection.countLabel(members.length, memberLimit)}
       </p>
 
       {issued && (
@@ -121,9 +131,10 @@ export function MemberSection({ members, onMembersChange }: MemberSectionProps) 
           {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
           <button
             type="submit"
-            className="rounded-md border border-black/10 py-2.5 text-sm font-medium dark:border-white/15"
+            disabled={submitting}
+            className="rounded-md border border-black/10 py-2.5 text-sm font-medium disabled:opacity-50 dark:border-white/15"
           >
-            {t.memberSection.submitButton}
+            {submitting ? "追加中..." : t.memberSection.submitButton}
           </button>
         </form>
       )}

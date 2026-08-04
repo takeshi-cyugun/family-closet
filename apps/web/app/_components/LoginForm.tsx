@@ -2,8 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { mockLogin } from "../_lib/auth";
-import { setForcePasswordChange } from "../_lib/session";
+import { loginFamily } from "../actions/login";
 
 const MAX_ATTEMPTS = 5;
 const LOCK_SECONDS = 5 * 60;
@@ -46,27 +45,22 @@ export function LoginForm() {
     const trimmedMemberId = memberId.trim();
 
     setSubmitting(true);
-    const result = await mockLogin(trimmedFamilyId, trimmedMemberId, password);
+    const result = await loginFamily(trimmedFamilyId, trimmedMemberId, password);
     setSubmitting(false);
 
-    if (!result.ok) {
+    if (!result.success) {
       const nextFailCount = failCount + 1;
       setFailCount(nextFailCount);
       if (nextFailCount >= MAX_ATTEMPTS) {
         setLockSecondsLeft(LOCK_SECONDS);
-        setError("ログイン試行回数の上限に達しました。5分後に再度お試しください");
-      } else {
-        setError(
-          `ファミリーID・メンバーID・パスワードの組み合わせが正しくありません（${nextFailCount}/${MAX_ATTEMPTS}回）`
-        );
       }
+      setError(result.error);
       return;
     }
 
     setFailCount(0);
 
     if (result.firstLogin) {
-      setForcePasswordChange({ familyId: trimmedFamilyId, memberId: trimmedMemberId, currentPassword: password });
       router.push("/change-password");
     } else {
       router.push("/dashboard");
