@@ -4,6 +4,7 @@ import type { PlanTier } from "../_data/constants";
 
 export type SettingsDictionary = {
   headerTitle: string;
+  loading: string;
   pageTitle: string;
   guestBanner: {
     trialNotice: (days: number) => string;
@@ -49,6 +50,7 @@ export type SettingsDictionary = {
 
 const ja: SettingsDictionary = {
   headerTitle: "設定",
+  loading: "読み込み中...",
   pageTitle: "ファミリー・メンバー設定",
   guestBanner: {
     trialNotice: (days) => `お試し利用中です（残り${days}日）`,
@@ -98,6 +100,7 @@ const ja: SettingsDictionary = {
 
 const en: SettingsDictionary = {
   headerTitle: "Settings",
+  loading: "Loading...",
   pageTitle: "Family & Member Settings",
   guestBanner: {
     trialNotice: (days) => `You're on a free trial (${days} days left)`,
@@ -147,6 +150,7 @@ const en: SettingsDictionary = {
 
 const zhCN: SettingsDictionary = {
   headerTitle: "设置",
+  loading: "加载中...",
   pageTitle: "家庭与成员设置",
   guestBanner: {
     trialNotice: (days) => `试用中（剩余${days}天）`,
@@ -196,6 +200,7 @@ const zhCN: SettingsDictionary = {
 
 const zhTW: SettingsDictionary = {
   headerTitle: "設定",
+  loading: "載入中...",
   pageTitle: "家庭與成員設定",
   guestBanner: {
     trialNotice: (days) => `試用中（剩餘${days}天）`,
