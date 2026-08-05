@@ -31,8 +31,8 @@ export function Header({ title = "ファミリークロゼット" }: HeaderProps
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-black/10 bg-white/90 px-4 backdrop-blur dark:border-white/10 dark:bg-black/80">
-      <Link href="/dashboard" className="text-lg font-bold tracking-tight">
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between bg-espresso px-4">
+      <Link href="/dashboard" className="font-serif text-lg font-semibold tracking-tight text-on-espresso">
         {title}
       </Link>
 
@@ -40,17 +40,17 @@ export function Header({ title = "ファミリークロゼット" }: HeaderProps
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-800 text-sm font-semibold text-white dark:bg-neutral-200 dark:text-black"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-on-espresso text-sm font-semibold text-espresso"
           aria-label={t.header.userMenu}
         >
           {CURRENT_MEMBER_ID.charAt(0).toUpperCase()}
         </button>
 
         {menuOpen && (
-          <div className="absolute right-0 mt-2 w-36 overflow-hidden rounded-lg border border-black/10 bg-white shadow-lg dark:border-white/10 dark:bg-neutral-900">
+          <div className="absolute right-0 mt-2 w-36 overflow-hidden rounded-lg border border-linen bg-cream shadow-lg">
             <button
               type="button"
-              className="block w-full px-4 py-2 text-left text-sm hover:bg-black/5 dark:hover:bg-white/10"
+              className="block w-full px-4 py-2 text-left text-sm text-ink hover:bg-sand"
               onClick={() => setMenuOpen(false)}
             >
               {t.header.logout}

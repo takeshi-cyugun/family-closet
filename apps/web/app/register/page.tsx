@@ -92,25 +92,23 @@ export default function RegisterPage() {
 
   if (createdFamilyId) {
     return (
-      <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-neutral-50 px-6 text-center dark:bg-black">
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-cream px-6 text-center text-ink">
         <p className="text-4xl">📨</p>
-        <h1 className="text-lg font-bold">ファミリーを作成しました</h1>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <h1 className="font-serif text-lg font-bold">ファミリーを作成しました</h1>
+        <p className="text-sm text-ink-soft">
           ファミリーID「{createdFamilyId}」を作成しました。
           <br />
           {email} 宛に確認メールを送信しましたので、メール内のリンクをクリックしてください。
         </p>
         {hasGuestSession && migrateGuestData && (
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="text-sm text-ink-soft">
             お試し利用中の洋服データ{guestItemCount}着を引き継ぎました。
           </p>
         )}
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-          メール確認が完了するまでログインできません。
-        </p>
+        <p className="text-xs text-ink-faint">メール確認が完了するまでログインできません。</p>
         <Link
           href="/"
-          className="mt-2 rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white dark:bg-white dark:text-black"
+          className="mt-2 rounded-md bg-espresso px-5 py-2.5 text-sm font-medium text-on-espresso"
         >
           トップに戻る
         </Link>
@@ -119,22 +117,20 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
-      <header className="flex h-14 items-center border-b border-black/10 px-4 dark:border-white/10">
-        <Link href="/" className="text-lg font-bold tracking-tight">
+    <div className="flex min-h-dvh flex-col bg-cream text-ink">
+      <header className="flex h-14 items-center bg-espresso px-4">
+        <Link href="/" className="font-serif text-lg font-semibold tracking-tight text-on-espresso">
           ファミリークロゼット
         </Link>
       </header>
 
       <main className="flex-1 px-4 py-6">
-        <h1 className="mb-1 text-lg font-bold">ファミリーを新規作成</h1>
-        <p className="mb-6 text-sm text-neutral-600 dark:text-neutral-400">
-          代表者アカウントを作成します。
-        </p>
+        <h1 className="mb-1 font-serif text-lg font-bold">ファミリーを新規作成</h1>
+        <p className="mb-6 text-sm text-ink-soft">代表者アカウントを作成します。</p>
 
         <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label htmlFor="email" className="text-sm font-medium text-ink">
               代表者メールアドレス
             </label>
             <input
@@ -143,13 +139,13 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+              className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.email && <p className="text-xs text-red-600 dark:text-red-400">{errors.email}</p>}
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="password" className="text-sm font-medium">
+            <label htmlFor="password" className="text-sm font-medium text-ink">
               代表者パスワード
             </label>
             <input
@@ -158,7 +154,7 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="8文字以上の英数字混合"
-              className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+              className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.password && (
               <p className="text-xs text-red-600 dark:text-red-400">{errors.password}</p>
@@ -166,7 +162,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="passwordConfirm" className="text-sm font-medium">
+            <label htmlFor="passwordConfirm" className="text-sm font-medium text-ink">
               パスワード(確認用)
             </label>
             <input
@@ -174,7 +170,7 @@ export default function RegisterPage() {
               type="password"
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
-              className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+              className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.passwordConfirm && (
               <p className="text-xs text-red-600 dark:text-red-400">{errors.passwordConfirm}</p>
@@ -192,7 +188,7 @@ export default function RegisterPage() {
           )}
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="memberId" className="text-sm font-medium">
+            <label htmlFor="memberId" className="text-sm font-medium text-ink">
               代表者メンバーID
             </label>
             <input
@@ -202,7 +198,7 @@ export default function RegisterPage() {
               onChange={(e) => setMemberId(e.target.value)}
               placeholder="例: dad, taro"
               autoComplete="off"
-              className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+              className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.memberId && (
               <p className="text-xs text-red-600 dark:text-red-400">{errors.memberId}</p>
@@ -210,7 +206,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="displayName" className="text-sm font-medium">
+            <label htmlFor="displayName" className="text-sm font-medium text-ink">
               代表者表示名
             </label>
             <input
@@ -219,7 +215,7 @@ export default function RegisterPage() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="例: パパ"
-              className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+              className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.displayName && (
               <p className="text-xs text-red-600 dark:text-red-400">{errors.displayName}</p>
@@ -227,7 +223,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-medium">プラン選択</span>
+            <span className="text-sm font-medium text-ink">プラン選択</span>
             <label className="flex items-start gap-2 text-sm">
               <input
                 type="radio"
@@ -289,7 +285,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-2 rounded-md bg-black py-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-black"
+            className="mt-2 rounded-md bg-espresso py-3 text-sm font-semibold text-on-espresso disabled:opacity-50"
           >
             {submitting ? "作成中..." : "ファミリーを作成して始める"}
           </button>

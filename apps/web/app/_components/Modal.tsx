@@ -22,7 +22,7 @@ export function Modal({ children }: { children: React.ReactNode }) {
         className="absolute inset-0 bg-black/50"
         onClick={() => router.back()}
       />
-      <div className="relative z-10 flex h-dvh w-full flex-col overflow-y-auto bg-neutral-50 dark:bg-black">
+      <div className="relative z-10 flex h-dvh w-full flex-col overflow-y-auto bg-cream">
         {children}
       </div>
     </div>

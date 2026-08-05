@@ -70,7 +70,7 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
+    <div className="flex min-h-dvh flex-col bg-cream text-ink">
       <Header />
       <GuestTrialBanner />
       {members.length > 1 && (
@@ -78,13 +78,11 @@ export default function DashboardPage() {
       )}
       <FilterBar filter={filter} onChange={setFilter} />
 
-      <p className="px-4 pt-3 text-xs text-neutral-500 dark:text-neutral-400">
-        {t.itemsCount(filteredClothes.length)}
-      </p>
+      <p className="px-4 pt-3 text-xs text-ink-soft">{t.itemsCount(filteredClothes.length)}</p>
 
       <main className="flex flex-1 flex-col">
         {loading ? (
-          <div className="flex flex-1 items-center justify-center px-4 py-16 text-center text-sm text-neutral-500 dark:text-neutral-400">
+          <div className="flex flex-1 items-center justify-center px-4 py-16 text-center text-sm text-ink-soft">
             読み込み中...
           </div>
         ) : (

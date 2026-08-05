@@ -11,7 +11,7 @@ export default function NewClothesPage() {
   const t = getClothesFormDictionary(language);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
+    <div className="flex min-h-dvh flex-col bg-cream text-ink">
       <Header title={t.headerTitle} />
 
       <main className="flex-1 px-4 py-6">

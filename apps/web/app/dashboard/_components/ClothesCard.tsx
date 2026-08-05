@@ -29,9 +29,9 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
   return (
     <Link
       href={`/clothes/${item.id}`}
-      className="group flex flex-col overflow-hidden rounded-lg border border-black/10 bg-white transition-shadow hover:shadow-md dark:border-white/10 dark:bg-neutral-900"
+      className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-[0_4px_10px_rgba(60,47,43,0.14),0_1px_3px_rgba(60,47,43,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(60,47,43,0.2),0_2px_4px_rgba(60,47,43,0.14)]"
     >
-      <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-neutral-100 text-5xl dark:bg-neutral-800">
+      <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-cream text-5xl">
         {item.photoDataUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={item.photoDataUrl} alt={item.name} className="h-full w-full object-cover" />
@@ -46,8 +46,8 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
       </div>
 
       <div className="flex flex-col gap-0.5 p-2.5">
-        <p className="truncate text-sm font-medium">{item.name}</p>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+        <p className="truncate font-serif text-sm font-semibold text-ink">{item.name}</p>
+        <p className="text-xs text-ink-soft">
           {categoryText} ・ {ownerName} ・ {item.size}
         </p>
       </div>

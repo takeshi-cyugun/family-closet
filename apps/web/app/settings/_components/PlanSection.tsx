@@ -16,24 +16,24 @@ export function PlanSection({ tier, memberCount, memberLimit, itemCount, itemLim
   const { t } = useSettingsLanguage();
 
   return (
-    <section className="rounded-lg border border-black/10 p-4 dark:border-white/15">
-      <p className="text-base font-bold">{t.planSection.planNames[tier]}</p>
+    <section className="rounded-lg bg-white p-4 shadow-[0_2px_8px_rgba(60,47,43,0.08)]">
+      <p className="font-serif text-base font-bold text-ink">{t.planSection.planNames[tier]}</p>
 
-      <dl className="mt-3 divide-y divide-black/10 text-sm dark:divide-white/10">
+      <dl className="mt-3 divide-y divide-linen text-sm">
         <div className="flex justify-between py-2 first:pt-0">
-          <dt className="text-neutral-500 dark:text-neutral-400">{t.planSection.memberCountLabel}</dt>
-          <dd className="font-medium">{t.planSection.memberCountValue(memberCount, memberLimit)}</dd>
+          <dt className="text-ink-soft">{t.planSection.memberCountLabel}</dt>
+          <dd className="font-medium text-ink">{t.planSection.memberCountValue(memberCount, memberLimit)}</dd>
         </div>
         <div className="flex justify-between py-2 last:pb-0">
-          <dt className="text-neutral-500 dark:text-neutral-400">{t.planSection.itemCountLabel}</dt>
-          <dd className="font-medium">{t.planSection.itemCountValue(itemCount, itemLimit)}</dd>
+          <dt className="text-ink-soft">{t.planSection.itemCountLabel}</dt>
+          <dd className="font-medium text-ink">{t.planSection.itemCountValue(itemCount, itemLimit)}</dd>
         </div>
       </dl>
 
       {tier !== "paid" && (
         <Link
           href="/settings/billing"
-          className="mt-4 block rounded-md bg-black py-2.5 text-center text-sm font-semibold text-white dark:bg-white dark:text-black"
+          className="mt-4 block rounded-md bg-espresso py-2.5 text-center text-sm font-semibold text-on-espresso"
         >
           {t.planSection.upgradeCta}
         </Link>

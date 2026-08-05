@@ -23,9 +23,9 @@ const STATUS_TEXT: Record<FamilyIdStatus, string> = {
 };
 
 const STATUS_CLASS: Record<FamilyIdStatus, string> = {
-  idle: "text-neutral-500 dark:text-neutral-400",
+  idle: "text-ink-soft",
   invalid: "text-red-600 dark:text-red-400",
-  checking: "text-neutral-500 dark:text-neutral-400",
+  checking: "text-ink-soft",
   available: "text-emerald-600 dark:text-emerald-400",
   taken: "text-red-600 dark:text-red-400",
 };
@@ -57,7 +57,7 @@ export function FamilyIdField({ value, onChange, status, onStatusChange }: Famil
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor="familyId" className="text-sm font-medium">
+      <label htmlFor="familyId" className="text-sm font-medium text-ink">
         希望ファミリーID
       </label>
       <input
@@ -67,7 +67,7 @@ export function FamilyIdField({ value, onChange, status, onStatusChange }: Famil
         onChange={(e) => onChange(e.target.value)}
         placeholder="例: yamada-family"
         autoComplete="off"
-        className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+        className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
       />
       {status !== "idle" && (
         <p className={`text-xs ${STATUS_CLASS[status]}`}>{STATUS_TEXT[status]}</p>

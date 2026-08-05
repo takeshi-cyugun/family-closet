@@ -36,9 +36,9 @@ function SettingsPageContent() {
 
   if (loading) {
     return (
-      <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
+      <div className="flex min-h-dvh flex-col bg-cream text-ink">
         <Header title={t.headerTitle} />
-        <main className="flex flex-1 items-center justify-center px-4 py-6 text-sm text-neutral-500 dark:text-neutral-400">
+        <main className="flex flex-1 items-center justify-center px-4 py-6 text-sm text-ink-soft">
           読み込み中...
         </main>
         <BottomNavSpacer />
@@ -49,9 +49,9 @@ function SettingsPageContent() {
 
   if (!settings) {
     return (
-      <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
+      <div className="flex min-h-dvh flex-col bg-cream text-ink">
         <Header title={t.headerTitle} />
-        <main className="flex flex-1 items-center justify-center px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
+        <main className="flex flex-1 items-center justify-center px-4 py-6 text-center text-sm text-ink-soft">
           まだファミリーが作成されていません。洋服を登録するとファミリーが作成されます。
         </main>
         <BottomNavSpacer />
@@ -63,11 +63,11 @@ function SettingsPageContent() {
   const limits = PLAN_LIMITS[settings.planTier];
 
   return (
-    <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
+    <div className="flex min-h-dvh flex-col bg-cream text-ink">
       <Header title={t.headerTitle} />
 
       <main className="flex-1 px-4 py-6">
-        <h1 className="mb-4 text-lg font-bold">{t.pageTitle}</h1>
+        <h1 className="mb-4 font-serif text-lg font-bold">{t.pageTitle}</h1>
 
         <div className="flex flex-col gap-4">
           {settings.isGuest && settings.guestDaysLeft !== null && (
@@ -84,7 +84,7 @@ function SettingsPageContent() {
           <LanguageSection />
         </div>
 
-        <h1 className="mb-4 mt-6 text-lg font-bold">{t.planSection.heading}</h1>
+        <h1 className="mb-4 mt-6 font-serif text-lg font-bold">{t.planSection.heading}</h1>
 
         <div className="flex flex-col gap-4">
           <PlanSection

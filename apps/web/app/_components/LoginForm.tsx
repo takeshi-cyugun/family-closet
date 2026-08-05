@@ -70,7 +70,7 @@ export function LoginForm() {
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit} noValidate>
       <div className="flex flex-col gap-1">
-        <label htmlFor="loginFamilyId" className="text-sm font-medium">
+        <label htmlFor="loginFamilyId" className="text-sm font-medium text-ink">
           ファミリーID
         </label>
         <input
@@ -80,12 +80,12 @@ export function LoginForm() {
           onChange={(e) => setFamilyId(e.target.value)}
           disabled={locked}
           autoComplete="off"
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base disabled:opacity-50 dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink disabled:opacity-50"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="loginMemberId" className="text-sm font-medium">
+        <label htmlFor="loginMemberId" className="text-sm font-medium text-ink">
           メンバーID
         </label>
         <input
@@ -95,12 +95,12 @@ export function LoginForm() {
           onChange={(e) => setMemberId(e.target.value)}
           disabled={locked}
           autoComplete="off"
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base disabled:opacity-50 dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink disabled:opacity-50"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="loginPassword" className="text-sm font-medium">
+        <label htmlFor="loginPassword" className="text-sm font-medium text-ink">
           パスワード
         </label>
         <input
@@ -109,7 +109,7 @@ export function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={locked}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base disabled:opacity-50 dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink disabled:opacity-50"
         />
       </div>
 
@@ -118,7 +118,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={submitting || locked}
-        className="mt-1 rounded-md bg-black py-2.5 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-black"
+        className="mt-1 rounded-md bg-espresso py-2.5 text-sm font-semibold text-on-espresso disabled:opacity-50"
       >
         {locked ? `ロック中（残り ${formatCountdown(lockSecondsLeft)}）` : submitting ? "ログイン中..." : "ログイン"}
       </button>

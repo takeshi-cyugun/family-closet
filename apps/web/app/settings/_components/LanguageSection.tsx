@@ -40,8 +40,8 @@ export function LanguageSection() {
   }
 
   return (
-    <section className="rounded-lg border border-black/10 p-4 dark:border-white/15">
-      <span id="language-label" className="text-sm font-semibold">
+    <section className="rounded-lg bg-white p-4 shadow-[0_2px_8px_rgba(60,47,43,0.08)]">
+      <span id="language-label" className="font-serif text-sm font-semibold text-ink">
         {t.languageSection.label}
       </span>
       <div ref={containerRef} className="relative mt-2">
@@ -51,11 +51,11 @@ export function LanguageSection() {
           aria-expanded={open}
           aria-labelledby="language-label"
           onClick={() => setOpen((prev) => !prev)}
-          className="flex w-full items-center gap-2 rounded-md border border-black/10 bg-white px-3 py-2 text-left text-base dark:border-white/15 dark:bg-neutral-900"
+          className="flex w-full items-center gap-2 rounded-md border border-linen bg-white px-3 py-2 text-left text-base text-ink"
         >
           <SelectedFlag className="h-4 w-6 shrink-0 rounded-sm object-cover" />
           <span className="flex-1">{selected.label}</span>
-          <span aria-hidden="true" className="text-xs opacity-60">
+          <span aria-hidden="true" className="text-xs text-ink-soft">
             ▾
           </span>
         </button>
@@ -63,7 +63,7 @@ export function LanguageSection() {
           <ul
             role="listbox"
             aria-labelledby="language-label"
-            className="absolute z-10 mt-1 w-full overflow-hidden rounded-md border border-black/10 bg-white shadow-lg dark:border-white/15 dark:bg-neutral-900"
+            className="absolute z-10 mt-1 w-full overflow-hidden rounded-md border border-linen bg-white shadow-lg"
           >
             {LANGUAGES.map((lang) => {
               const Flag = LANGUAGE_FLAGS[lang.code];
@@ -73,8 +73,8 @@ export function LanguageSection() {
                   <button
                     type="button"
                     onClick={() => handleSelect(lang.code)}
-                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-base hover:bg-black/5 dark:hover:bg-white/10 ${
-                      isSelected ? "bg-black/5 dark:bg-white/10" : ""
+                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-base text-ink hover:bg-sand ${
+                      isSelected ? "bg-sand" : ""
                     }`}
                   >
                     <Flag className="h-4 w-6 shrink-0 rounded-sm object-cover" />

@@ -16,7 +16,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-black/10 bg-white/95 backdrop-blur dark:border-white/10 dark:bg-black/90"
+      className="fixed inset-x-0 bottom-0 z-20 bg-espresso"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="flex h-16 items-stretch">
@@ -24,7 +24,7 @@ export function BottomNav() {
           <Link
             key={item.href}
             href={item.href}
-            className="flex flex-1 flex-col items-center justify-center gap-0.5 text-xs text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white"
+            className="flex flex-1 flex-col items-center justify-center gap-0.5 text-xs text-on-espresso/70 hover:text-on-espresso"
           >
             <span className="text-lg leading-none">{item.icon}</span>
             <span>{item.label}</span>

@@ -83,7 +83,7 @@ export function PhotoPicker({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-black/20 px-4 py-3 text-neutral-500 dark:border-white/20 dark:text-neutral-400"
+            className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-linen bg-white px-4 py-3 text-ink-soft"
           >
             <span className="text-xl">📷</span>
             <span className="text-sm">{labels.selectCta}</span>

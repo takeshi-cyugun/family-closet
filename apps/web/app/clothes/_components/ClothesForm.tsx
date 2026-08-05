@@ -37,14 +37,14 @@ function SelectField<T extends string>({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium">
+      <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
       </label>
       <select
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+        className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -230,7 +230,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">{t.photo.label}</label>
+        <label className="text-sm font-medium text-ink">{t.photo.label}</label>
         <PhotoPicker
           photoUrl={photoUrl}
           rotation={rotation}
@@ -245,7 +245,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-medium">
+        <label htmlFor="name" className="text-sm font-medium text-ink">
           {t.fields.name.label}
         </label>
         <input
@@ -254,13 +254,13 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={t.fields.name.placeholder}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         />
         {errors.name && <p className="text-xs text-red-600 dark:text-red-400">{errors.name}</p>}
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="category" className="text-sm font-medium">
+        <label htmlFor="category" className="text-sm font-medium text-ink">
           {t.fields.category.label}
         </label>
         <input
@@ -269,14 +269,14 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           placeholder={t.fields.category.placeholder}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         />
       </div>
 
       <SelectField id="size" label={t.fields.size} value={size} options={SIZES} onChange={setSize} />
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="color" className="text-sm font-medium">
+        <label htmlFor="color" className="text-sm font-medium text-ink">
           {t.fields.color.label}
         </label>
         <input
@@ -285,7 +285,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
           value={color}
           onChange={(e) => setColor(e.target.value)}
           placeholder={t.fields.color.placeholder}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         />
         {errors.color && <p className="text-xs text-red-600 dark:text-red-400">{errors.color}</p>}
       </div>
@@ -300,14 +300,14 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
       />
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="owner" className="text-sm font-medium">
+        <label htmlFor="owner" className="text-sm font-medium text-ink">
           {t.fields.owner}
         </label>
         <select
           id="owner"
           value={ownerId}
           onChange={(e) => setOwnerId(e.target.value)}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         >
           {members.map((member) => (
             <option key={member.id} value={member.id}>
@@ -327,7 +327,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
       />
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="memo" className="text-sm font-medium">
+        <label htmlFor="memo" className="text-sm font-medium text-ink">
           {t.fields.memo}
         </label>
         <textarea
@@ -335,7 +335,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
           value={memo}
           onChange={(e) => setMemo(e.target.value)}
           rows={3}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         />
       </div>
 
@@ -344,7 +344,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
       <button
         type="submit"
         disabled={saving || analyzing || uploading}
-        className="mt-2 rounded-md bg-black py-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-black"
+        className="mt-2 rounded-md bg-espresso py-3 text-sm font-semibold text-on-espresso disabled:opacity-50"
       >
         {saving
           ? mode === "new"
@@ -367,7 +367,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
                   type="button"
                   disabled={deleting}
                   onClick={() => setConfirmingDelete(false)}
-                  className="flex-1 rounded-md border border-black/10 py-2 text-sm disabled:opacity-50 dark:border-white/15"
+                  className="flex-1 rounded-md border border-linen py-2 text-sm text-ink disabled:opacity-50"
                 >
                   {t.delete.cancel}
                 </button>

@@ -9,7 +9,7 @@ type ClothesGridProps = {
 export function ClothesGrid({ items, members }: ClothesGridProps) {
   if (items.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center px-4 py-16 text-center text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="flex flex-1 items-center justify-center px-4 py-16 text-center text-sm text-ink-soft">
         条件に一致する洋服が見つかりませんでした。
       </div>
     );

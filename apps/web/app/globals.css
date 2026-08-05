@@ -3,6 +3,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Linen & craft palette — warm, minimal, premium */
+  --color-cream: #faf6ef; /* primary background */
+  --color-sand: #f1e8da; /* secondary background / cards */
+  --color-linen: #e6dacb; /* dividers / borders */
+  --color-ink: #3c2f2b; /* primary text */
+  --color-ink-soft: #7a6355; /* secondary text */
+  --color-ink-faint: #b8a99a; /* tertiary text / hints */
+  --color-espresso: #33251f; /* header / footer / buttons — fixed dark brown, not theme-inverted */
+  --color-espresso-hover: #2a1d18;
+  --color-espresso-press: #201512;
+  --color-on-espresso: #ffffff; /* text/icon color on top of the espresso color */
+  --color-gold: #c9a66b; /* accent 1 */
+  --color-mocha: #8b6f52; /* accent 2 */
+  --color-deep: #4a3226; /* accent 3 */
 }
 
 @theme inline {
@@ -10,12 +25,37 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-serif);
+
+  --color-cream: var(--color-cream);
+  --color-sand: var(--color-sand);
+  --color-linen: var(--color-linen);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-ink-faint: var(--color-ink-faint);
+  --color-espresso: var(--color-espresso);
+  --color-espresso-hover: var(--color-espresso-hover);
+  --color-espresso-press: var(--color-espresso-press);
+  --color-on-espresso: var(--color-on-espresso);
+  --color-gold: var(--color-gold);
+  --color-mocha: var(--color-mocha);
+  --color-deep: var(--color-deep);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --color-cream: #211913;
+    --color-sand: #2e241c;
+    --color-linen: #3d2f24;
+    --color-ink: #f3ece3;
+    --color-ink-soft: #c9bbae;
+    --color-ink-faint: #8a7a6c;
+    --color-gold: #d8bd8c;
+    --color-mocha: #a98f73;
+    --color-deep: #cbb296;
   }
 }
 

@@ -29,8 +29,8 @@ export function MemberTabs({ members, selectedId, onSelect }: MemberTabsProps) {
             onClick={() => onSelect(tab.id)}
             className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
               isSelected
-                ? "bg-black text-white dark:bg-white dark:text-black"
-                : "bg-black/5 text-neutral-700 hover:bg-black/10 dark:bg-white/10 dark:text-neutral-300 dark:hover:bg-white/20"
+                ? "bg-espresso text-on-espresso"
+                : "bg-sand text-ink-soft hover:bg-linen"
             }`}
           >
             {tab.name}

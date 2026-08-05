@@ -8,7 +8,7 @@ export default async function ClothesDetailPage({ params }: { params: Promise<{ 
   if (!data) notFound();
 
   return (
-    <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
+    <div className="flex min-h-dvh flex-col bg-cream">
       <ClothesDetailContent
         item={data.item}
         ownerName={data.ownerName}

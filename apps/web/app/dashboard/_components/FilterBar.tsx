@@ -48,11 +48,11 @@ function SelectField<T extends string>({
 }) {
   return (
     <label className="flex flex-col gap-1 text-sm">
-      <span className="text-neutral-500 dark:text-neutral-400">{label}</span>
+      <span className="text-ink-soft">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as T | "")}
-        className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+        className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
       >
         <option value="">{noSelectLabel}</option>
         {options.map((option) => (
@@ -73,23 +73,23 @@ export function FilterBar({ filter, onChange }: FilterBarProps) {
   const t = getDashboardDictionary(language);
 
   return (
-    <div className="border-b border-black/10 px-4 py-3 dark:border-white/10">
+    <div className="border-b border-linen px-4 py-3">
       <div className="flex items-center gap-2">
         <input
           type="text"
           value={filter.keyword}
           onChange={(e) => onChange({ ...filter, keyword: e.target.value })}
           placeholder={t.searchPlaceholder}
-          className="min-w-0 flex-1 rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="min-w-0 flex-1 rounded-md border border-linen bg-white px-3 py-2 text-base text-ink placeholder:text-ink-faint"
         />
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="relative shrink-0 rounded-md border border-black/10 px-3 py-2 text-sm font-medium dark:border-white/15"
+          className="relative shrink-0 rounded-md bg-espresso px-3 py-2 text-sm font-medium text-on-espresso"
         >
           {t.filter}
           {activeCount > 0 && (
-            <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white dark:bg-white dark:text-black">
+            <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-gold text-[10px] text-ink">
               {activeCount}
             </span>
           )}
@@ -101,12 +101,12 @@ export function FilterBar({ filter, onChange }: FilterBarProps) {
           <button
             type="button"
             aria-label={t.close}
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-ink/40"
             onClick={() => setDrawerOpen(false)}
           />
-          <div className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-white p-4 pb-6 dark:bg-neutral-900">
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-black/15 dark:bg-white/20" />
-            <h2 className="mb-3 text-base font-semibold">{t.filter}</h2>
+          <div className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-cream p-4 pb-6">
+            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-linen" />
+            <h2 className="mb-3 font-serif text-base font-semibold text-ink">{t.filter}</h2>
 
             <div className="flex flex-col gap-3">
               <SelectField
@@ -146,14 +146,14 @@ export function FilterBar({ filter, onChange }: FilterBarProps) {
               <button
                 type="button"
                 onClick={() => onChange({ ...EMPTY_FILTER, keyword: filter.keyword })}
-                className="flex-1 rounded-md border border-black/10 py-2.5 text-sm font-medium dark:border-white/15"
+                className="flex-1 rounded-md bg-espresso py-2.5 text-sm font-medium text-on-espresso"
               >
                 {t.reset}
               </button>
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="flex-1 rounded-md bg-black py-2.5 text-sm font-medium text-white dark:bg-white dark:text-black"
+                className="flex-1 rounded-md bg-espresso py-2.5 text-sm font-medium text-on-espresso"
               >
                 {t.apply}
               </button>

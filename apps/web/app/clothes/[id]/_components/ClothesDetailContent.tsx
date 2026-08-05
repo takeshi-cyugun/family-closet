@@ -29,7 +29,7 @@ function NavArrow({ direction, id }: { direction: "prev" | "next"; id: string | 
     return (
       <span
         aria-hidden
-        className={`absolute ${side} top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/10 text-lg text-white/40`}
+        className={`absolute ${side} top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-espresso/30 text-lg text-on-espresso/50`}
       >
         {symbol}
       </span>
@@ -40,7 +40,7 @@ function NavArrow({ direction, id }: { direction: "prev" | "next"; id: string | 
     <Link
       href={`/clothes/${id}`}
       aria-label={label}
-      className={`absolute ${side} top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-lg text-white`}
+      className={`absolute ${side} top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-espresso/70 text-lg text-on-espresso`}
     >
       {symbol}
     </Link>
@@ -50,8 +50,8 @@ function NavArrow({ direction, id }: { direction: "prev" | "next"; id: string | 
 function Field({ label, value, wide }: { label: string; value: string; wide?: boolean }) {
   return (
     <div className={`flex flex-col gap-0.5 ${wide ? "col-span-2" : ""}`}>
-      <dt className="text-xs text-neutral-500 dark:text-neutral-400">{label}</dt>
-      <dd className="font-medium">{value}</dd>
+      <dt className="text-xs text-ink-soft">{label}</dt>
+      <dd className="font-medium text-ink">{value}</dd>
     </div>
   );
 }
@@ -72,23 +72,23 @@ export function ClothesDetailContent({
 
   return (
     <>
-      <header className="flex h-14 items-center justify-between border-b border-black/10 px-4 dark:border-white/10">
-        <h1 className="text-base font-bold">洋服の詳細</h1>
+      <header className="flex h-14 items-center justify-between bg-espresso px-4">
+        <h1 className="font-serif text-base font-bold text-on-espresso">洋服の詳細</h1>
         <button
           type="button"
           onClick={handleClose}
           aria-label="閉じる"
-          className="text-xl leading-none text-neutral-500 dark:text-neutral-400"
+          className="text-xl leading-none text-on-espresso/80 hover:text-on-espresso"
         >
           ✕
         </button>
       </header>
 
-      <main className="flex-1 px-4 py-4">
+      <main className="flex-1 bg-cream px-4 py-4 text-ink">
         <div className="relative">
           <NavArrow direction="prev" id={prevId} />
 
-          <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+          <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-sand">
             {item.photoDataUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.photoDataUrl} alt={item.name} className="h-full w-full object-contain" />
@@ -101,7 +101,7 @@ export function ClothesDetailContent({
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-2">
-          <h2 className="text-xl font-bold">{item.name}</h2>
+          <h2 className="font-serif text-xl font-bold text-ink">{item.name}</h2>
           <span
             className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${STATUS_BADGE_CLASS[item.status]}`}
           >
@@ -120,7 +120,7 @@ export function ClothesDetailContent({
         <div className="mt-6">
           <Link
             href={`/clothes/${item.id}/edit`}
-            className="block rounded-md border border-black/10 py-2.5 text-center text-sm font-medium dark:border-white/15"
+            className="block rounded-md bg-espresso py-2.5 text-center text-sm font-medium text-on-espresso"
           >
             編集する
           </Link>

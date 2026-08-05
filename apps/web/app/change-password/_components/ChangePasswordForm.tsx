@@ -55,7 +55,7 @@ export function ChangePasswordForm() {
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
       <div className="flex flex-col gap-1">
-        <label htmlFor="currentPassword" className="text-sm font-medium">
+        <label htmlFor="currentPassword" className="text-sm font-medium text-ink">
           現在のパスワード
         </label>
         <input
@@ -63,7 +63,7 @@ export function ChangePasswordForm() {
           type="password"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         />
         {errors.currentPassword && (
           <p className="text-xs text-red-600 dark:text-red-400">{errors.currentPassword}</p>
@@ -71,7 +71,7 @@ export function ChangePasswordForm() {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="newPassword" className="text-sm font-medium">
+        <label htmlFor="newPassword" className="text-sm font-medium text-ink">
           新しいパスワード
         </label>
         <input
@@ -80,13 +80,13 @@ export function ChangePasswordForm() {
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           placeholder="8文字以上の英数字混合"
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         />
         {errors.newPassword && <p className="text-xs text-red-600 dark:text-red-400">{errors.newPassword}</p>}
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="newPasswordConfirm" className="text-sm font-medium">
+        <label htmlFor="newPasswordConfirm" className="text-sm font-medium text-ink">
           新しいパスワード（確認用）
         </label>
         <input
@@ -94,7 +94,7 @@ export function ChangePasswordForm() {
           type="password"
           value={newPasswordConfirm}
           onChange={(e) => setNewPasswordConfirm(e.target.value)}
-          className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+          className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
         />
         {errors.newPasswordConfirm && (
           <p className="text-xs text-red-600 dark:text-red-400">{errors.newPasswordConfirm}</p>
@@ -106,7 +106,7 @@ export function ChangePasswordForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-2 rounded-md bg-black py-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-black"
+        className="mt-2 rounded-md bg-espresso py-3 text-sm font-semibold text-on-espresso disabled:opacity-50"
       >
         {submitting ? "変更中..." : "パスワードを変更して利用開始"}
       </button>

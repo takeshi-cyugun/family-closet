@@ -23,7 +23,7 @@ export function GuestTrialBanner() {
   if (daysLeft === null) return null;
 
   return (
-    <div className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+    <div className="border-b border-linen bg-sand px-4 py-2 text-center text-xs text-ink">
       {t.guestTrial(daysLeft, GUEST_ITEM_LIMIT)}
       <Link href="/register" className="ml-1.5 font-medium underline">
         {t.registerCta}
