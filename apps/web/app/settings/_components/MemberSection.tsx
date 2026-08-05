@@ -60,30 +60,30 @@ export function MemberSection({ members, memberLimit, onMembersChange }: MemberS
 
   return (
     <>
-      <section className="rounded-lg border border-black/10 p-4 dark:border-white/15">
-        <h2 className="text-sm font-semibold">{t.memberSection.heading}</h2>
+      <section className="rounded-lg bg-white p-4 shadow-[0_2px_8px_rgba(60,47,43,0.08)]">
+        <h2 className="font-serif text-sm font-semibold text-ink">{t.memberSection.heading}</h2>
 
-        <ul className="mt-3 divide-y divide-black/10 dark:divide-white/10">
+        <ul className="mt-3 divide-y divide-linen">
           {members.map((member) => (
             <li key={member.id} className="flex items-center justify-between py-2 text-sm">
-              <span>
+              <span className="text-ink">
                 {member.name}
-                <span className="ml-1.5 text-neutral-500 dark:text-neutral-400">({member.memberId})</span>
+                <span className="ml-1.5 text-ink-soft">({member.memberId})</span>
               </span>
-              <span className="rounded-full bg-black/5 px-2.5 py-1 text-xs font-medium text-neutral-600 dark:bg-white/10 dark:text-neutral-300">
+              <span className="rounded-full bg-sand px-2.5 py-1 text-xs font-medium text-ink-soft">
                 {t.memberSection.role[member.role]}
               </span>
             </li>
           ))}
         </ul>
 
-        <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
+        <p className="mt-3 text-xs text-ink-soft">
           {t.memberSection.countLabel(members.length, memberLimit)}
         </p>
       </section>
 
-      <section className="rounded-lg border border-black/10 p-4 dark:border-white/15">
-        <h2 className="text-sm font-semibold">{t.memberSection.submitButton}</h2>
+      <section className="rounded-lg bg-white p-4 shadow-[0_2px_8px_rgba(60,47,43,0.08)]">
+        <h2 className="font-serif text-sm font-semibold text-ink">{t.memberSection.submitButton}</h2>
 
         {issued && (
           <div className="mt-3 rounded-md border border-emerald-300 bg-emerald-50 p-3 text-sm dark:border-emerald-900 dark:bg-emerald-950/40">
@@ -101,13 +101,11 @@ export function MemberSection({ members, memberLimit, onMembersChange }: MemberS
         )}
 
         {atLimit ? (
-          <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
-            {t.memberSection.limitReached}
-          </p>
+          <p className="mt-3 text-xs text-ink-soft">{t.memberSection.limitReached}</p>
         ) : (
           <form className="mt-3 flex flex-col gap-3" onSubmit={handleSubmit} noValidate>
             <div className="flex flex-col gap-1">
-              <label htmlFor="newMemberName" className="text-sm font-medium">
+              <label htmlFor="newMemberName" className="text-sm font-medium text-ink">
                 {t.memberSection.displayNameLabel}
               </label>
               <input
@@ -116,11 +114,11 @@ export function MemberSection({ members, memberLimit, onMembersChange }: MemberS
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t.memberSection.displayNamePlaceholder}
-                className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+                className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="newMemberId" className="text-sm font-medium">
+              <label htmlFor="newMemberId" className="text-sm font-medium text-ink">
                 {t.memberSection.memberIdLabel}
               </label>
               <input
@@ -130,14 +128,14 @@ export function MemberSection({ members, memberLimit, onMembersChange }: MemberS
                 onChange={(e) => setMemberId(e.target.value)}
                 placeholder={t.memberSection.memberIdPlaceholder}
                 autoComplete="off"
-                className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
+                className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
               />
             </div>
             {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-md border border-black/10 py-2.5 text-sm font-medium disabled:opacity-50 dark:border-white/15"
+              className="rounded-md bg-espresso py-2.5 text-sm font-medium text-on-espresso disabled:opacity-50"
             >
               {submitting ? "追加中..." : t.memberSection.submitButton}
             </button>
