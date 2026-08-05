@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ClothesForm } from "../_components/ClothesForm";
+import { ClothesForm } from "../clothes/_components/ClothesForm";
 
 export default function NewClothesPage() {
   return (

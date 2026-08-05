@@ -10,7 +10,7 @@ export function BottomNav() {
 
   const navItems = [
     { href: "/dashboard", label: t.nav.dashboard, icon: "📋" },
-    { href: "/clothes/new", label: t.nav.add, icon: "➕" },
+    { href: "/clothes-new", label: t.nav.add, icon: "➕" },
     { href: "/settings", label: t.nav.settings, icon: "⚙️" },
   ];
 
