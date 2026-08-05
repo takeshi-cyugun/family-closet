@@ -17,9 +17,7 @@ export function PlanSection({ tier, memberCount, memberLimit, itemCount, itemLim
 
   return (
     <section className="rounded-lg border border-black/10 p-4 dark:border-white/15">
-      <h2 className="text-sm font-semibold">{t.planSection.heading}</h2>
-
-      <p className="mt-2 text-base font-bold">{t.planSection.planNames[tier]}</p>
+      <p className="text-base font-bold">{t.planSection.planNames[tier]}</p>
 
       <dl className="mt-3 divide-y divide-black/10 text-sm dark:divide-white/10">
         <div className="flex justify-between py-2 first:pt-0">

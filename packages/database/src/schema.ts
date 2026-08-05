@@ -15,6 +15,7 @@ export const clothesStatusEnum = pgEnum('clothes_status', [
   'in_use',
   'stored',
   'disposal_planned',
+  'disposed',
 ]);
 export const planTypeEnum = pgEnum('plan_type', ['fitting', 'chest', 'walk_in']);
 

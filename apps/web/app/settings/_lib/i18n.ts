@@ -3,6 +3,7 @@ import type { MemberRole } from "../../_lib/clothes";
 import type { PlanTier } from "../_data/constants";
 
 export type SettingsDictionary = {
+  headerTitle: string;
   pageTitle: string;
   guestBanner: {
     trialNotice: (days: number) => string;
@@ -47,6 +48,7 @@ export type SettingsDictionary = {
 };
 
 const ja: SettingsDictionary = {
+  headerTitle: "設定",
   pageTitle: "ファミリー・メンバー設定",
   guestBanner: {
     trialNotice: (days) => `お試し利用中です（残り${days}日）`,
@@ -83,7 +85,7 @@ const ja: SettingsDictionary = {
     heading: "プラン・利用状況",
     planNames: {
       guest: "Fitting Plan（お試し）",
-      free: "Chest Plan（無料）",
+      free: "Chest Plan（有料）",
       paid: "Walk-in Plan（有料）",
     },
     memberCountLabel: "メンバー数",
@@ -95,6 +97,7 @@ const ja: SettingsDictionary = {
 };
 
 const en: SettingsDictionary = {
+  headerTitle: "Settings",
   pageTitle: "Family & Member Settings",
   guestBanner: {
     trialNotice: (days) => `You're on a free trial (${days} days left)`,
@@ -131,7 +134,7 @@ const en: SettingsDictionary = {
     heading: "Plan & Usage",
     planNames: {
       guest: "Fitting Plan (Trial)",
-      free: "Chest Plan (Free)",
+      free: "Chest Plan (Paid)",
       paid: "Walk-in Plan (Paid)",
     },
     memberCountLabel: "Members",
@@ -143,6 +146,7 @@ const en: SettingsDictionary = {
 };
 
 const zhCN: SettingsDictionary = {
+  headerTitle: "设置",
   pageTitle: "家庭与成员设置",
   guestBanner: {
     trialNotice: (days) => `试用中（剩余${days}天）`,
@@ -179,7 +183,7 @@ const zhCN: SettingsDictionary = {
     heading: "套餐与使用情况",
     planNames: {
       guest: "Fitting 套餐（试用）",
-      free: "Chest 套餐（免费）",
+      free: "Chest 套餐（付费）",
       paid: "Walk-in 套餐（付费）",
     },
     memberCountLabel: "成员数",
@@ -191,6 +195,7 @@ const zhCN: SettingsDictionary = {
 };
 
 const zhTW: SettingsDictionary = {
+  headerTitle: "設定",
   pageTitle: "家庭與成員設定",
   guestBanner: {
     trialNotice: (days) => `試用中（剩餘${days}天）`,
@@ -227,7 +232,7 @@ const zhTW: SettingsDictionary = {
     heading: "方案與使用狀況",
     planNames: {
       guest: "Fitting 方案（試用）",
-      free: "Chest 方案（免費）",
+      free: "Chest 方案（付費）",
       paid: "Walk-in 方案（付費）",
     },
     memberCountLabel: "成員數",

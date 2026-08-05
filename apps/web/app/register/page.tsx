@@ -237,7 +237,7 @@ export default function RegisterPage() {
                 className="mt-0.5 h-4 w-4 shrink-0"
               />
               <span>
-                チェストプラン（無料・メンバー5人まで・50着まで）
+                チェストプラン（有料・メンバー5人まで・50着まで）
               </span>
             </label>
             <label className="flex items-start gap-2 text-sm">

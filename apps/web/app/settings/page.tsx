@@ -37,7 +37,7 @@ function SettingsPageContent() {
   if (loading) {
     return (
       <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
-        <Header />
+        <Header title={t.headerTitle} />
         <main className="flex flex-1 items-center justify-center px-4 py-6 text-sm text-neutral-500 dark:text-neutral-400">
           読み込み中...
         </main>
@@ -50,7 +50,7 @@ function SettingsPageContent() {
   if (!settings) {
     return (
       <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
-        <Header />
+        <Header title={t.headerTitle} />
         <main className="flex flex-1 items-center justify-center px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
           まだファミリーが作成されていません。洋服を登録するとファミリーが作成されます。
         </main>
@@ -64,7 +64,7 @@ function SettingsPageContent() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
-      <Header />
+      <Header title={t.headerTitle} />
 
       <main className="flex-1 px-4 py-6">
         <h1 className="mb-4 text-lg font-bold">{t.pageTitle}</h1>
@@ -82,6 +82,11 @@ function SettingsPageContent() {
             />
           )}
           <LanguageSection />
+        </div>
+
+        <h1 className="mb-4 mt-6 text-lg font-bold">{t.planSection.heading}</h1>
+
+        <div className="flex flex-col gap-4">
           <PlanSection
             tier={settings.planTier}
             memberCount={members.length}

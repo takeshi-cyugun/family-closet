@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GUEST_ITEM_LIMIT, getGuestDaysLeft, getGuestSession } from "../../_lib/session";
+import { GUEST_ITEM_LIMIT } from "../../_lib/session";
 import { useLanguage } from "../../_lib/LanguageContext";
 import { getDashboardDictionary } from "../_lib/i18n";
+import { getSettingsData } from "../../actions/settings";
 
 export function GuestTrialBanner() {
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
@@ -12,8 +13,11 @@ export function GuestTrialBanner() {
   const t = getDashboardDictionary(language);
 
   useEffect(() => {
-    const session = getGuestSession();
-    if (session) setDaysLeft(getGuestDaysLeft(session));
+    getSettingsData().then((settings) => {
+      if (settings?.isGuest && settings.guestDaysLeft !== null) {
+        setDaysLeft(settings.guestDaysLeft);
+      }
+    });
   }, []);
 
   if (daysLeft === null) return null;

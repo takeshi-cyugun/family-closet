@@ -19,7 +19,8 @@ type ClothesDetailProps = {
 const STATUS_BADGE_CLASS: Record<ClothesStatus, string> = {
   使用中: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
   保管中: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
-  "譲渡/廃棄予定": "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
+  処分予定: "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
+  処分済: "bg-neutral-300 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300",
 };
 
 function NavArrow({ direction, id }: { direction: "prev" | "next"; id: string | null }) {

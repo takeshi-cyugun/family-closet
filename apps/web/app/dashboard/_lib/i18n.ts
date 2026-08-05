@@ -58,7 +58,8 @@ const ja: DashboardDictionary = {
   statuses: {
     使用中: "使用中",
     保管中: "保管中",
-    "譲渡/廃棄予定": "譲渡/廃棄予定",
+    処分予定: "処分予定",
+    処分済: "処分済",
   },
   categories: {
     コート: "コート",
@@ -116,7 +117,8 @@ const en: DashboardDictionary = {
   statuses: {
     使用中: "In Use",
     保管中: "Stored",
-    "譲渡/廃棄予定": "To Donate/Discard",
+    処分予定: "To Dispose",
+    処分済: "Disposed",
   },
   categories: {
     コート: "Coats",
@@ -174,7 +176,8 @@ const zhCN: DashboardDictionary = {
   statuses: {
     使用中: "使用中",
     保管中: "保管中",
-    "譲渡/廃棄予定": "拟转让/废弃",
+    処分予定: "计划处置",
+    処分済: "已处置",
   },
   categories: {
     コート: "大衣/外套",
@@ -232,7 +235,8 @@ const zhTW: DashboardDictionary = {
   statuses: {
     使用中: "使用中",
     保管中: "保管中",
-    "譲渡/廃棄予定": "擬轉讓/廢棄",
+    処分予定: "計劃處置",
+    処分済: "已處置",
   },
   categories: {
     コート: "大衣/外套",

@@ -1,11 +1,12 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { db, clothes, members } from '@repo/database';
+import { db, clothes, members, subscriptions } from '@repo/database';
 import { eq, and, desc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { mapDbStatusToUiStatus } from '../_lib/clothes';
 import type { ClothesItem, DbClothesStatus, Season, Size } from '../_lib/clothes';
+import { PLAN_LIMITS, mapPlanTypeToTier } from '../settings/_data/constants';
 
 export interface CreateClothesInput {
   familyId: string;
@@ -18,7 +19,7 @@ export interface CreateClothesInput {
   size?: string;
   season?: string;
   memo?: string;
-  status?: 'in_use' | 'stored' | 'disposal_planned';
+  status?: 'in_use' | 'stored' | 'disposal_planned' | 'disposed';
 }
 
 export interface UpdateClothesInput {
@@ -29,7 +30,7 @@ export interface UpdateClothesInput {
   season?: string;
   memo?: string;
   imageUrl?: string;
-  status?: 'in_use' | 'stored' | 'disposal_planned';
+  status?: 'in_use' | 'stored' | 'disposal_planned' | 'disposed';
 }
 
 function toClothesItem(row: typeof clothes.$inferSelect): ClothesItem {
@@ -51,6 +52,20 @@ function toClothesItem(row: typeof clothes.$inferSelect): ClothesItem {
 // 洋服の新規登録
 export async function createClothes(input: CreateClothesInput) {
   try {
+    const [subscription] = await db
+      .select()
+      .from(subscriptions)
+      .where(eq(subscriptions.familyId, input.familyId));
+    const limit = PLAN_LIMITS[mapPlanTypeToTier(subscription?.planType ?? 'fitting')].itemLimit;
+
+    const existingClothes = await db
+      .select({ id: clothes.id })
+      .from(clothes)
+      .where(eq(clothes.familyId, input.familyId));
+    if (existingClothes.length >= limit) {
+      return { success: false as const, error: 'アイテム数の上限に達しています。プランのアップグレードが必要です。' };
+    }
+
     const [newCloth] = await db
       .insert(clothes)
       .values({

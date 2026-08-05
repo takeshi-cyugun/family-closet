@@ -206,7 +206,8 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
-      <div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium">画像</label>
         <PhotoPicker
           photoUrl={photoUrl}
           rotation={rotation}
@@ -215,8 +216,8 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
           onRotate={handleRotate}
           onRemove={handleRemovePhoto}
         />
-        {errors.photo && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.photo}</p>}
-        {uploadError && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{uploadError}</p>}
+        {errors.photo && <p className="text-xs text-red-600 dark:text-red-400">{errors.photo}</p>}
+        {uploadError && <p className="text-xs text-red-600 dark:text-red-400">{uploadError}</p>}
       </div>
 
       <div className="flex flex-col gap-1">
@@ -248,6 +249,8 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
         />
       </div>
 
+      <SelectField id="size" label="サイズ" value={size} options={SIZES} onChange={setSize} />
+
       <div className="flex flex-col gap-1">
         <label htmlFor="color" className="text-sm font-medium">
           色
@@ -262,6 +265,8 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
         />
         {errors.color && <p className="text-xs text-red-600 dark:text-red-400">{errors.color}</p>}
       </div>
+
+      <SelectField id="season" label="シーズン" value={season} options={SEASONS} onChange={setSeason} />
 
       <div className="flex flex-col gap-1">
         <label htmlFor="owner" className="text-sm font-medium">
@@ -282,12 +287,10 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
       </div>
 
       <SelectField id="status" label="ステータス" value={status} options={STATUSES} onChange={setStatus} />
-      <SelectField id="season" label="シーズン" value={season} options={SEASONS} onChange={setSeason} />
-      <SelectField id="size" label="サイズ" value={size} options={SIZES} onChange={setSize} />
 
       <div className="flex flex-col gap-1">
         <label htmlFor="memo" className="text-sm font-medium">
-          メモ
+          メモ（説明、収納場所）
         </label>
         <textarea
           id="memo"
@@ -305,7 +308,15 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
         disabled={saving || analyzing || uploading}
         className="mt-2 rounded-md bg-black py-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-black"
       >
-        {saving ? "保存中..." : uploading ? "写真をアップロード中..." : "保存する"}
+        {saving
+          ? mode === "new"
+            ? "登録中..."
+            : "保存中..."
+          : uploading
+            ? "写真をアップロード中..."
+            : mode === "new"
+              ? "登録する"
+              : "保存する"}
       </button>
     </form>
   );

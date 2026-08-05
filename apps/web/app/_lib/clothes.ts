@@ -1,4 +1,4 @@
-export type ClothesStatus = "使用中" | "保管中" | "譲渡/廃棄予定";
+export type ClothesStatus = "使用中" | "保管中" | "処分予定" | "処分済";
 
 export type Season = "通年" | "春" | "夏" | "秋" | "冬" | "春夏" | "秋冬";
 
@@ -15,23 +15,7 @@ export type Category =
   | "帽子"
   | "その他";
 
-export type Size =
-  | "70"
-  | "80"
-  | "90"
-  | "100"
-  | "110"
-  | "120"
-  | "130"
-  | "140"
-  | "150"
-  | "160"
-  | "XS"
-  | "S"
-  | "M"
-  | "L"
-  | "XL"
-  | "FREE";
+export type Size = "S" | "M" | "L" | "FREE";
 
 export type MemberRole = "admin" | "member";
 
@@ -70,20 +54,22 @@ export const CATEGORIES: Category[] = [
   "その他",
 ];
 
-export const STATUSES: ClothesStatus[] = ["使用中", "保管中", "譲渡/廃棄予定"];
+export const STATUSES: ClothesStatus[] = ["使用中", "保管中", "処分予定", "処分済"];
 
-export type DbClothesStatus = "in_use" | "stored" | "disposal_planned";
+export type DbClothesStatus = "in_use" | "stored" | "disposal_planned" | "disposed";
 
 const DB_TO_UI_STATUS: Record<DbClothesStatus, ClothesStatus> = {
   in_use: "使用中",
   stored: "保管中",
-  disposal_planned: "譲渡/廃棄予定",
+  disposal_planned: "処分予定",
+  disposed: "処分済",
 };
 
 const UI_TO_DB_STATUS: Record<ClothesStatus, DbClothesStatus> = {
   使用中: "in_use",
   保管中: "stored",
-  "譲渡/廃棄予定": "disposal_planned",
+  処分予定: "disposal_planned",
+  処分済: "disposed",
 };
 
 export function mapDbStatusToUiStatus(status: string): ClothesStatus {
@@ -96,24 +82,7 @@ export function mapUiStatusToDbStatus(status: ClothesStatus): DbClothesStatus {
 
 export const SEASONS: Season[] = ["通年", "春", "夏", "秋", "冬", "春夏", "秋冬"];
 
-export const SIZES: Size[] = [
-  "70",
-  "80",
-  "90",
-  "100",
-  "110",
-  "120",
-  "130",
-  "140",
-  "150",
-  "160",
-  "XS",
-  "S",
-  "M",
-  "L",
-  "XL",
-  "FREE",
-];
+export const SIZES: Size[] = ["S", "M", "L", "FREE"];
 
 export const CATEGORY_ICON: Record<Category, string> = {
   コート: "🧥",
@@ -144,23 +113,23 @@ export const mockMembers: Member[] = [
 
 export const mockClothes: ClothesItem[] = [
   { id: "1", name: "ダウンコート", category: "コート", color: "ネイビー", ownerId: "dad", status: "使用中", season: "冬", size: "L" },
-  { id: "2", name: "ボーダーTシャツ", category: "トップス", color: "白×紺", ownerId: "elder-daughter", status: "使用中", season: "春夏", size: "120" },
-  { id: "3", name: "デニムパンツ", category: "パンツ", color: "ブルー", ownerId: "son", status: "保管中", season: "通年", size: "110" },
-  { id: "4", name: "花柄ワンピース", category: "ワンピース", color: "ピンク", ownerId: "elder-daughter", status: "使用中", season: "夏", size: "130" },
+  { id: "2", name: "ボーダーTシャツ", category: "トップス", color: "白×紺", ownerId: "elder-daughter", status: "使用中", season: "春夏", size: "M" },
+  { id: "3", name: "デニムパンツ", category: "パンツ", color: "ブルー", ownerId: "son", status: "保管中", season: "通年", size: "S" },
+  { id: "4", name: "花柄ワンピース", category: "ワンピース", color: "ピンク", ownerId: "elder-daughter", status: "使用中", season: "夏", size: "M" },
   { id: "5", name: "プリーツスカート", category: "スカート", color: "ベージュ", ownerId: "mom", status: "保管中", season: "秋冬", size: "M" },
-  { id: "6", name: "スニーカー", category: "靴", color: "ホワイト", ownerId: "son", status: "使用中", season: "通年", size: "110", memo: "紐タイプ" },
+  { id: "6", name: "スニーカー", category: "靴", color: "ホワイト", ownerId: "son", status: "使用中", season: "通年", size: "S", memo: "紐タイプ" },
   { id: "7", name: "ニット帽", category: "帽子", color: "グレー", ownerId: "dad", status: "保管中", season: "冬", size: "FREE" },
-  { id: "8", name: "レインコート", category: "アウター", color: "イエロー", ownerId: "son", status: "使用中", season: "春夏", size: "110" },
+  { id: "8", name: "レインコート", category: "アウター", color: "イエロー", ownerId: "son", status: "使用中", season: "春夏", size: "S" },
   { id: "9", name: "カーディガン", category: "トップス", color: "ベージュ", ownerId: "mom", status: "使用中", season: "春夏", size: "L" },
   { id: "10", name: "チノパン", category: "パンツ", color: "カーキ", ownerId: "dad", status: "使用中", season: "秋冬", size: "L" },
-  { id: "11", name: "浴衣", category: "その他", color: "紺×白", ownerId: "elder-daughter", status: "保管中", season: "夏", size: "120" },
-  { id: "12", name: "フォーマルワンピース", category: "ワンピース", color: "ブラック", ownerId: "mom", status: "譲渡/廃棄予定", season: "通年", size: "M" },
-  { id: "13", name: "半袖シャツ", category: "トップス", color: "水色", ownerId: "son", status: "使用中", season: "夏", size: "100" },
-  { id: "14", name: "サンダル", category: "靴", color: "ブラウン", ownerId: "elder-daughter", status: "使用中", season: "夏", size: "120" },
-  { id: "15", name: "マウンテンパーカー", category: "アウター", color: "オリーブ", ownerId: "dad", status: "保管中", season: "秋", size: "XL" },
-  { id: "16", name: "ロンパース", category: "その他", color: "イエロー", ownerId: "son", status: "譲渡/廃棄予定", season: "通年", size: "80" },
+  { id: "11", name: "浴衣", category: "その他", color: "紺×白", ownerId: "elder-daughter", status: "保管中", season: "夏", size: "M" },
+  { id: "12", name: "フォーマルワンピース", category: "ワンピース", color: "ブラック", ownerId: "mom", status: "処分予定", season: "通年", size: "M" },
+  { id: "13", name: "半袖シャツ", category: "トップス", color: "水色", ownerId: "son", status: "使用中", season: "夏", size: "S" },
+  { id: "14", name: "サンダル", category: "靴", color: "ブラウン", ownerId: "elder-daughter", status: "使用中", season: "夏", size: "M" },
+  { id: "15", name: "マウンテンパーカー", category: "アウター", color: "オリーブ", ownerId: "dad", status: "保管中", season: "秋", size: "L" },
+  { id: "16", name: "ロンパース", category: "その他", color: "イエロー", ownerId: "son", status: "処分済", season: "通年", size: "S" },
   { id: "17", name: "ストローハット", category: "帽子", color: "ナチュラル", ownerId: "mom", status: "使用中", season: "夏", size: "FREE" },
-  { id: "18", name: "スウェットパンツ", category: "パンツ", color: "グレー", ownerId: "elder-daughter", status: "使用中", season: "秋冬", size: "130" },
+  { id: "18", name: "スウェットパンツ", category: "パンツ", color: "グレー", ownerId: "elder-daughter", status: "使用中", season: "秋冬", size: "M" },
 ];
 
 export function findClothesById(id: string): ClothesItem | undefined {

@@ -76,7 +76,7 @@ export function PhotoPicker({ photoUrl, rotation, analyzing, onSelectFile, onRot
             className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-black/20 px-4 py-3 text-neutral-500 dark:border-white/20 dark:text-neutral-400"
           >
             <span className="text-xl">📷</span>
-            <span className="text-sm">タップして撮影 / 写真を選択</span>
+            <span className="text-sm">画像を選択</span>
           </button>
         </div>
       )}

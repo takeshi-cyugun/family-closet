@@ -7,7 +7,11 @@ import { getDashboardDictionary } from "../dashboard/_lib/i18n";
 
 const CURRENT_MEMBER_ID = "dad";
 
-export function Header() {
+type HeaderProps = {
+  title?: string;
+};
+
+export function Header({ title = "ファミリークロゼット" }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { language } = useLanguage();
   const t = getDashboardDictionary(language);
@@ -15,7 +19,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-black/10 bg-white/90 px-4 backdrop-blur dark:border-white/10 dark:bg-black/80">
       <Link href="/dashboard" className="text-lg font-bold tracking-tight">
-        ファミリークロゼット
+        {title}
       </Link>
 
       <div className="relative">
