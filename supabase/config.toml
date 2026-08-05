@@ -234,7 +234,10 @@ otp_length = 6
 otp_expiry = 3600
 
 # Use a production-ready SMTP server
-# さくらインターネット(レンタルサーバー、初期ドメイン doocmo.sakura.ne.jp)の独自ドメインメールを中継に使用。
+# Resend (https://resend.com) のSMTP中継を使用。family-closet.com をResend側で検証済みドメインとして
+# 登録し、そのドメイン上の任意のローカルパート(noreply@等)をFromに使える。
+# さくらインターネットのSMTP中継は海外(Supabase送信元)からの接続がタイムアウトし、
+# auth.signUp() が AuthRetryableFetchError(504) で失敗する事象が発生したため不採用とした。
 # 本番プロジェクトへの反映は `supabase config push` ではなく、Supabase Dashboard
 # (Authentication → Emails → SMTP Settings) で直接同じ値を入力する運用にしている。
 # 理由: このファイルはローカル開発(`supabase start`)にも使う共有ファイルのため、
@@ -242,11 +245,11 @@ otp_expiry = 3600
 # 試みてしまう。そのためローカルでは enabled = false のままにし、以下はDashboard入力用の控えとして残す。
 [auth.email.smtp]
 enabled = false
-host = "doocmo.sakura.ne.jp"
-port = 587
-user = "info@family-closet.com" # SMTP認証用の既存メールボックス(noreply@は未作成のため、こちらを使用。Fromはadmin_emailのnoreply@のまま)
-pass = "env(SAKURA_SMTP_PASSWORD)"
-admin_email = "noreply@family-closet.com" # 送信ヘッダーのFrom。SMTP認証アドレスと異なっていてよい
+host = "smtp.resend.com"
+port = 465
+user = "resend" # Resend SMTPの固定ユーザー名(ドメインやアカウントに依存しない)
+pass = "env(RESEND_SMTP_PASSWORD)" # Resendの API Key をそのままSMTPパスワードとして使用
+admin_email = "noreply@family-closet.com" # 送信ヘッダーのFrom。family-closet.com をResendで検証済みにしておくこと
 sender_name = "ファミリークロゼット"
 
 # Uncomment to customize email template

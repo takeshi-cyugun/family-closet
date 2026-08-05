@@ -30,8 +30,13 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
       href={`/clothes/${item.id}`}
       className="group flex flex-col overflow-hidden rounded-lg border border-black/10 bg-white transition-shadow hover:shadow-md dark:border-white/10 dark:bg-neutral-900"
     >
-      <div className="relative flex aspect-square items-center justify-center bg-neutral-100 text-5xl dark:bg-neutral-800">
-        {getCategoryIcon(item.category)}
+      <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-neutral-100 text-5xl dark:bg-neutral-800">
+        {item.photoDataUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.photoDataUrl} alt={item.name} className="h-full w-full object-cover" />
+        ) : (
+          getCategoryIcon(item.category)
+        )}
         <span
           className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_BADGE_CLASS[item.status]}`}
         >
