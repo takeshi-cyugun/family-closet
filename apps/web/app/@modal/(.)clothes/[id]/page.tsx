@@ -17,7 +17,6 @@ export default async function InterceptedClothesDetailPage({
       <ClothesDetailContent
         item={data.item}
         ownerName={data.ownerName}
-        familyId={data.familyId}
         prevId={data.prevId}
         nextId={data.nextId}
         closeTo="back"

@@ -12,7 +12,6 @@ export default async function ClothesDetailPage({ params }: { params: Promise<{ 
       <ClothesDetailContent
         item={data.item}
         ownerName={data.ownerName}
-        familyId={data.familyId}
         prevId={data.prevId}
         nextId={data.nextId}
         closeTo="/dashboard"

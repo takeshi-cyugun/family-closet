@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../_lib/LanguageContext";
 import { getDashboardDictionary } from "../dashboard/_lib/i18n";
 
@@ -13,8 +13,22 @@ type HeaderProps = {
 
 export function Header({ title = "ファミリークロゼット" }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
   const t = getDashboardDictionary(language);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
 
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-black/10 bg-white/90 px-4 backdrop-blur dark:border-white/10 dark:bg-black/80">
@@ -22,7 +36,7 @@ export function Header({ title = "ファミリークロゼット" }: HeaderProps
         {title}
       </Link>
 
-      <div className="relative">
+      <div className="relative" ref={menuRef}>
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}

@@ -6,9 +6,12 @@ import { PhotoPicker } from "./PhotoPicker";
 import { uploadClothesImage } from "../../actions/uploadImage";
 import { ensureGuestFamily } from "../../actions/ensureGuestFamily";
 import { getFamilyMembers } from "../../actions/members";
-import { createClothes, updateClothes } from "../../actions/clothes";
+import { createClothes, deleteClothes, updateClothes } from "../../actions/clothes";
 import { SEASONS, SIZES, STATUSES, mapUiStatusToDbStatus, mockAnalyzeImage } from "../../_lib/clothes";
 import type { ClothesItem, ClothesStatus, Member, Season, Size } from "../../_lib/clothes";
+import { useLanguage } from "../../_lib/LanguageContext";
+import { getClothesFormDictionary } from "../_lib/i18n";
+import { getDashboardDictionary } from "../../dashboard/_lib/i18n";
 
 type ClothesFormProps = {
   mode: "new" | "edit";
@@ -23,12 +26,14 @@ function SelectField<T extends string>({
   value,
   options,
   onChange,
+  renderOption,
 }: {
   id: string;
   label: string;
   value: T;
   options: readonly T[];
   onChange: (value: T) => void;
+  renderOption?: (option: T) => string;
 }) {
   return (
     <div className="flex flex-col gap-1">
@@ -43,7 +48,7 @@ function SelectField<T extends string>({
       >
         {options.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {renderOption ? renderOption(option) : option}
           </option>
         ))}
       </select>
@@ -53,6 +58,9 @@ function SelectField<T extends string>({
 
 export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
   const router = useRouter();
+  const { language } = useLanguage();
+  const t = getClothesFormDictionary(language);
+  const dashboardT = getDashboardDictionary(language);
 
   const [photoUrl, setPhotoUrl] = useState<string | null>(initialItem?.photoDataUrl ?? null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
@@ -73,6 +81,9 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
   const [errors, setErrors] = useState<Errors>({});
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
@@ -134,9 +145,9 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
 
   function validate(): Errors {
     const next: Errors = {};
-    if (mode === "new" && !photoUrl) next.photo = "写真を選択してください";
-    if (!name.trim()) next.name = "名前を入力してください";
-    if (mode === "new" && !color.trim()) next.color = "色を入力してください";
+    if (mode === "new" && !photoUrl) next.photo = t.errors.photoRequired;
+    if (!name.trim()) next.name = t.errors.nameRequired;
+    if (mode === "new" && !color.trim()) next.color = t.errors.colorRequired;
     return next;
   }
 
@@ -151,7 +162,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
 
     if (mode === "new") {
       if (!uploadedPhotoUrl) {
-        setSubmitError("写真のアップロードが完了していません。もう一度写真を選択してください。");
+        setSubmitError(t.errors.uploadIncomplete);
         setSaving(false);
         return;
       }
@@ -204,10 +215,22 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
     router.push("/dashboard");
   }
 
+  async function handleDelete() {
+    if (!initialItem) return;
+    setDeleting(true);
+    const session = familyId ? { familyId } : await ensureGuestFamily();
+    const result = await deleteClothes(initialItem.id, session.familyId);
+    if (result.success) {
+      router.push("/dashboard");
+    } else {
+      setDeleting(false);
+    }
+  }
+
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">画像</label>
+        <label className="text-sm font-medium">{t.photo.label}</label>
         <PhotoPicker
           photoUrl={photoUrl}
           rotation={rotation}
@@ -215,6 +238,7 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
           onSelectFile={handleSelectFile}
           onRotate={handleRotate}
           onRemove={handleRemovePhoto}
+          labels={t.photo}
         />
         {errors.photo && <p className="text-xs text-red-600 dark:text-red-400">{errors.photo}</p>}
         {uploadError && <p className="text-xs text-red-600 dark:text-red-400">{uploadError}</p>}
@@ -222,14 +246,14 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-sm font-medium">
-          名前
+          {t.fields.name.label}
         </label>
         <input
           id="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="例: ダウンコート"
+          placeholder={t.fields.name.placeholder}
           className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
         />
         {errors.name && <p className="text-xs text-red-600 dark:text-red-400">{errors.name}</p>}
@@ -237,40 +261,47 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="category" className="text-sm font-medium">
-          カテゴリ
+          {t.fields.category.label}
         </label>
         <input
           id="category"
           type="text"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          placeholder="例: コート"
+          placeholder={t.fields.category.placeholder}
           className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
         />
       </div>
 
-      <SelectField id="size" label="サイズ" value={size} options={SIZES} onChange={setSize} />
+      <SelectField id="size" label={t.fields.size} value={size} options={SIZES} onChange={setSize} />
 
       <div className="flex flex-col gap-1">
         <label htmlFor="color" className="text-sm font-medium">
-          色
+          {t.fields.color.label}
         </label>
         <input
           id="color"
           type="text"
           value={color}
           onChange={(e) => setColor(e.target.value)}
-          placeholder="例: ネイビー"
+          placeholder={t.fields.color.placeholder}
           className="rounded-md border border-black/10 bg-white px-3 py-2 text-base dark:border-white/15 dark:bg-neutral-900"
         />
         {errors.color && <p className="text-xs text-red-600 dark:text-red-400">{errors.color}</p>}
       </div>
 
-      <SelectField id="season" label="シーズン" value={season} options={SEASONS} onChange={setSeason} />
+      <SelectField
+        id="season"
+        label={t.fields.season}
+        value={season}
+        options={SEASONS}
+        onChange={setSeason}
+        renderOption={(option) => dashboardT.seasons[option]}
+      />
 
       <div className="flex flex-col gap-1">
         <label htmlFor="owner" className="text-sm font-medium">
-          オーナー
+          {t.fields.owner}
         </label>
         <select
           id="owner"
@@ -286,11 +317,18 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
         </select>
       </div>
 
-      <SelectField id="status" label="ステータス" value={status} options={STATUSES} onChange={setStatus} />
+      <SelectField
+        id="status"
+        label={t.fields.status}
+        value={status}
+        options={STATUSES}
+        onChange={setStatus}
+        renderOption={(option) => dashboardT.statuses[option]}
+      />
 
       <div className="flex flex-col gap-1">
         <label htmlFor="memo" className="text-sm font-medium">
-          メモ（説明、収納場所）
+          {t.fields.memo}
         </label>
         <textarea
           id="memo"
@@ -310,14 +348,50 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
       >
         {saving
           ? mode === "new"
-            ? "登録中..."
-            : "保存中..."
+            ? t.submit.registering
+            : t.submit.saving
           : uploading
-            ? "写真をアップロード中..."
+            ? t.submit.uploading
             : mode === "new"
-              ? "登録する"
-              : "保存する"}
+              ? t.submit.register
+              : t.submit.save}
       </button>
+
+      {mode === "edit" && initialItem && (
+        <div className="text-center">
+          {confirmingDelete ? (
+            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-left text-sm dark:border-red-900 dark:bg-red-950/40">
+              <p className="mb-2 text-red-700 dark:text-red-300">{t.delete.confirm}</p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => setConfirmingDelete(false)}
+                  className="flex-1 rounded-md border border-black/10 py-2 text-sm disabled:opacity-50 dark:border-white/15"
+                >
+                  {t.delete.cancel}
+                </button>
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={handleDelete}
+                  className="flex-1 rounded-md bg-red-600 py-2 text-sm font-medium text-white disabled:opacity-50"
+                >
+                  {deleting ? t.delete.deleting : t.delete.confirmButton}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmingDelete(true)}
+              className="text-xs text-red-600 underline-offset-2 hover:underline dark:text-red-400"
+            >
+              {t.delete.link}
+            </button>
+          )}
+        </div>
+      )}
     </form>
   );
 }

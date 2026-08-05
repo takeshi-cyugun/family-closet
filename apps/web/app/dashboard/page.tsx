@@ -73,7 +73,9 @@ export default function DashboardPage() {
     <div className="flex min-h-dvh flex-col bg-neutral-50 dark:bg-black">
       <Header />
       <GuestTrialBanner />
-      <MemberTabs members={members} selectedId={selectedMemberId} onSelect={setSelectedMemberId} />
+      {members.length > 1 && (
+        <MemberTabs members={members} selectedId={selectedMemberId} onSelect={setSelectedMemberId} />
+      )}
       <FilterBar filter={filter} onChange={setFilter} />
 
       <p className="px-4 pt-3 text-xs text-neutral-500 dark:text-neutral-400">

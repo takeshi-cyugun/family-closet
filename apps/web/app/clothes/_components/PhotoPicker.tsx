@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import type { ClothesFormDictionary } from "../_lib/i18n";
 
 type PhotoPickerProps = {
   photoUrl: string | null;
@@ -9,9 +10,18 @@ type PhotoPickerProps = {
   onSelectFile: (file: File) => void;
   onRotate: () => void;
   onRemove: () => void;
+  labels: ClothesFormDictionary["photo"];
 };
 
-export function PhotoPicker({ photoUrl, rotation, analyzing, onSelectFile, onRotate, onRemove }: PhotoPickerProps) {
+export function PhotoPicker({
+  photoUrl,
+  rotation,
+  analyzing,
+  onSelectFile,
+  onRotate,
+  onRemove,
+  labels,
+}: PhotoPickerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -34,7 +44,7 @@ export function PhotoPicker({ photoUrl, rotation, analyzing, onSelectFile, onRot
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={photoUrl}
-              alt="選択した写真のプレビュー"
+              alt={labels.previewAlt}
               className="block max-h-[50vh] w-auto max-w-full rounded-lg transition-transform"
               style={{ transform: `rotate(${rotation}deg)` }}
             />
@@ -42,7 +52,7 @@ export function PhotoPicker({ photoUrl, rotation, analyzing, onSelectFile, onRot
             {analyzing && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-lg bg-white/80 dark:bg-black/70">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-black/20 border-t-black dark:border-white/20 dark:border-t-white" />
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">AI解析中...</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">{labels.analyzing}</p>
               </div>
             )}
 
@@ -51,7 +61,7 @@ export function PhotoPicker({ photoUrl, rotation, analyzing, onSelectFile, onRot
                 <button
                   type="button"
                   onClick={onRotate}
-                  aria-label="90度回転"
+                  aria-label={labels.rotate}
                   className="absolute left-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-base text-white"
                 >
                   ⟳
@@ -59,7 +69,7 @@ export function PhotoPicker({ photoUrl, rotation, analyzing, onSelectFile, onRot
                 <button
                   type="button"
                   onClick={onRemove}
-                  aria-label="写真を削除"
+                  aria-label={labels.remove}
                   className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-base text-white"
                 >
                   ✕
@@ -76,7 +86,7 @@ export function PhotoPicker({ photoUrl, rotation, analyzing, onSelectFile, onRot
             className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-black/20 px-4 py-3 text-neutral-500 dark:border-white/20 dark:text-neutral-400"
           >
             <span className="text-xl">📷</span>
-            <span className="text-sm">画像を選択</span>
+            <span className="text-sm">{labels.selectCta}</span>
           </button>
         </div>
       )}
