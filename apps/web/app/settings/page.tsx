@@ -39,7 +39,7 @@ function SettingsPageContent() {
       <div className="flex min-h-dvh flex-col bg-cream text-ink">
         <Header title={t.headerTitle} />
         <main className="flex flex-1 items-center justify-center px-4 py-6 text-sm text-ink-soft">
-          読み込み中...
+          {t.loading}
         </main>
         <BottomNavSpacer />
         <BottomNav />

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { checkFamilyIdAvailability } from "../../actions/registerFamily";
+import type { RegisterDictionary } from "../_lib/i18n";
 
 const FAMILY_ID_PATTERN = /^[a-zA-Z0-9-]{3,32}$/;
 
@@ -12,14 +13,7 @@ type FamilyIdFieldProps = {
   onChange: (value: string) => void;
   status: FamilyIdStatus;
   onStatusChange: (status: FamilyIdStatus) => void;
-};
-
-const STATUS_TEXT: Record<FamilyIdStatus, string> = {
-  idle: "",
-  invalid: "半角英数字とハイフンのみ、3文字以上で入力してください",
-  checking: "確認中...",
-  available: "✓ このIDは使用できます",
-  taken: "✕ このIDは既に使用されています",
+  t: RegisterDictionary["familyId"];
 };
 
 const STATUS_CLASS: Record<FamilyIdStatus, string> = {
@@ -30,7 +24,7 @@ const STATUS_CLASS: Record<FamilyIdStatus, string> = {
   taken: "text-red-600 dark:text-red-400",
 };
 
-export function FamilyIdField({ value, onChange, status, onStatusChange }: FamilyIdFieldProps) {
+export function FamilyIdField({ value, onChange, status, onStatusChange, t }: FamilyIdFieldProps) {
   useEffect(() => {
     if (value === "") {
       onStatusChange("idle");
@@ -55,23 +49,29 @@ export function FamilyIdField({ value, onChange, status, onStatusChange }: Famil
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
+  const statusText: Record<FamilyIdStatus, string> = {
+    idle: "",
+    invalid: t.status.invalid,
+    checking: t.status.checking,
+    available: t.status.available,
+    taken: t.status.taken,
+  };
+
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor="familyId" className="text-sm font-medium text-ink">
-        希望ファミリーID
+        {t.label}
       </label>
       <input
         id="familyId"
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="例: yamada-family"
+        placeholder={t.placeholder}
         autoComplete="off"
         className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
       />
-      {status !== "idle" && (
-        <p className={`text-xs ${STATUS_CLASS[status]}`}>{STATUS_TEXT[status]}</p>
-      )}
+      {status !== "idle" && <p className={`text-xs ${STATUS_CLASS[status]}`}>{statusText[status]}</p>}
     </div>
   );
 }

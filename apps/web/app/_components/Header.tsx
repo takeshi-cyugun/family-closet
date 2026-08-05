@@ -11,11 +11,12 @@ type HeaderProps = {
   title?: string;
 };
 
-export function Header({ title = "ファミリークロゼット" }: HeaderProps) {
+export function Header({ title }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
   const t = getDashboardDictionary(language);
+  const displayTitle = title ?? t.appName;
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -33,7 +34,7 @@ export function Header({ title = "ファミリークロゼット" }: HeaderProps
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center justify-between bg-espresso px-4">
       <Link href="/dashboard" className="font-serif text-lg font-semibold tracking-tight text-on-espresso">
-        {title}
+        {displayTitle}
       </Link>
 
       <div className="relative" ref={menuRef}>

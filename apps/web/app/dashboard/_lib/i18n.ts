@@ -3,6 +3,7 @@ import type { Category, Season, ClothesStatus } from "../../_lib/clothes";
 
 export type DashboardDictionary = {
   appName: string;
+  loading: string;
   allMembers: string;
   itemsCount: (count: number) => string;
   searchPlaceholder: string;
@@ -37,6 +38,7 @@ export type DashboardDictionary = {
 
 const ja: DashboardDictionary = {
   appName: "ファミリークロゼット",
+  loading: "読み込み中...",
   allMembers: "全員",
   itemsCount: (count) => `${count}件表示中`,
   searchPlaceholder: "フリーワード検索",
@@ -96,6 +98,7 @@ const ja: DashboardDictionary = {
 
 const en: DashboardDictionary = {
   appName: "Family Closet",
+  loading: "Loading...",
   allMembers: "All",
   itemsCount: (count) => `Showing ${count} ${count === 1 ? "item" : "items"}`,
   searchPlaceholder: "Search by keyword",
@@ -155,6 +158,7 @@ const en: DashboardDictionary = {
 
 const zhCN: DashboardDictionary = {
   appName: "家庭衣橱",
+  loading: "加载中...",
   allMembers: "全部",
   itemsCount: (count) => `显示 ${count} 件`,
   searchPlaceholder: "关键字搜索",
@@ -214,6 +218,7 @@ const zhCN: DashboardDictionary = {
 
 const zhTW: DashboardDictionary = {
   appName: "家庭衣櫥",
+  loading: "載入中...",
   allMembers: "全部",
   itemsCount: (count) => `顯示 ${count} 件`,
   searchPlaceholder: "關鍵字搜尋",

@@ -6,6 +6,8 @@ import { FamilyIdField } from "./_components/FamilyIdField";
 import type { FamilyIdStatus } from "./_components/FamilyIdField";
 import { registerFamily } from "../actions/registerFamily";
 import { getSettingsData } from "../actions/settings";
+import { useLanguage } from "../_lib/LanguageContext";
+import { getRegisterDictionary } from "./_lib/i18n";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
@@ -18,6 +20,9 @@ type Errors = Partial<
 >;
 
 export default function RegisterPage() {
+  const { language } = useLanguage();
+  const t = getRegisterDictionary(language);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -49,15 +54,13 @@ export default function RegisterPage() {
 
   function validate(): Errors {
     const next: Errors = {};
-    if (!EMAIL_PATTERN.test(email)) next.email = "有効なメールアドレスを入力してください";
-    if (!PASSWORD_PATTERN.test(password))
-      next.password = "8文字以上の英数字混合で入力してください";
-    if (password !== passwordConfirm) next.passwordConfirm = "パスワードが一致しません";
-    if (familyIdStatus !== "available") next.familyId = "利用可能なファミリーIDを入力してください";
-    if (!MEMBER_ID_PATTERN.test(memberId))
-      next.memberId = "半角英数字・アンダースコア・ハイフンで2〜20文字";
-    if (!displayName.trim()) next.displayName = "表示名を入力してください";
-    if (!agreeTerms) next.agreeTerms = "利用規約とプライバシーポリシーへの同意が必要です";
+    if (!EMAIL_PATTERN.test(email)) next.email = t.errors.email;
+    if (!PASSWORD_PATTERN.test(password)) next.password = t.errors.password;
+    if (password !== passwordConfirm) next.passwordConfirm = t.errors.passwordConfirm;
+    if (familyIdStatus !== "available") next.familyId = t.errors.familyId;
+    if (!MEMBER_ID_PATTERN.test(memberId)) next.memberId = t.errors.memberId;
+    if (!displayName.trim()) next.displayName = t.errors.displayName;
+    if (!agreeTerms) next.agreeTerms = t.errors.agreeTerms;
     return next;
   }
 
@@ -94,23 +97,21 @@ export default function RegisterPage() {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-cream px-6 text-center text-ink">
         <p className="text-4xl">📨</p>
-        <h1 className="font-serif text-lg font-bold">ファミリーを作成しました</h1>
+        <h1 className="font-serif text-lg font-bold">{t.success.heading}</h1>
         <p className="text-sm text-ink-soft">
-          ファミリーID「{createdFamilyId}」を作成しました。
+          {t.success.familyIdLine(createdFamilyId)}
           <br />
-          {email} 宛に確認メールを送信しましたので、メール内のリンクをクリックしてください。
+          {t.success.emailLine(email)}
         </p>
         {hasGuestSession && migrateGuestData && (
-          <p className="text-sm text-ink-soft">
-            お試し利用中の洋服データ{guestItemCount}着を引き継ぎました。
-          </p>
+          <p className="text-sm text-ink-soft">{t.success.migratedNotice(guestItemCount)}</p>
         )}
-        <p className="text-xs text-ink-faint">メール確認が完了するまでログインできません。</p>
+        <p className="text-xs text-ink-faint">{t.success.confirmNotice}</p>
         <Link
           href="/"
           className="mt-2 rounded-md bg-espresso px-5 py-2.5 text-sm font-medium text-on-espresso"
         >
-          トップに戻る
+          {t.success.backToTop}
         </Link>
       </div>
     );
@@ -120,25 +121,25 @@ export default function RegisterPage() {
     <div className="flex min-h-dvh flex-col bg-cream text-ink">
       <header className="flex h-14 items-center bg-espresso px-4">
         <Link href="/" className="font-serif text-lg font-semibold tracking-tight text-on-espresso">
-          ファミリークロゼット
+          {t.headerBrand}
         </Link>
       </header>
 
       <main className="flex-1 px-4 py-6">
-        <h1 className="mb-1 font-serif text-lg font-bold">ファミリーを新規作成</h1>
-        <p className="mb-6 text-sm text-ink-soft">代表者アカウントを作成します。</p>
+        <h1 className="mb-1 font-serif text-lg font-bold">{t.pageTitle}</h1>
+        <p className="mb-6 text-sm text-ink-soft">{t.pageSubtitle}</p>
 
         <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
           <div className="flex flex-col gap-1">
             <label htmlFor="email" className="text-sm font-medium text-ink">
-              代表者メールアドレス
+              {t.fields.email.label}
             </label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={t.fields.email.placeholder}
               className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.email && <p className="text-xs text-red-600 dark:text-red-400">{errors.email}</p>}
@@ -146,14 +147,14 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1">
             <label htmlFor="password" className="text-sm font-medium text-ink">
-              代表者パスワード
+              {t.fields.password.label}
             </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="8文字以上の英数字混合"
+              placeholder={t.fields.password.placeholder}
               className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.password && (
@@ -163,7 +164,7 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1">
             <label htmlFor="passwordConfirm" className="text-sm font-medium text-ink">
-              パスワード(確認用)
+              {t.fields.passwordConfirm.label}
             </label>
             <input
               id="passwordConfirm"
@@ -182,6 +183,7 @@ export default function RegisterPage() {
             onChange={setFamilyId}
             status={familyIdStatus}
             onStatusChange={setFamilyIdStatus}
+            t={t.familyId}
           />
           {errors.familyId && (
             <p className="-mt-4 text-xs text-red-600 dark:text-red-400">{errors.familyId}</p>
@@ -189,14 +191,14 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1">
             <label htmlFor="memberId" className="text-sm font-medium text-ink">
-              代表者メンバーID
+              {t.fields.memberId.label}
             </label>
             <input
               id="memberId"
               type="text"
               value={memberId}
               onChange={(e) => setMemberId(e.target.value)}
-              placeholder="例: dad, taro"
+              placeholder={t.fields.memberId.placeholder}
               autoComplete="off"
               className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
@@ -207,14 +209,14 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1">
             <label htmlFor="displayName" className="text-sm font-medium text-ink">
-              代表者表示名
+              {t.fields.displayName.label}
             </label>
             <input
               id="displayName"
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="例: パパ"
+              placeholder={t.fields.displayName.placeholder}
               className="rounded-md border border-linen bg-white px-3 py-2 text-base text-ink"
             />
             {errors.displayName && (
@@ -223,7 +225,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-ink">プラン選択</span>
+            <span className="text-sm font-medium text-ink">{t.planSection.heading}</span>
             <label className="flex items-start gap-2 text-sm">
               <input
                 type="radio"
@@ -232,9 +234,7 @@ export default function RegisterPage() {
                 onChange={() => setPlan("chest")}
                 className="mt-0.5 h-4 w-4 shrink-0"
               />
-              <span>
-                チェストプラン（有料・メンバー5人まで・50着まで）
-              </span>
+              <span>{t.planSection.chest}</span>
             </label>
             <label className="flex items-start gap-2 text-sm">
               <input
@@ -244,9 +244,7 @@ export default function RegisterPage() {
                 onChange={() => setPlan("walk_in")}
                 className="mt-0.5 h-4 w-4 shrink-0"
               />
-              <span>
-                ウォークインプラン（有料・メンバー数/着数無制限）
-              </span>
+              <span>{t.planSection.walkIn}</span>
             </label>
           </div>
 
@@ -258,9 +256,7 @@ export default function RegisterPage() {
                 onChange={(e) => setMigrateGuestData(e.target.checked)}
                 className="mt-0.5 h-4 w-4 shrink-0"
               />
-              <span>
-                お試し利用中のデータ({guestItemCount}着)を引き継ぐ
-              </span>
+              <span>{t.migrateGuestData(guestItemCount)}</span>
             </label>
           )}
 
@@ -272,8 +268,15 @@ export default function RegisterPage() {
               className="mt-0.5 h-4 w-4 shrink-0"
             />
             <span>
-              <a href="/terms" className="underline">利用規約</a>および
-              <a href="/privacy" className="underline">プライバシーポリシー</a>に同意する
+              {t.agree.prefix}
+              <a href="/terms" className="underline">
+                {t.agree.terms}
+              </a>
+              {t.agree.and}
+              <a href="/privacy" className="underline">
+                {t.agree.privacy}
+              </a>
+              {t.agree.suffix}
             </span>
           </label>
           {errors.agreeTerms && (
@@ -287,7 +290,7 @@ export default function RegisterPage() {
             disabled={submitting}
             className="mt-2 rounded-md bg-espresso py-3 text-sm font-semibold text-on-espresso disabled:opacity-50"
           >
-            {submitting ? "作成中..." : "ファミリーを作成して始める"}
+            {submitting ? t.submit.creating : t.submit.create}
           </button>
         </form>
       </main>

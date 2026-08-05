@@ -83,7 +83,7 @@ export default function DashboardPage() {
       <main className="flex flex-1 flex-col">
         {loading ? (
           <div className="flex flex-1 items-center justify-center px-4 py-16 text-center text-sm text-ink-soft">
-            読み込み中...
+            {t.loading}
           </div>
         ) : (
           <ClothesGrid items={pagedClothes} members={members} />

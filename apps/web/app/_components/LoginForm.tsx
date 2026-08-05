@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { loginFamily } from "../actions/login";
+import type { HomeDictionary } from "../_lib/homeI18n";
 
 const MAX_ATTEMPTS = 5;
 const LOCK_SECONDS = 5 * 60;
@@ -13,7 +14,11 @@ function formatCountdown(totalSeconds: number): string {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export function LoginForm() {
+type LoginFormProps = {
+  t: HomeDictionary["loginForm"];
+};
+
+export function LoginForm({ t }: LoginFormProps) {
   const router = useRouter();
   const [familyId, setFamilyId] = useState("");
   const [memberId, setMemberId] = useState("");
@@ -37,7 +42,7 @@ export function LoginForm() {
     setError(null);
 
     if (!familyId.trim() || !memberId.trim() || !password) {
-      setError("ファミリーID・メンバーID・パスワードを入力してください");
+      setError(t.missingFields);
       return;
     }
 
@@ -71,7 +76,7 @@ export function LoginForm() {
     <form className="flex flex-col gap-3" onSubmit={handleSubmit} noValidate>
       <div className="flex flex-col gap-1">
         <label htmlFor="loginFamilyId" className="text-sm font-medium text-ink">
-          ファミリーID
+          {t.familyId}
         </label>
         <input
           id="loginFamilyId"
@@ -86,7 +91,7 @@ export function LoginForm() {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="loginMemberId" className="text-sm font-medium text-ink">
-          メンバーID
+          {t.memberId}
         </label>
         <input
           id="loginMemberId"
@@ -101,7 +106,7 @@ export function LoginForm() {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="loginPassword" className="text-sm font-medium text-ink">
-          パスワード
+          {t.password}
         </label>
         <input
           id="loginPassword"
@@ -120,7 +125,7 @@ export function LoginForm() {
         disabled={submitting || locked}
         className="mt-1 rounded-md bg-espresso py-2.5 text-sm font-semibold text-on-espresso disabled:opacity-50"
       >
-        {locked ? `ロック中（残り ${formatCountdown(lockSecondsLeft)}）` : submitting ? "ログイン中..." : "ログイン"}
+        {locked ? t.locked(formatCountdown(lockSecondsLeft)) : submitting ? t.loggingIn : t.login}
       </button>
     </form>
   );
