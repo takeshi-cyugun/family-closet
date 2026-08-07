@@ -94,7 +94,7 @@ export function AccountInfoCard({
             </button>
           </form>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             <span className="font-medium text-ink">{value}</span>
             <button
               type="button"

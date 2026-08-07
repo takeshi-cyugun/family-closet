@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getCategoryIcon } from "../../../_lib/clothes";
 import type { ClothesItem, ClothesStatus } from "../../../_lib/clothes";
+import { useLanguage } from "../../../_lib/LanguageContext";
+import { getClothesFormDictionary } from "../../_lib/i18n";
+import { getDashboardDictionary } from "../../../dashboard/_lib/i18n";
 
 type ClothesDetailProps = {
   item: ClothesItem;
@@ -21,9 +24,16 @@ const STATUS_BADGE_CLASS: Record<ClothesStatus, string> = {
   処分済: "bg-neutral-300 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300",
 };
 
-function NavArrow({ direction, id }: { direction: "prev" | "next"; id: string | null }) {
+function NavArrow({
+  direction,
+  id,
+  label,
+}: {
+  direction: "prev" | "next";
+  id: string | null;
+  label: string;
+}) {
   const symbol = direction === "prev" ? "‹" : "›";
-  const label = direction === "prev" ? "前の洋服" : "次の洋服";
   const side = direction === "prev" ? "left-2" : "right-2";
 
   if (!id) {
@@ -66,6 +76,9 @@ export function ClothesDetailContent({
   compact,
 }: ClothesDetailProps) {
   const router = useRouter();
+  const { language } = useLanguage();
+  const t = getClothesFormDictionary(language);
+  const dashboardT = getDashboardDictionary(language);
 
   function handleClose() {
     if (closeTo === "back") router.back();
@@ -75,11 +88,11 @@ export function ClothesDetailContent({
   return (
     <>
       <header className="flex h-14 shrink-0 items-center justify-between bg-espresso px-4">
-        <h1 className="font-serif text-base font-bold text-on-espresso">洋服の詳細</h1>
+        <h1 className="font-serif text-base font-bold text-on-espresso">{t.detail.title}</h1>
         <button
           type="button"
           onClick={handleClose}
-          aria-label="閉じる"
+          aria-label={t.detail.close}
           className="text-xl leading-none text-on-espresso/80 hover:text-on-espresso"
         >
           ✕
@@ -88,7 +101,7 @@ export function ClothesDetailContent({
 
       <main className="flex-1 bg-cream px-4 py-4 text-ink">
         <div className="relative">
-          <NavArrow direction="prev" id={prevId} />
+          <NavArrow direction="prev" id={prevId} label={t.detail.prevAria} />
 
           <div
             className={`flex w-full items-center justify-center overflow-hidden rounded-lg bg-sand ${compact ? "h-48" : "aspect-square"}`}
@@ -101,7 +114,7 @@ export function ClothesDetailContent({
             )}
           </div>
 
-          <NavArrow direction="next" id={nextId} />
+          <NavArrow direction="next" id={nextId} label={t.detail.nextAria} />
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-2">
@@ -109,25 +122,29 @@ export function ClothesDetailContent({
           <span
             className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${STATUS_BADGE_CLASS[item.status]}`}
           >
-            {item.status}
+            {dashboardT.statuses[item.status]}
           </span>
         </div>
 
         <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
-          <Field label="カテゴリ" value={item.category || "-"} />
-          <Field label="サイズ" value={item.size} />
-          <Field label="シーズン" value={item.season} />
-          <Field label="オーナー" value={ownerName} />
-          <Field label="メモ" value={item.memo || "-"} wide />
+          <Field label={t.fields.category.label} value={item.category || "-"} />
+          <Field label={t.fields.size} value={item.size} />
+          <Field label={t.fields.season} value={dashboardT.seasons[item.season]} />
+          <Field label={t.fields.owner} value={ownerName === "ゲスト" ? t.guestMemberName : ownerName} />
+          <Field label={t.fields.memo} value={item.memo || "-"} wide />
         </dl>
 
         <div className="mt-6">
-          <Link
-            href={`/clothes/${item.id}/edit`}
-            className="block rounded-md bg-espresso py-2.5 text-center text-sm font-medium text-on-espresso"
+          <button
+            type="button"
+            onClick={() => {
+              // モーダル（@modalスロット）内からのソフトナビゲーションだと編集ページへ正しく遷移できないため、通常のページ遷移にする
+              window.location.href = `/clothes/${item.id}/edit`;
+            }}
+            className="block w-full rounded-md bg-espresso py-2.5 text-center text-sm font-medium text-on-espresso"
           >
-            編集する
-          </Link>
+            {t.detail.editButton}
+          </button>
         </div>
       </main>
     </>

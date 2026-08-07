@@ -21,6 +21,8 @@ export type SettingsDictionary = {
     familyNamePlaceholder: string;
     memberNamePlaceholder: string;
     updateError: string;
+    guestFamilyName: string;
+    guestMemberName: string;
   };
   memberSection: {
     heading: string;
@@ -75,6 +77,8 @@ const ja: SettingsDictionary = {
     familyNamePlaceholder: "例: 山田家",
     memberNamePlaceholder: "例: パパ",
     updateError: "更新に失敗しました。",
+    guestFamilyName: "ゲストファミリー",
+    guestMemberName: "ゲスト",
   },
   memberSection: {
     heading: "家族メンバー管理",
@@ -133,6 +137,8 @@ const en: SettingsDictionary = {
     familyNamePlaceholder: "e.g. The Smiths",
     memberNamePlaceholder: "e.g. Dad",
     updateError: "Failed to update.",
+    guestFamilyName: "Guest Family",
+    guestMemberName: "Guest",
   },
   memberSection: {
     heading: "Family Members",
@@ -191,6 +197,8 @@ const zhCN: SettingsDictionary = {
     familyNamePlaceholder: "例：山田家",
     memberNamePlaceholder: "例：爸爸",
     updateError: "更新失败。",
+    guestFamilyName: "访客家庭",
+    guestMemberName: "访客",
   },
   memberSection: {
     heading: "家庭成员管理",
@@ -249,6 +257,8 @@ const zhTW: SettingsDictionary = {
     familyNamePlaceholder: "例：山田家",
     memberNamePlaceholder: "例：爸爸",
     updateError: "更新失敗。",
+    guestFamilyName: "訪客家庭",
+    guestMemberName: "訪客",
   },
   memberSection: {
     heading: "家庭成員管理",

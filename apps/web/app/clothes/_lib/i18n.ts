@@ -20,6 +20,7 @@ export type ClothesFormDictionary = {
     status: string;
     memo: string;
   };
+  guestMemberName: string;
   errors: {
     photoRequired: string;
     nameRequired: string;
@@ -39,6 +40,13 @@ export type ClothesFormDictionary = {
     cancel: string;
     confirmButton: string;
     deleting: string;
+  };
+  detail: {
+    title: string;
+    close: string;
+    prevAria: string;
+    nextAria: string;
+    editButton: string;
   };
 };
 
@@ -62,6 +70,7 @@ const ja: ClothesFormDictionary = {
     status: "ステータス",
     memo: "メモ（説明、収納場所）",
   },
+  guestMemberName: "ゲスト",
   errors: {
     photoRequired: "写真を選択してください",
     nameRequired: "名前を入力してください",
@@ -81,6 +90,13 @@ const ja: ClothesFormDictionary = {
     cancel: "キャンセル",
     confirmButton: "削除する",
     deleting: "削除中...",
+  },
+  detail: {
+    title: "洋服の詳細",
+    close: "閉じる",
+    prevAria: "前の洋服",
+    nextAria: "次の洋服",
+    editButton: "編集する",
   },
 };
 
@@ -104,6 +120,7 @@ const en: ClothesFormDictionary = {
     status: "Status",
     memo: "Memo (description, storage location)",
   },
+  guestMemberName: "Guest",
   errors: {
     photoRequired: "Please select a photo",
     nameRequired: "Please enter a name",
@@ -123,6 +140,13 @@ const en: ClothesFormDictionary = {
     cancel: "Cancel",
     confirmButton: "Delete",
     deleting: "Deleting...",
+  },
+  detail: {
+    title: "Item Details",
+    close: "Close",
+    prevAria: "Previous item",
+    nextAria: "Next item",
+    editButton: "Edit",
   },
 };
 
@@ -146,6 +170,7 @@ const zhCN: ClothesFormDictionary = {
     status: "状态",
     memo: "备注（说明、收纳位置）",
   },
+  guestMemberName: "访客",
   errors: {
     photoRequired: "请选择照片",
     nameRequired: "请输入名称",
@@ -165,6 +190,13 @@ const zhCN: ClothesFormDictionary = {
     cancel: "取消",
     confirmButton: "删除",
     deleting: "删除中...",
+  },
+  detail: {
+    title: "物品详情",
+    close: "关闭",
+    prevAria: "上一件",
+    nextAria: "下一件",
+    editButton: "编辑",
   },
 };
 
@@ -188,6 +220,7 @@ const zhTW: ClothesFormDictionary = {
     status: "狀態",
     memo: "備註（說明、收納位置）",
   },
+  guestMemberName: "訪客",
   errors: {
     photoRequired: "請選擇照片",
     nameRequired: "請輸入名稱",
@@ -207,6 +240,13 @@ const zhTW: ClothesFormDictionary = {
     cancel: "取消",
     confirmButton: "刪除",
     deleting: "刪除中...",
+  },
+  detail: {
+    title: "物品詳情",
+    close: "關閉",
+    prevAria: "上一件",
+    nextAria: "下一件",
+    editButton: "編輯",
   },
 };
 

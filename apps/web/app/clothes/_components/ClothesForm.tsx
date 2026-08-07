@@ -324,7 +324,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
         >
           {members.map((member) => (
             <option key={member.id} value={member.id}>
-              {member.name}
+              {member.name === "ゲスト" ? t.guestMemberName : member.name}
             </option>
           ))}
         </select>
