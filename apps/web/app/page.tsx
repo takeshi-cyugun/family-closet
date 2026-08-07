@@ -50,7 +50,7 @@ function LanguageSelect({
   const SelectedFlag = LANGUAGE_FLAGS[selected.code];
 
   return (
-    <div ref={containerRef} className="relative mx-auto mt-4 w-40">
+    <div ref={containerRef} className="relative mx-auto w-40">
       <button
         type="button"
         aria-haspopup="listbox"
@@ -69,7 +69,7 @@ function LanguageSelect({
         <ul
           role="listbox"
           aria-label={ariaLabel}
-          className="absolute bottom-full left-0 z-10 mb-1 w-full overflow-hidden rounded-md border border-linen bg-white shadow-lg"
+          className="absolute left-0 top-full z-10 mt-1 w-full overflow-hidden rounded-md border border-linen bg-white shadow-lg"
         >
           {FOOTER_LANGUAGES.map((lang) => {
             const Flag = LANGUAGE_FLAGS[lang.code];
@@ -82,7 +82,7 @@ function LanguageSelect({
                     onChange(lang.code);
                     setOpen(false);
                   }}
-                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-ink hover:bg-sand ${
+                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-ink hover:bg-linen ${
                     isSelected ? "bg-sand" : ""
                   }`}
                 >
@@ -110,7 +110,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-1 flex-col bg-cream text-ink">
-      <section className="flex flex-col items-center gap-5 px-6 pb-8 pt-16 text-center">
+      <section className="flex flex-col items-center gap-5 px-6 pb-4 pt-16 text-center">
         <span className="text-5xl">🧺</span>
         <h1 className="font-serif text-3xl font-bold tracking-tight">{t.appName}</h1>
         <p className="max-w-sm text-sm text-ink-soft">{t.tagline}</p>
@@ -130,6 +130,8 @@ export default function Home() {
             {t.registerCta}
           </Link>
         </div>
+
+        <LanguageSelect language={language} onChange={setLanguage} ariaLabel={t.footer.languageSelect} />
       </section>
 
       <section className="mx-auto grid w-full max-w-xl gap-4 px-6 py-8 sm:grid-cols-2">
@@ -159,7 +161,6 @@ export default function Home() {
             {t.footer.privacy}
           </a>
         </div>
-        <LanguageSelect language={language} onChange={setLanguage} ariaLabel={t.footer.languageSelect} />
       </footer>
     </div>
   );

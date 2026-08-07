@@ -20,7 +20,6 @@ export type ClothesFormDictionary = {
     status: string;
     memo: string;
   };
-  guestMemberName: string;
   errors: {
     photoRequired: string;
     nameRequired: string;
@@ -78,7 +77,6 @@ const ja: ClothesFormDictionary = {
     status: "ステータス",
     memo: "メモ（説明、収納場所）",
   },
-  guestMemberName: "ゲスト",
   errors: {
     photoRequired: "写真を選択してください",
     nameRequired: "名前を入力してください",
@@ -136,7 +134,6 @@ const en: ClothesFormDictionary = {
     status: "Status",
     memo: "Memo (description, storage location)",
   },
-  guestMemberName: "Guest",
   errors: {
     photoRequired: "Please select a photo",
     nameRequired: "Please enter a name",
@@ -194,7 +191,6 @@ const zhCN: ClothesFormDictionary = {
     status: "状态",
     memo: "备注（说明、收纳位置）",
   },
-  guestMemberName: "访客",
   errors: {
     photoRequired: "请选择照片",
     nameRequired: "请输入名称",
@@ -252,7 +248,6 @@ const zhTW: ClothesFormDictionary = {
     status: "狀態",
     memo: "備註（說明、收納位置）",
   },
-  guestMemberName: "訪客",
   errors: {
     photoRequired: "請選擇照片",
     nameRequired: "請輸入名稱",

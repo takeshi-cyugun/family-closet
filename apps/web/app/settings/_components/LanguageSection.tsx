@@ -6,6 +6,9 @@ import type { LanguageCode } from "../../_lib/i18n";
 import { LANGUAGE_FLAGS } from "../../_lib/languageFlags";
 import { useSettingsLanguage } from "../_lib/LanguageContext";
 
+// 日本語を末尾に表示する（トップページの言語切替と同じ並び順）
+const SORTED_LANGUAGES = [...LANGUAGES.filter((lang) => lang.code !== "ja"), LANGUAGES.find((lang) => lang.code === "ja")!];
+
 export function LanguageSection() {
   const { language, setLanguage, t } = useSettingsLanguage();
   const [open, setOpen] = useState(false);
@@ -65,7 +68,7 @@ export function LanguageSection() {
             aria-labelledby="language-label"
             className="absolute z-10 mt-1 w-full overflow-hidden rounded-md border border-linen bg-white shadow-lg"
           >
-            {LANGUAGES.map((lang) => {
+            {SORTED_LANGUAGES.map((lang) => {
               const Flag = LANGUAGE_FLAGS[lang.code];
               const isSelected = lang.code === language;
               return (

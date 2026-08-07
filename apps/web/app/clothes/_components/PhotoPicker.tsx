@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { Camera } from "lucide-react";
 import type { ClothesFormDictionary } from "../_lib/i18n";
 
 type PhotoPickerProps = {
@@ -89,7 +90,7 @@ export function PhotoPicker({
             onClick={() => inputRef.current?.click()}
             className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-linen bg-white px-4 py-3 text-ink-soft"
           >
-            <span className="text-xl">📷</span>
+            <Camera size={20} strokeWidth={1.75} aria-hidden />
             <span className="text-sm">{labels.selectCta}</span>
           </button>
         </div>

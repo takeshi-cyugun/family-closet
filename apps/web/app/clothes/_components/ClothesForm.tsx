@@ -95,7 +95,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
 
   useEffect(() => {
     let cancelled = false;
-    ensureGuestFamily().then(async (session) => {
+    ensureGuestFamily(language).then(async (session) => {
       const [familyMembers, settings] = await Promise.all([getFamilyMembers(), getSettingsData()]);
       if (cancelled) return;
       setFamilyId(session.familyId);
@@ -106,6 +106,8 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
     return () => {
       cancelled = true;
     };
+    // マウント時点の言語だけを初回のゲストファミリー作成に使う（言語切替のたびに再作成/再取得はしない）
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleSelectFile(file: File) {
@@ -184,7 +186,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
         return;
       }
 
-      const session = await ensureGuestFamily();
+      const session = await ensureGuestFamily(language);
       const result = await createClothes({
         familyId: session.familyId,
         ownerMemberId: ownerId || session.memberId,
@@ -216,7 +218,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
       return;
     }
 
-    const session = familyId ? { familyId } : await ensureGuestFamily();
+    const session = familyId ? { familyId } : await ensureGuestFamily(language);
     const result = await updateClothes(initialItem.id, session.familyId, {
       name: name.trim(),
       category: category.trim(),
@@ -239,7 +241,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
   async function handleDelete() {
     if (!initialItem) return;
     setDeleting(true);
-    const session = familyId ? { familyId } : await ensureGuestFamily();
+    const session = familyId ? { familyId } : await ensureGuestFamily(language);
     const result = await deleteClothes(initialItem.id, session.familyId);
     if (result.success) {
       router.push("/dashboard");
@@ -333,7 +335,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
         >
           {members.map((member) => (
             <option key={member.id} value={member.id}>
-              {member.name === "ゲスト" ? t.guestMemberName : member.name}
+              {member.name}
             </option>
           ))}
         </select>

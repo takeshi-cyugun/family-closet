@@ -15,10 +15,6 @@ import { LanguageSection } from "./_components/LanguageSection";
 import { PlanSection } from "./_components/PlanSection";
 import { SettingsLanguageProvider, useSettingsLanguage } from "./_lib/LanguageContext";
 
-// families.name / members.displayName の未カスタマイズ時のDB既定値（お試し期間中はローカライズした表示に差し替える）
-const DEFAULT_FAMILY_NAME = "ファミリー名";
-const DEFAULT_GUEST_MEMBER_NAME = "ゲスト";
-
 function SettingsPageContent() {
   const [members, setMembers] = useState<Member[]>([]);
   const [settings, setSettings] = useState<SettingsData | null>(null);
@@ -66,15 +62,6 @@ function SettingsPageContent() {
 
   const limits = PLAN_LIMITS[settings.planTier];
 
-  const displayFamilyName =
-    settings.isGuest && settings.familyName === DEFAULT_FAMILY_NAME
-      ? t.accountInfo.guestFamilyName
-      : settings.familyName;
-  const displayMemberName =
-    settings.isGuest && settings.memberName === DEFAULT_GUEST_MEMBER_NAME
-      ? t.accountInfo.guestMemberName
-      : settings.memberName;
-
   return (
     <div className="flex min-h-dvh flex-col bg-cream text-ink">
       <Header title={t.headerTitle} />
@@ -87,8 +74,8 @@ function SettingsPageContent() {
             <GuestBanner daysLeft={settings.guestDaysLeft} />
           )}
           <AccountInfoCard
-            familyName={displayFamilyName}
-            memberName={displayMemberName}
+            familyName={settings.familyName}
+            memberName={settings.memberName}
             onFamilyNameChange={(name) =>
               setSettings((prev) => (prev ? { ...prev, familyName: name } : prev))
             }

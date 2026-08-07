@@ -130,7 +130,7 @@ export function ClothesDetailContent({
           <Field label={t.fields.category.label} value={item.category || "-"} />
           <Field label={t.fields.size} value={item.size} />
           <Field label={t.fields.season} value={dashboardT.seasons[item.season]} />
-          <Field label={t.fields.owner} value={ownerName === "ゲスト" ? t.guestMemberName : ownerName} />
+          <Field label={t.fields.owner} value={ownerName} />
           <Field label={t.fields.memo} value={item.memo || "-"} wide />
         </dl>
 
