@@ -35,6 +35,7 @@ export type SettingsDictionary = {
     memberIdLabel: string;
     memberIdPlaceholder: string;
     submitButton: string;
+    qrButton: string;
     errors: {
       nameRequired: string;
       invalidMemberId: string;
@@ -88,6 +89,7 @@ const ja: SettingsDictionary = {
     memberIdLabel: "メンバーID",
     memberIdPlaceholder: "例: jijo",
     submitButton: "メンバーを追加",
+    qrButton: "QRコード表示",
     errors: {
       nameRequired: "表示名を入力してください",
       invalidMemberId: "メンバーIDは半角英数字・アンダースコア・ハイフンで2〜20文字",
@@ -145,6 +147,7 @@ const en: SettingsDictionary = {
     memberIdLabel: "Member ID",
     memberIdPlaceholder: "e.g. jijo",
     submitButton: "Add member",
+    qrButton: "Show QR code",
     errors: {
       nameRequired: "Please enter a display name",
       invalidMemberId: "Member ID must be 2-20 alphanumeric characters, underscores, or hyphens",
@@ -202,6 +205,7 @@ const zhCN: SettingsDictionary = {
     memberIdLabel: "成员ID",
     memberIdPlaceholder: "例：jijo",
     submitButton: "添加成员",
+    qrButton: "显示二维码",
     errors: {
       nameRequired: "请输入显示名称",
       invalidMemberId: "成员ID须为2〜20位的半角英数字、下划线或连字符",
@@ -259,6 +263,7 @@ const zhTW: SettingsDictionary = {
     memberIdLabel: "成員ID",
     memberIdPlaceholder: "例：jijo",
     submitButton: "新增成員",
+    qrButton: "顯示QR碼",
     errors: {
       nameRequired: "請輸入顯示名稱",
       invalidMemberId: "成員ID須為2〜20位的半形英數字、底線或連字號",
