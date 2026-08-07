@@ -79,9 +79,12 @@ function SettingsPageContent() {
             onFamilyNameChange={(name) =>
               setSettings((prev) => (prev ? { ...prev, familyName: name } : prev))
             }
-            onMemberNameChange={(name) =>
-              setSettings((prev) => (prev ? { ...prev, memberName: name } : prev))
-            }
+            onMemberNameChange={(name) => {
+              setSettings((prev) => (prev ? { ...prev, memberName: name } : prev));
+              setMembers((prev) =>
+                prev.map((member) => (member.id === settings.memberDbId ? { ...member, name } : member))
+              );
+            }}
           />
           {settings.role === "admin" && (
             <MemberSection

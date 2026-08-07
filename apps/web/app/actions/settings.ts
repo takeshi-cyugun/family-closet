@@ -8,6 +8,7 @@ import type { PlanTier } from '../settings/_data/constants';
 
 export type SettingsData = {
   familyName: string;
+  memberDbId: string;
   memberName: string;
   role: 'admin' | 'member';
   isGuest: boolean;
@@ -60,6 +61,7 @@ export async function getSettingsData(): Promise<SettingsData | null> {
 
   return {
     familyName: family.name,
+    memberDbId,
     memberName,
     role: currentMember?.role === 'owner' ? 'admin' : 'member',
     isGuest: family.isGuest,
