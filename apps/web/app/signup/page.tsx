@@ -5,6 +5,7 @@ import { Check, Infinity as InfinityIcon, Mail, Shirt } from "lucide-react";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { useLanguage } from "../_lib/LanguageContext";
 import { getSignupDictionary } from "./_lib/i18n";
+import { signupOwner } from "../actions/signupOwner";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
@@ -47,6 +48,7 @@ export default function SignupPage() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function handleChooseEmail() {
     setGoogleNotice(false);
@@ -78,10 +80,16 @@ export default function SignupPage() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    setSubmitError(null);
     setSubmitting(true);
-    // トライアル実装のためサーバー通信は行わず、UI上の完了状態だけを模擬する
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    const result = await signupOwner({ email, password, plan });
     setSubmitting(false);
+
+    if (!result.success) {
+      setSubmitError(result.error);
+      return;
+    }
+
     setSubmitted(true);
   }
 
@@ -125,13 +133,13 @@ export default function SignupPage() {
               />
               <span>
                 {t.agree.prefix}
-                <a href="/terms" className="underline">
+                <Link href="/terms" className="underline">
                   {t.agree.terms}
-                </a>
+                </Link>
                 {t.agree.and}
-                <a href="/privacy" className="underline">
+                <Link href="/privacy" className="underline">
                   {t.agree.privacy}
-                </a>
+                </Link>
                 {t.agree.suffix}
               </span>
             </label>
@@ -281,6 +289,8 @@ export default function SignupPage() {
                 <p className="text-xs text-red-600 dark:text-red-400">{errors.passwordConfirm}</p>
               )}
             </div>
+
+            {submitError && <p className="text-xs text-red-600 dark:text-red-400">{submitError}</p>}
 
             <button
               type="submit"

@@ -100,8 +100,8 @@ const ja: SignupDictionary = {
   },
   success: {
     heading: "確認メールを送信しました",
-    emailLine: (email) => `${email} 宛に認証用URLを送信しました（トライアル画面のため実際には送信されません）。`,
-    trialNotice: "このページはUI・遷移アニメーションのみのトライアル実装です。実際のユーザー作成は行われません。",
+    emailLine: (email) => `${email} 宛に認証用URLを送信しました。`,
+    trialNotice: "メール内のリンクをクリックすると、ファミリーの作成が完了します。",
     loginButton: "ログイン画面へ",
   },
 };
@@ -153,8 +153,8 @@ const en: SignupDictionary = {
   },
   success: {
     heading: "Confirmation email sent",
-    emailLine: (email) => `A verification link has been sent to ${email} (not actually sent — this is a trial page).`,
-    trialNotice: "This page is a UI/animation trial only. No real account is created.",
+    emailLine: (email) => `A verification link has been sent to ${email}.`,
+    trialNotice: "Clicking the link in the email will finish setting up your family.",
     loginButton: "Go to login",
   },
 };
@@ -206,8 +206,8 @@ const zhCN: SignupDictionary = {
   },
   success: {
     heading: "确认邮件已发送",
-    emailLine: (email) => `验证链接已发送至 ${email}（试用页面，实际未发送）。`,
-    trialNotice: "此页面仅为UI与动画试用，不会创建真实账户。",
+    emailLine: (email) => `验证链接已发送至 ${email}。`,
+    trialNotice: "点击邮件中的链接后，家庭账户即创建完成。",
     loginButton: "前往登录",
   },
 };
@@ -259,8 +259,8 @@ const zhTW: SignupDictionary = {
   },
   success: {
     heading: "確認郵件已寄送",
-    emailLine: (email) => `驗證連結已寄送至 ${email}（試用頁面，實際未寄送）。`,
-    trialNotice: "此頁面僅為UI與動畫試用，不會建立真實帳戶。",
+    emailLine: (email) => `驗證連結已寄送至 ${email}。`,
+    trialNotice: "點擊郵件中的連結後，家庭帳戶即建立完成。",
     loginButton: "前往登入",
   },
 };

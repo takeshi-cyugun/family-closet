@@ -16,6 +16,14 @@ export type HomeDictionary = {
     loggingIn: string;
     login: string;
   };
+  ownerLoginForm: {
+    email: string;
+    password: string;
+    missingFields: string;
+    locked: (countdown: string) => string;
+    loggingIn: string;
+    login: string;
+  };
   footer: {
     terms: string;
     privacy: string;
@@ -47,6 +55,14 @@ const ja: HomeDictionary = {
     memberId: "メンバーID",
     password: "パスワード",
     missingFields: "ファミリーID・メンバーID・パスワードを入力してください",
+    locked: (countdown) => `ロック中（残り ${countdown}）`,
+    loggingIn: "ログイン中...",
+    login: "ログイン",
+  },
+  ownerLoginForm: {
+    email: "メールアドレス",
+    password: "パスワード",
+    missingFields: "メールアドレスとパスワードを入力してください",
     locked: (countdown) => `ロック中（残り ${countdown}）`,
     loggingIn: "ログイン中...",
     login: "ログイン",
@@ -86,6 +102,14 @@ const en: HomeDictionary = {
     loggingIn: "Logging in...",
     login: "Log in",
   },
+  ownerLoginForm: {
+    email: "Email address",
+    password: "Password",
+    missingFields: "Please enter your email address and password",
+    locked: (countdown) => `Locked (${countdown} remaining)`,
+    loggingIn: "Logging in...",
+    login: "Log in",
+  },
   footer: {
     terms: "Terms of Service",
     privacy: "Privacy Policy",
@@ -120,6 +144,14 @@ const zhCN: HomeDictionary = {
     loggingIn: "登录中...",
     login: "登录",
   },
+  ownerLoginForm: {
+    email: "邮箱地址",
+    password: "密码",
+    missingFields: "请输入邮箱地址和密码",
+    locked: (countdown) => `锁定中（剩余 ${countdown}）`,
+    loggingIn: "登录中...",
+    login: "登录",
+  },
   footer: {
     terms: "服务条款",
     privacy: "隐私政策",
@@ -150,6 +182,14 @@ const zhTW: HomeDictionary = {
     memberId: "成員ID",
     password: "密碼",
     missingFields: "請輸入家庭ID、成員ID和密碼",
+    locked: (countdown) => `鎖定中（剩餘 ${countdown}）`,
+    loggingIn: "登入中...",
+    login: "登入",
+  },
+  ownerLoginForm: {
+    email: "電子郵件地址",
+    password: "密碼",
+    missingFields: "請輸入電子郵件地址和密碼",
     locked: (countdown) => `鎖定中（剩餘 ${countdown}）`,
     loggingIn: "登入中...",
     login: "登入",

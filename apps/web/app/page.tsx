@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { LoginForm } from "./_components/LoginForm";
+import { OwnerLoginForm } from "./_components/OwnerLoginForm";
 import { startGuestSession } from "./_lib/session";
 import { LANGUAGES } from "./_lib/i18n";
 import type { LanguageCode } from "./_lib/i18n";
@@ -147,7 +147,7 @@ export default function Home() {
 
       <section className="mx-auto w-full max-w-sm px-6 py-8">
         <h2 className="mb-4 font-serif text-base font-bold text-ink">{t.loginHeading}</h2>
-        <LoginForm t={t.loginForm} />
+        <OwnerLoginForm t={t.ownerLoginForm} />
       </section>
 
       <footer className="mt-auto border-t border-linen px-6 py-6 text-center">

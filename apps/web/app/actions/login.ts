@@ -1,14 +1,14 @@
 'use server';
 
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import {
   db,
   members,
-  loginAttempts,
   createSupabaseServerClient,
   createSupabaseAuthClient,
 } from '@repo/database';
-import { eq, and, gt } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
+import { isLocked, recordFailure, clearAttempts, getClientIp } from './_lib/loginLockout';
 
 export type LoginResult =
   | { success: true; firstLogin: boolean }
@@ -17,33 +17,6 @@ export type LoginResult =
 const INVALID_CREDENTIALS_MESSAGE = 'ファミリーID・メンバーID・パスワードの組み合わせが正しくありません。';
 const LOCKED_MESSAGE = 'ログイン試行回数の上限に達しました。5分後に再度お試しください。';
 const EMAIL_NOT_CONFIRMED_MESSAGE = 'メールアドレスの確認が完了していません。届いた確認メール内のリンクをクリックしてください。';
-
-const MAX_ATTEMPTS = 5;
-const LOCKOUT_WINDOW_MS = 5 * 60 * 1000;
-
-async function isLocked(identifier: string): Promise<boolean> {
-  const since = new Date(Date.now() - LOCKOUT_WINDOW_MS);
-  const rows = await db
-    .select({ id: loginAttempts.id })
-    .from(loginAttempts)
-    .where(and(eq(loginAttempts.identifier, identifier), gt(loginAttempts.createdAt, since)));
-  return rows.length >= MAX_ATTEMPTS;
-}
-
-async function recordFailure(identifier: string): Promise<void> {
-  await db.insert(loginAttempts).values({ identifier });
-}
-
-async function clearAttempts(identifier: string): Promise<void> {
-  await db.delete(loginAttempts).where(eq(loginAttempts.identifier, identifier));
-}
-
-async function getClientIp(): Promise<string | null> {
-  const headerList = await headers();
-  const forwardedFor = headerList.get('x-forwarded-for');
-  if (forwardedFor) return forwardedFor.split(',')[0].trim();
-  return headerList.get('x-real-ip');
-}
 
 // ファミリーID + メンバーID + パスワードで実ログインし、セッションCookieを発行する
 // IP・アカウント単位で5分間に5回失敗するとロックする（サーバー側ブルートフォース対策）
