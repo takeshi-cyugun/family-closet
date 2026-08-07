@@ -9,8 +9,9 @@ type PhotoPickerProps = {
   analyzing: boolean;
   onSelectFile: (file: File) => void;
   onRotate: () => void;
-  onRemove: () => void;
+  onRemove?: () => void;
   labels: ClothesFormDictionary["photo"];
+  compact?: boolean;
 };
 
 export function PhotoPicker({
@@ -21,6 +22,7 @@ export function PhotoPicker({
   onRotate,
   onRemove,
   labels,
+  compact,
 }: PhotoPickerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -45,7 +47,7 @@ export function PhotoPicker({
             <img
               src={photoUrl}
               alt={labels.previewAlt}
-              className="block max-h-[50vh] w-auto max-w-full rounded-lg transition-transform"
+              className={`block w-auto max-w-full rounded-lg transition-transform ${compact ? "max-h-40" : "max-h-[50vh]"}`}
               style={{ transform: `rotate(${rotation}deg)` }}
             />
 
@@ -66,14 +68,16 @@ export function PhotoPicker({
                 >
                   ⟳
                 </button>
-                <button
-                  type="button"
-                  onClick={onRemove}
-                  aria-label={labels.remove}
-                  className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-base text-white"
-                >
-                  ✕
-                </button>
+                {onRemove && (
+                  <button
+                    type="button"
+                    onClick={onRemove}
+                    aria-label={labels.remove}
+                    className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-base text-white"
+                  >
+                    ✕
+                  </button>
+                )}
               </>
             )}
           </div>

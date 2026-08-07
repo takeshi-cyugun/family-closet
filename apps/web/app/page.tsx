@@ -124,7 +124,7 @@ export default function Home() {
             {t.guestCta}
           </button>
           <Link
-            href="/register"
+            href="/signup"
             className="rounded-md border border-linen py-3 text-center text-sm font-medium text-ink"
           >
             {t.registerCta}

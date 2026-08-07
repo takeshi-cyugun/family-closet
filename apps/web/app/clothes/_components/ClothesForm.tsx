@@ -16,6 +16,7 @@ import { getDashboardDictionary } from "../../dashboard/_lib/i18n";
 type ClothesFormProps = {
   mode: "new" | "edit";
   initialItem?: ClothesItem;
+  compact?: boolean;
 };
 
 type Errors = Partial<Record<"photo" | "name" | "color", string>>;
@@ -56,7 +57,7 @@ function SelectField<T extends string>({
   );
 }
 
-export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
+export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
   const router = useRouter();
   const { language } = useLanguage();
   const t = getClothesFormDictionary(language);
@@ -237,8 +238,9 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
           analyzing={analyzing}
           onSelectFile={handleSelectFile}
           onRotate={handleRotate}
-          onRemove={handleRemovePhoto}
+          onRemove={mode === "new" ? handleRemovePhoto : undefined}
           labels={t.photo}
+          compact={compact}
         />
         {errors.photo && <p className="text-xs text-red-600 dark:text-red-400">{errors.photo}</p>}
         {uploadError && <p className="text-xs text-red-600 dark:text-red-400">{uploadError}</p>}
@@ -359,37 +361,45 @@ export function ClothesForm({ mode, initialItem }: ClothesFormProps) {
 
       {mode === "edit" && initialItem && (
         <div className="text-center">
-          {confirmingDelete ? (
-            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-left text-sm dark:border-red-900 dark:bg-red-950/40">
-              <p className="mb-2 text-red-700 dark:text-red-300">{t.delete.confirm}</p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  disabled={deleting}
-                  onClick={() => setConfirmingDelete(false)}
-                  className="flex-1 rounded-md border border-linen py-2 text-sm text-ink disabled:opacity-50"
-                >
-                  {t.delete.cancel}
-                </button>
-                <button
-                  type="button"
-                  disabled={deleting}
-                  onClick={handleDelete}
-                  className="flex-1 rounded-md bg-red-600 py-2 text-sm font-medium text-white disabled:opacity-50"
-                >
-                  {deleting ? t.delete.deleting : t.delete.confirmButton}
-                </button>
-              </div>
+          <button
+            type="button"
+            onClick={() => setConfirmingDelete(true)}
+            className="text-xs text-red-600 underline-offset-2 hover:underline dark:text-red-400"
+          >
+            {t.delete.link}
+          </button>
+        </div>
+      )}
+
+      {confirmingDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label={t.delete.cancel}
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setConfirmingDelete(false)}
+          />
+          <div className="relative z-10 w-full max-w-sm rounded-2xl bg-cream p-5 text-left shadow-2xl">
+            <p className="mb-4 text-sm text-red-700 dark:text-red-300">{t.delete.confirm}</p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => setConfirmingDelete(false)}
+                className="flex-1 rounded-md border border-linen py-2 text-sm text-ink disabled:opacity-50"
+              >
+                {t.delete.cancel}
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={handleDelete}
+                className="flex-1 rounded-md bg-red-600 py-2 text-sm font-medium text-white disabled:opacity-50"
+              >
+                {deleting ? t.delete.deleting : t.delete.confirmButton}
+              </button>
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setConfirmingDelete(true)}
-              className="text-xs text-red-600 underline-offset-2 hover:underline dark:text-red-400"
-            >
-              {t.delete.link}
-            </button>
-          )}
+          </div>
         </div>
       )}
     </form>

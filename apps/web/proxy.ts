@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 const FORCE_PASSWORD_CHANGE_COOKIE = "fc_force_password_change";
 const CHANGE_PASSWORD_PATH = "/change-password";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const mustChangePassword = request.cookies.get(FORCE_PASSWORD_CHANGE_COOKIE)?.value === "1";
   const { pathname } = request.nextUrl;
 

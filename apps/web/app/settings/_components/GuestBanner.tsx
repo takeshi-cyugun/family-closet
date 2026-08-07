@@ -15,7 +15,7 @@ export function GuestBanner({ daysLeft }: GuestBannerProps) {
       <p className="text-sm font-medium text-ink">{t.guestBanner.trialNotice(daysLeft)}</p>
       <p className="mt-1 text-xs text-ink-soft">{t.guestBanner.trialDesc}</p>
       <Link
-        href="/register"
+        href="/signup"
         className="mt-3 block rounded-md bg-espresso py-2.5 text-center text-sm font-semibold text-on-espresso"
       >
         {t.guestBanner.registerCta}

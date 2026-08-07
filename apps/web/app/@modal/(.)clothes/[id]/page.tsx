@@ -20,6 +20,7 @@ export default async function InterceptedClothesDetailPage({
         prevId={data.prevId}
         nextId={data.nextId}
         closeTo="back"
+        compact
       />
     </Modal>
   );

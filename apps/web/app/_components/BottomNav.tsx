@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { LayoutGrid, Plus, Settings } from "lucide-react";
 import { useLanguage } from "../_lib/LanguageContext";
 import { getDashboardDictionary } from "../dashboard/_lib/i18n";
 
@@ -9,9 +10,9 @@ export function BottomNav() {
   const t = getDashboardDictionary(language);
 
   const navItems = [
-    { href: "/dashboard", label: t.nav.dashboard, icon: "📋" },
-    { href: "/clothes-new", label: t.nav.add, icon: "➕" },
-    { href: "/settings", label: t.nav.settings, icon: "⚙️" },
+    { href: "/dashboard", label: t.nav.dashboard, Icon: LayoutGrid },
+    { href: "/clothes-new", label: t.nav.add, Icon: Plus },
+    { href: "/settings", label: t.nav.settings, Icon: Settings },
   ];
 
   return (
@@ -20,14 +21,14 @@ export function BottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="flex h-16 items-stretch">
-        {navItems.map((item) => (
+        {navItems.map(({ href, label, Icon }) => (
           <Link
-            key={item.href}
-            href={item.href}
+            key={href}
+            href={href}
             className="flex flex-1 flex-col items-center justify-center gap-0.5 text-xs text-on-espresso/70 hover:text-on-espresso"
           >
-            <span className="text-lg leading-none">{item.icon}</span>
-            <span>{item.label}</span>
+            <Icon size={20} strokeWidth={1.75} aria-hidden />
+            <span>{label}</span>
           </Link>
         ))}
       </div>

@@ -25,7 +25,7 @@ export function GuestTrialBanner() {
   return (
     <div className="border-b border-linen bg-sand px-4 py-2 text-center text-xs text-ink">
       {t.guestTrial(daysLeft, GUEST_ITEM_LIMIT)}
-      <Link href="/register" className="ml-1.5 font-medium underline">
+      <Link href="/signup" className="ml-1.5 font-medium underline">
         {t.registerCta}
       </Link>
     </div>

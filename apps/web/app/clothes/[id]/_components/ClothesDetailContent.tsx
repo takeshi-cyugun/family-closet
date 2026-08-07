@@ -11,6 +11,7 @@ type ClothesDetailProps = {
   prevId: string | null;
   nextId: string | null;
   closeTo: "back" | string;
+  compact?: boolean;
 };
 
 const STATUS_BADGE_CLASS: Record<ClothesStatus, string> = {
@@ -62,6 +63,7 @@ export function ClothesDetailContent({
   prevId,
   nextId,
   closeTo,
+  compact,
 }: ClothesDetailProps) {
   const router = useRouter();
 
@@ -72,7 +74,7 @@ export function ClothesDetailContent({
 
   return (
     <>
-      <header className="flex h-14 items-center justify-between bg-espresso px-4">
+      <header className="flex h-14 shrink-0 items-center justify-between bg-espresso px-4">
         <h1 className="font-serif text-base font-bold text-on-espresso">洋服の詳細</h1>
         <button
           type="button"
@@ -88,7 +90,9 @@ export function ClothesDetailContent({
         <div className="relative">
           <NavArrow direction="prev" id={prevId} />
 
-          <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-sand">
+          <div
+            className={`flex w-full items-center justify-center overflow-hidden rounded-lg bg-sand ${compact ? "h-48" : "aspect-square"}`}
+          >
             {item.photoDataUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.photoDataUrl} alt={item.name} className="h-full w-full object-contain" />

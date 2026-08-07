@@ -15,14 +15,14 @@ export function Modal({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <button
         type="button"
         aria-label="閉じる"
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0 bg-black/60"
         onClick={() => router.back()}
       />
-      <div className="relative z-10 flex h-dvh w-full flex-col overflow-y-auto bg-cream">
+      <div className="modal-scrollbar relative z-10 flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col overflow-y-auto rounded-3xl bg-cream shadow-2xl">
         {children}
       </div>
     </div>
