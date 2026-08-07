@@ -7,7 +7,7 @@ import { uploadClothesImage } from "../../actions/uploadImage";
 import { ensureGuestFamily } from "../../actions/ensureGuestFamily";
 import { getFamilyMembers } from "../../actions/members";
 import { createClothes, deleteClothes, updateClothes } from "../../actions/clothes";
-import { SEASONS, SIZES, STATUSES, mapUiStatusToDbStatus, mockAnalyzeImage } from "../../_lib/clothes";
+import { SEASONS, SIZES, STATUSES, mapUiStatusToDbStatus, mapAiSeasonToSeason } from "../../_lib/clothes";
 import type { ClothesItem, ClothesStatus, Member, Season, Size } from "../../_lib/clothes";
 import { useLanguage } from "../../_lib/LanguageContext";
 import { getClothesFormDictionary } from "../_lib/i18n";
@@ -117,12 +117,23 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
     const formData = new FormData();
     formData.set("file", file);
 
+    const analyzeFormData = new FormData();
+    analyzeFormData.set("image", file);
+    analyzeFormData.set("language", language);
+
     const [analyzeResult, uploadResult] = await Promise.all([
-      mockAnalyzeImage(),
+      fetch("/api/analyze-image", { method: "POST", body: analyzeFormData })
+        .then((res) => (res.ok ? res.json() : null))
+        .catch(() => null),
       uploadClothesImage(formData),
     ]);
 
-    setCategory(analyzeResult.category);
+    if (analyzeResult?.success) {
+      if (analyzeResult.name) setName(analyzeResult.name);
+      if (analyzeResult.category) setCategory(analyzeResult.category);
+      if (analyzeResult.color) setColor(analyzeResult.color);
+      if (analyzeResult.season) setSeason(mapAiSeasonToSeason(analyzeResult.season, dashboardT.seasons));
+    }
     setAnalyzing(false);
 
     if (uploadResult.success) {

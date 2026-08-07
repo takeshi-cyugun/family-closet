@@ -178,9 +178,27 @@ export function deleteClothesItem(id: string): void {
   if (index !== -1) mockClothes.splice(index, 1);
 }
 
-const MOCK_AI_CATEGORIES: Category[] = ["トップス", "アウター", "パンツ", "ワンピース", "靴"];
+const SINGLE_SEASONS = ["通年", "春", "夏", "秋", "冬"] as const;
+type SingleSeason = (typeof SINGLE_SEASONS)[number];
 
-export async function mockAnalyzeImage(): Promise<{ category: Category }> {
-  await new Promise((resolve) => setTimeout(resolve, 1200));
-  return { category: MOCK_AI_CATEGORIES[Math.floor(Math.random() * MOCK_AI_CATEGORIES.length)] };
+// AIが返す「春,秋」/ "Spring,Autumn" のようなカンマ区切りの季節を、フォームの単一選択肢に丸める
+// seasonLabels には表示中の言語での「通年/春/夏/秋/冬」の訳語（getDashboardDictionary(language).seasons）を渡す
+export function mapAiSeasonToSeason(aiSeason: string, seasonLabels?: Partial<Record<Season, string>>): Season {
+  const reverseMap = new Map<string, SingleSeason>();
+  for (const key of SINGLE_SEASONS) {
+    reverseMap.set(key.toLowerCase(), key);
+    const label = seasonLabels?.[key];
+    if (label) reverseMap.set(label.trim().toLowerCase(), key);
+  }
+
+  const matched = new Set<SingleSeason>();
+  for (const token of aiSeason.split(",")) {
+    const key = reverseMap.get(token.trim().toLowerCase());
+    if (key) matched.add(key);
+  }
+
+  if (matched.has("通年") || matched.size === 0) return "通年";
+  if (matched.has("春") && matched.has("夏")) return "春夏";
+  if (matched.has("秋") && matched.has("冬")) return "秋冬";
+  return [...matched][0];
 }
