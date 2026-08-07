@@ -12,8 +12,15 @@ export type SettingsDictionary = {
     registerCta: string;
   };
   accountInfo: {
-    familyId: string;
-    memberId: string;
+    familyNameLabel: string;
+    memberNameLabel: string;
+    editButton: string;
+    saveButton: string;
+    cancelButton: string;
+    saving: string;
+    familyNamePlaceholder: string;
+    memberNamePlaceholder: string;
+    updateError: string;
   };
   memberSection: {
     heading: string;
@@ -58,8 +65,15 @@ const ja: SettingsDictionary = {
     registerCta: "ファミリーを本登録する",
   },
   accountInfo: {
-    familyId: "ファミリーID",
-    memberId: "メンバーID",
+    familyNameLabel: "ファミリー名",
+    memberNameLabel: "メンバー",
+    editButton: "編集",
+    saveButton: "保存",
+    cancelButton: "キャンセル",
+    saving: "保存中...",
+    familyNamePlaceholder: "例: 山田家",
+    memberNamePlaceholder: "例: パパ",
+    updateError: "更新に失敗しました。",
   },
   memberSection: {
     heading: "家族メンバー管理",
@@ -108,8 +122,15 @@ const en: SettingsDictionary = {
     registerCta: "Complete family registration",
   },
   accountInfo: {
-    familyId: "Family ID",
-    memberId: "Member ID",
+    familyNameLabel: "Family name",
+    memberNameLabel: "Member",
+    editButton: "Edit",
+    saveButton: "Save",
+    cancelButton: "Cancel",
+    saving: "Saving...",
+    familyNamePlaceholder: "e.g. The Smiths",
+    memberNamePlaceholder: "e.g. Dad",
+    updateError: "Failed to update.",
   },
   memberSection: {
     heading: "Family Members",
@@ -158,8 +179,15 @@ const zhCN: SettingsDictionary = {
     registerCta: "完成家庭注册",
   },
   accountInfo: {
-    familyId: "家庭ID",
-    memberId: "成员ID",
+    familyNameLabel: "家庭名称",
+    memberNameLabel: "成员",
+    editButton: "编辑",
+    saveButton: "保存",
+    cancelButton: "取消",
+    saving: "保存中...",
+    familyNamePlaceholder: "例：山田家",
+    memberNamePlaceholder: "例：爸爸",
+    updateError: "更新失败。",
   },
   memberSection: {
     heading: "家庭成员管理",
@@ -208,8 +236,15 @@ const zhTW: SettingsDictionary = {
     registerCta: "完成家庭註冊",
   },
   accountInfo: {
-    familyId: "家庭ID",
-    memberId: "成員ID",
+    familyNameLabel: "家庭名稱",
+    memberNameLabel: "成員",
+    editButton: "編輯",
+    saveButton: "儲存",
+    cancelButton: "取消",
+    saving: "儲存中...",
+    familyNamePlaceholder: "例：山田家",
+    memberNamePlaceholder: "例：爸爸",
+    updateError: "更新失敗。",
   },
   memberSection: {
     heading: "家庭成員管理",

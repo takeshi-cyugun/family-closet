@@ -73,7 +73,16 @@ function SettingsPageContent() {
           {settings.isGuest && settings.guestDaysLeft !== null && (
             <GuestBanner daysLeft={settings.guestDaysLeft} />
           )}
-          <AccountInfoCard familyId={settings.familyId} memberId={settings.memberId} />
+          <AccountInfoCard
+            familyName={settings.familyName}
+            memberName={settings.memberName}
+            onFamilyNameChange={(name) =>
+              setSettings((prev) => (prev ? { ...prev, familyName: name } : prev))
+            }
+            onMemberNameChange={(name) =>
+              setSettings((prev) => (prev ? { ...prev, memberName: name } : prev))
+            }
+          />
           {settings.role === "admin" && (
             <MemberSection
               members={members}

@@ -22,6 +22,7 @@ export const planTypeEnum = pgEnum('plan_type', ['fitting', 'chest', 'walk_in'])
 // 1. ファミリー (families)
 export const families = pgTable('families', {
   id: text('id').primaryKey(), // 例: "guest_xxx" または カスタムファミリーID
+  name: text('name').default('ファミリー名').notNull(), // 設定画面で表示・編集する表示用のファミリー名（ログインIDとは別）
   isGuest: boolean('is_guest').default(false).notNull(),
   guestExpiresAt: timestamp('guest_expires_at'), // フィッティングプラン用（14日間）
   createdAt: timestamp('created_at').defaultNow().notNull(),
