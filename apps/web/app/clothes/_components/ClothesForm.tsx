@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { PhotoPicker } from "./PhotoPicker";
 import { uploadClothesImage } from "../../actions/uploadImage";
 import { ensureGuestFamily } from "../../actions/ensureGuestFamily";
 import { getFamilyMembers } from "../../actions/members";
+import { getSettingsData } from "../../actions/settings";
 import { createClothes, deleteClothes, updateClothes } from "../../actions/clothes";
 import { SEASONS, SIZES, STATUSES, mapUiStatusToDbStatus, mapAiSeasonToSeason } from "../../_lib/clothes";
 import type { ClothesItem, ClothesStatus, Member, Season, Size } from "../../_lib/clothes";
@@ -88,14 +90,17 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
 
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
+  const [isGuest, setIsGuest] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     ensureGuestFamily().then(async (session) => {
-      const familyMembers = await getFamilyMembers();
+      const [familyMembers, settings] = await Promise.all([getFamilyMembers(), getSettingsData()]);
       if (cancelled) return;
       setFamilyId(session.familyId);
       setMembers(familyMembers);
+      setIsGuest(settings?.isGuest ?? false);
       setOwnerId((prev) => prev || familyMembers[0]?.id || session.memberId);
     });
     return () => {
@@ -195,7 +200,11 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
 
       setSaving(false);
       if (!result.success) {
-        setSubmitError(result.error);
+        if ("reason" in result && result.reason === "item_limit") {
+          setShowLimitModal(true);
+        } else {
+          setSubmitError(result.error);
+        }
         return;
       }
       router.push("/dashboard");
@@ -408,6 +417,38 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
                 className="flex-1 rounded-md bg-red-600 py-2 text-sm font-medium text-white disabled:opacity-50"
               >
                 {deleting ? t.delete.deleting : t.delete.confirmButton}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showLimitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label={t.limitModal.close}
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setShowLimitModal(false)}
+          />
+          <div className="relative z-10 w-full max-w-sm rounded-2xl bg-cream p-6 text-center shadow-2xl">
+            <h2 className="font-serif text-lg font-bold text-ink">{t.limitModal.title}</h2>
+            <p className="mt-3 text-sm text-ink-soft">
+              {isGuest ? t.limitModal.descGuest : t.limitModal.descMember}
+            </p>
+            <div className="mt-6 flex flex-col gap-2">
+              <Link
+                href={isGuest ? "/signup" : "/settings"}
+                className="rounded-md bg-espresso py-2.5 text-center text-sm font-semibold text-on-espresso"
+              >
+                {isGuest ? t.limitModal.ctaGuest : t.limitModal.ctaMember}
+              </Link>
+              <button
+                type="button"
+                onClick={() => setShowLimitModal(false)}
+                className="rounded-md border border-linen py-2.5 text-sm text-ink"
+              >
+                {t.limitModal.close}
               </button>
             </div>
           </div>

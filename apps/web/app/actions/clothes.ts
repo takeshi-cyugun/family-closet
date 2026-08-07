@@ -63,7 +63,11 @@ export async function createClothes(input: CreateClothesInput) {
       .from(clothes)
       .where(eq(clothes.familyId, input.familyId));
     if (existingClothes.length >= limit) {
-      return { success: false as const, error: 'アイテム数の上限に達しています。プランのアップグレードが必要です。' };
+      return {
+        success: false as const,
+        error: 'アイテム数の上限に達しています。プランのアップグレードが必要です。',
+        reason: 'item_limit' as const,
+      };
     }
 
     const [newCloth] = await db

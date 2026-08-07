@@ -22,10 +22,7 @@ export function MemberSection({ members, memberLimit }: MemberSectionProps) {
         <ul className="mt-3 divide-y divide-linen">
           {members.map((member) => (
             <li key={member.id} className="flex items-center justify-between py-2 text-sm">
-              <span className="text-ink">
-                {member.name}
-                <span className="ml-1.5 text-ink-soft">({member.memberId})</span>
-              </span>
+              <span className="text-ink">{member.name}</span>
               <span className="rounded-full bg-sand px-2.5 py-1 text-xs font-medium text-ink-soft">
                 {t.memberSection.role[member.role]}
               </span>

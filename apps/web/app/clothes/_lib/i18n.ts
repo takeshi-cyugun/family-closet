@@ -48,6 +48,14 @@ export type ClothesFormDictionary = {
     nextAria: string;
     editButton: string;
   };
+  limitModal: {
+    title: string;
+    descGuest: string;
+    descMember: string;
+    ctaGuest: string;
+    ctaMember: string;
+    close: string;
+  };
 };
 
 const ja: ClothesFormDictionary = {
@@ -97,6 +105,14 @@ const ja: ClothesFormDictionary = {
     prevAria: "前の洋服",
     nextAria: "次の洋服",
     editButton: "編集する",
+  },
+  limitModal: {
+    title: "アイテム数の上限に達しました",
+    descGuest: "お試し利用ではこれ以上登録できません。ファミリー登録すると、上限が増えて引き続きご利用いただけます。",
+    descMember: "現在のプランの登録上限に達しています。プランをアップグレードすると、引き続き登録いただけます。",
+    ctaGuest: "ファミリーを登録する",
+    ctaMember: "プランをアップグレード",
+    close: "閉じる",
   },
 };
 
@@ -148,6 +164,14 @@ const en: ClothesFormDictionary = {
     nextAria: "Next item",
     editButton: "Edit",
   },
+  limitModal: {
+    title: "Item limit reached",
+    descGuest: "You've reached the trial limit. Register your family to raise the limit and keep adding items.",
+    descMember: "You've reached your current plan's item limit. Upgrade your plan to keep adding items.",
+    ctaGuest: "Register your family",
+    ctaMember: "Upgrade plan",
+    close: "Close",
+  },
 };
 
 const zhCN: ClothesFormDictionary = {
@@ -198,6 +222,14 @@ const zhCN: ClothesFormDictionary = {
     nextAria: "下一件",
     editButton: "编辑",
   },
+  limitModal: {
+    title: "已达到物品数量上限",
+    descGuest: "试用模式下无法继续登记。完成家庭注册后可提高上限，继续使用。",
+    descMember: "已达到当前套餐的登记上限。升级套餐后即可继续登记。",
+    ctaGuest: "注册家庭",
+    ctaMember: "升级套餐",
+    close: "关闭",
+  },
 };
 
 const zhTW: ClothesFormDictionary = {
@@ -247,6 +279,14 @@ const zhTW: ClothesFormDictionary = {
     prevAria: "上一件",
     nextAria: "下一件",
     editButton: "編輯",
+  },
+  limitModal: {
+    title: "已達到物品數量上限",
+    descGuest: "試用模式下無法繼續登記。完成家庭註冊後可提高上限，繼續使用。",
+    descMember: "已達到目前方案的登記上限。升級方案後即可繼續登記。",
+    ctaGuest: "註冊家庭",
+    ctaMember: "升級方案",
+    close: "關閉",
   },
 };
 
