@@ -66,7 +66,10 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
   const dashboardT = getDashboardDictionary(language);
 
   const [photoUrl, setPhotoUrl] = useState<string | null>(initialItem?.photoDataUrl ?? null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [assetId, setAssetId] = useState<string | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
+  const [uploadedThumbnailUrl, setUploadedThumbnailUrl] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
   const [analyzing, setAnalyzing] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -110,19 +113,30 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 回転角度を焼き込んだ上でWebP変換・リサイズ（本画像+サムネイル）してアップロードする。
+  // assetIdを固定することで、回転をやり直すたびに同じファイルへ上書き保存する。
+  async function uploadWithRotation(file: File, rotationDeg: number, id: string) {
+    const formData = new FormData();
+    formData.set("file", file);
+    formData.set("rotation", String(rotationDeg));
+    formData.set("assetId", id);
+    return uploadClothesImage(formData);
+  }
+
   async function handleSelectFile(file: File) {
     const url = URL.createObjectURL(file);
+    const id = crypto.randomUUID();
+    setSelectedFile(file);
+    setAssetId(id);
     setPhotoUrl(url);
     setUploadedPhotoUrl(null);
+    setUploadedThumbnailUrl(null);
     setUploadError(null);
     setRotation(0);
     setErrors((prev) => ({ ...prev, photo: undefined }));
 
     setAnalyzing(true);
     setUploading(true);
-
-    const formData = new FormData();
-    formData.set("file", file);
 
     const analyzeFormData = new FormData();
     analyzeFormData.set("image", file);
@@ -132,7 +146,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
       fetch("/api/analyze-image", { method: "POST", body: analyzeFormData })
         .then((res) => (res.ok ? res.json() : null))
         .catch(() => null),
-      uploadClothesImage(formData),
+      uploadWithRotation(file, 0, id),
     ]);
 
     if (analyzeResult?.success) {
@@ -144,20 +158,54 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
     setAnalyzing(false);
 
     if (uploadResult.success) {
-      setUploadedPhotoUrl(uploadResult.url);
+      setUploadedPhotoUrl(uploadResult.imageUrl);
+      setUploadedThumbnailUrl(uploadResult.thumbnailUrl);
     } else {
       setUploadError(uploadResult.error);
     }
     setUploading(false);
   }
 
-  function handleRotate() {
-    setRotation((prev) => (prev + 90) % 360);
+  async function handleRotate() {
+    const nextRotation = (rotation + 90) % 360;
+    setRotation(nextRotation);
+
+    let file = selectedFile;
+    let id = assetId;
+
+    if (!file) {
+      // 編集画面で既存の写真を、新たに選び直すことなく回転する場合：現在の画像を取得してから同じ処理に乗せる
+      if (!photoUrl) return;
+      try {
+        const blob = await fetch(photoUrl).then((res) => res.blob());
+        file = new File([blob], "photo", { type: blob.type || "image/jpeg" });
+        id = crypto.randomUUID();
+        setSelectedFile(file);
+        setAssetId(id);
+      } catch {
+        return;
+      }
+    }
+    if (!file || !id) return;
+
+    setUploading(true);
+    const result = await uploadWithRotation(file, nextRotation, id);
+    if (result.success) {
+      setUploadedPhotoUrl(result.imageUrl);
+      setUploadedThumbnailUrl(result.thumbnailUrl);
+      setUploadError(null);
+    } else {
+      setUploadError(result.error);
+    }
+    setUploading(false);
   }
 
   function handleRemovePhoto() {
     setPhotoUrl(null);
+    setSelectedFile(null);
+    setAssetId(null);
     setUploadedPhotoUrl(null);
+    setUploadedThumbnailUrl(null);
     setUploadError(null);
     setRotation(0);
   }
@@ -192,6 +240,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
         ownerMemberId: ownerId || session.memberId,
         name: name.trim(),
         imageUrl: uploadedPhotoUrl,
+        thumbnailUrl: uploadedThumbnailUrl ?? undefined,
         category: category.trim(),
         color: color.trim(),
         size,
@@ -228,6 +277,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
       status: mapUiStatusToDbStatus(status),
       memo: memo.trim() || undefined,
       imageUrl: uploadedPhotoUrl ?? undefined,
+      thumbnailUrl: uploadedThumbnailUrl ?? undefined,
     });
 
     setSaving(false);
@@ -257,7 +307,8 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
         <PhotoPicker
           photoUrl={photoUrl}
           rotation={rotation}
-          analyzing={analyzing}
+          analyzing={analyzing || uploading}
+          busyLabel={analyzing ? t.photo.analyzing : t.photo.processing}
           onSelectFile={handleSelectFile}
           onRotate={handleRotate}
           onRemove={mode === "new" ? handleRemovePhoto : undefined}

@@ -50,6 +50,7 @@ function NavArrow({
   return (
     <Link
       href={`/clothes/${id}`}
+      replace
       aria-label={label}
       className={`absolute ${side} top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-espresso/70 text-lg text-on-espresso`}
     >

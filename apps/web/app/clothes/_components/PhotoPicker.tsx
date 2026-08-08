@@ -8,6 +8,7 @@ type PhotoPickerProps = {
   photoUrl: string | null;
   rotation: number;
   analyzing: boolean;
+  busyLabel?: string;
   onSelectFile: (file: File) => void;
   onRotate: () => void;
   onRemove?: () => void;
@@ -19,6 +20,7 @@ export function PhotoPicker({
   photoUrl,
   rotation,
   analyzing,
+  busyLabel,
   onSelectFile,
   onRotate,
   onRemove,
@@ -55,7 +57,7 @@ export function PhotoPicker({
             {analyzing && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-lg bg-white/80 dark:bg-black/70">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-black/20 border-t-black dark:border-white/20 dark:border-t-white" />
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{labels.analyzing}</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">{busyLabel ?? labels.analyzing}</p>
               </div>
             )}
 

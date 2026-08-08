@@ -30,6 +30,7 @@ export interface UpdateClothesInput {
   season?: string;
   memo?: string;
   imageUrl?: string;
+  thumbnailUrl?: string;
   status?: 'in_use' | 'stored' | 'disposal_planned' | 'disposed';
 }
 
@@ -45,6 +46,7 @@ function toClothesItem(row: typeof clothes.$inferSelect): ClothesItem {
     size: (row.size as Size) ?? 'FREE',
     memo: row.memo ?? undefined,
     photoDataUrl: row.imageUrl,
+    thumbnailDataUrl: row.thumbnailUrl ?? row.imageUrl,
     createdAt: row.createdAt.toISOString().slice(0, 10),
   };
 }
@@ -158,7 +160,9 @@ export async function updateClothes(clothesId: string, familyId: string, input: 
         season: input.season,
         memo: input.memo,
         ...(input.status ? { status: input.status } : {}),
-        ...(input.imageUrl ? { imageUrl: input.imageUrl, thumbnailUrl: input.imageUrl } : {}),
+        ...(input.imageUrl
+          ? { imageUrl: input.imageUrl, thumbnailUrl: input.thumbnailUrl || input.imageUrl }
+          : {}),
         updatedAt: new Date(),
       })
       .where(and(eq(clothes.id, clothesId), eq(clothes.familyId, familyId)));

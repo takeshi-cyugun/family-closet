@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../_lib/LanguageContext";
 import { useCurrentMember } from "../_lib/MemberContext";
 import { getDashboardDictionary } from "../dashboard/_lib/i18n";
+import { logout } from "../actions/logout";
 
 type HeaderProps = {
   title?: string;
@@ -12,6 +13,7 @@ type HeaderProps = {
 
 export function Header({ title }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
   const { memberName, canLogout } = useCurrentMember();
@@ -61,8 +63,13 @@ export function Header({ title }: HeaderProps) {
           <div className="absolute right-0 mt-2 w-36 overflow-hidden rounded-lg border border-linen bg-cream shadow-lg">
             <button
               type="button"
-              className="block w-full px-4 py-2 text-left text-sm text-ink hover:bg-sand"
-              onClick={() => setMenuOpen(false)}
+              disabled={loggingOut}
+              className="block w-full px-4 py-2 text-left text-sm text-ink hover:bg-sand disabled:opacity-50"
+              onClick={async () => {
+                setMenuOpen(false);
+                setLoggingOut(true);
+                await logout();
+              }}
             >
               {t.header.logout}
             </button>

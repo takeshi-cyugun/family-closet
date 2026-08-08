@@ -37,6 +37,7 @@ export type ClothesItem = {
   size: Size;
   memo?: string;
   photoDataUrl?: string;
+  thumbnailDataUrl?: string;
   createdAt?: string;
 };
 

@@ -10,6 +10,7 @@ export type ClothesFormDictionary = {
     rotate: string;
     remove: string;
     analyzing: string;
+    processing: string;
   };
   fields: {
     name: { label: string; placeholder: string };
@@ -69,6 +70,7 @@ const ja: ClothesFormDictionary = {
     rotate: "90度回転",
     remove: "写真を削除",
     analyzing: "AI解析中...",
+    processing: "画像を処理中...",
   },
   fields: {
     name: { label: "名前", placeholder: "例: ダウンコート" },
@@ -128,6 +130,7 @@ const en: ClothesFormDictionary = {
     rotate: "Rotate 90°",
     remove: "Remove photo",
     analyzing: "Analyzing with AI...",
+    processing: "Processing image...",
   },
   fields: {
     name: { label: "Name", placeholder: "e.g. Down coat" },
@@ -187,6 +190,7 @@ const zhCN: ClothesFormDictionary = {
     rotate: "旋转90度",
     remove: "删除照片",
     analyzing: "AI 识别中...",
+    processing: "正在处理图片...",
   },
   fields: {
     name: { label: "名称", placeholder: "例：羽绒服" },
@@ -246,6 +250,7 @@ const zhTW: ClothesFormDictionary = {
     rotate: "旋轉90度",
     remove: "刪除照片",
     analyzing: "AI 辨識中...",
+    processing: "正在處理圖片...",
   },
   fields: {
     name: { label: "名稱", placeholder: "例：羽絨外套" },

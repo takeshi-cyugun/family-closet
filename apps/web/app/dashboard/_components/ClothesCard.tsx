@@ -33,9 +33,14 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
       className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-[0_4px_10px_rgba(60,47,43,0.14),0_1px_3px_rgba(60,47,43,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(60,47,43,0.2),0_2px_4px_rgba(60,47,43,0.14)]"
     >
       <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-cream text-5xl">
-        {item.photoDataUrl ? (
+        {item.thumbnailDataUrl || item.photoDataUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.photoDataUrl} alt={item.name} className="h-full w-full object-cover" />
+          <img
+            src={item.thumbnailDataUrl || item.photoDataUrl}
+            alt={item.name}
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
         ) : (
           getCategoryIcon(item.category)
         )}
