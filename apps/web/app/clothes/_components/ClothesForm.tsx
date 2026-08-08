@@ -101,7 +101,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
       setFamilyId(session.familyId);
       setMembers(familyMembers);
       setIsGuest(settings?.isGuest ?? false);
-      setOwnerId((prev) => prev || familyMembers[0]?.id || session.memberId);
+      setOwnerId((prev) => prev || session.memberId || familyMembers[0]?.id);
     });
     return () => {
       cancelled = true;

@@ -108,6 +108,7 @@ function SettingsPageContent() {
             memberLimit={limits.memberLimit}
             itemCount={settings.itemCount}
             itemLimit={limits.itemLimit}
+            canUpgrade={settings.role === "admin"}
           />
         </div>
       </main>

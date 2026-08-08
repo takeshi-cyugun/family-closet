@@ -10,9 +10,10 @@ type PlanSectionProps = {
   memberLimit: number;
   itemCount: number;
   itemLimit: number;
+  canUpgrade: boolean;
 };
 
-export function PlanSection({ tier, memberCount, memberLimit, itemCount, itemLimit }: PlanSectionProps) {
+export function PlanSection({ tier, memberCount, memberLimit, itemCount, itemLimit, canUpgrade }: PlanSectionProps) {
   const { t } = useSettingsLanguage();
 
   return (
@@ -30,7 +31,7 @@ export function PlanSection({ tier, memberCount, memberLimit, itemCount, itemLim
         </div>
       </dl>
 
-      {tier !== "paid" && (
+      {tier !== "paid" && canUpgrade && (
         <Link
           href="/settings/billing"
           className="mt-4 block rounded-md bg-espresso py-2.5 text-center text-sm font-semibold text-on-espresso"
