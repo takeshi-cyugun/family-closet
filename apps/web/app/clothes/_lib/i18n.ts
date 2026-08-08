@@ -2,6 +2,7 @@ import type { LanguageCode } from "../../_lib/i18n";
 
 export type ClothesFormDictionary = {
   headerTitle: string;
+  editHeaderTitle: string;
   photo: {
     label: string;
     selectCta: string;
@@ -46,6 +47,7 @@ export type ClothesFormDictionary = {
     prevAria: string;
     nextAria: string;
     editButton: string;
+    cancelEditButton: string;
   };
   limitModal: {
     title: string;
@@ -59,6 +61,7 @@ export type ClothesFormDictionary = {
 
 const ja: ClothesFormDictionary = {
   headerTitle: "アイテム登録",
+  editHeaderTitle: "アイテム編集",
   photo: {
     label: "画像",
     selectCta: "画像を選択",
@@ -103,6 +106,7 @@ const ja: ClothesFormDictionary = {
     prevAria: "前の洋服",
     nextAria: "次の洋服",
     editButton: "編集する",
+    cancelEditButton: "キャンセルして詳細へ戻る",
   },
   limitModal: {
     title: "アイテム数の上限に達しました",
@@ -116,6 +120,7 @@ const ja: ClothesFormDictionary = {
 
 const en: ClothesFormDictionary = {
   headerTitle: "Item Registration",
+  editHeaderTitle: "Edit Item",
   photo: {
     label: "Photo",
     selectCta: "Select image",
@@ -160,6 +165,7 @@ const en: ClothesFormDictionary = {
     prevAria: "Previous item",
     nextAria: "Next item",
     editButton: "Edit",
+    cancelEditButton: "Cancel and back to details",
   },
   limitModal: {
     title: "Item limit reached",
@@ -173,6 +179,7 @@ const en: ClothesFormDictionary = {
 
 const zhCN: ClothesFormDictionary = {
   headerTitle: "登记物品",
+  editHeaderTitle: "编辑物品",
   photo: {
     label: "图片",
     selectCta: "选择图片",
@@ -217,6 +224,7 @@ const zhCN: ClothesFormDictionary = {
     prevAria: "上一件",
     nextAria: "下一件",
     editButton: "编辑",
+    cancelEditButton: "取消并返回详情",
   },
   limitModal: {
     title: "已达到物品数量上限",
@@ -230,6 +238,7 @@ const zhCN: ClothesFormDictionary = {
 
 const zhTW: ClothesFormDictionary = {
   headerTitle: "登記物品",
+  editHeaderTitle: "編輯物品",
   photo: {
     label: "圖片",
     selectCta: "選擇圖片",
@@ -274,6 +283,7 @@ const zhTW: ClothesFormDictionary = {
     prevAria: "上一件",
     nextAria: "下一件",
     editButton: "編輯",
+    cancelEditButton: "取消並返回詳情",
   },
   limitModal: {
     title: "已達到物品數量上限",

@@ -382,6 +382,16 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
       </button>
 
       {mode === "edit" && initialItem && (
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="rounded-md border border-linen py-2.5 text-sm font-medium text-ink"
+        >
+          {t.detail.cancelEditButton}
+        </button>
+      )}
+
+      {mode === "edit" && initialItem && (
         <div className="text-center">
           <button
             type="button"

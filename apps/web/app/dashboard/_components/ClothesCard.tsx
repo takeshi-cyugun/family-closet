@@ -25,6 +25,7 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
   const statusText = t.statuses[item.status] ?? item.status;
   const categoryText = (t.categories as Record<string, string>)[item.category] ?? item.category;
   const ownerName = owner?.name ?? t.unknownOwner;
+  const sizeText = item.size === "FREE" ? "F" : item.size;
 
   return (
     <Link
@@ -48,7 +49,7 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
       <div className="flex flex-col gap-0.5 p-2.5">
         <p className="truncate font-serif text-sm font-semibold text-ink">{item.name}</p>
         <p className="text-xs text-ink-soft">
-          {categoryText} ・ {ownerName} ・ {item.size}
+          {categoryText} / {sizeText} / {t.seasons[item.season]} / {ownerName}
         </p>
       </div>
     </Link>

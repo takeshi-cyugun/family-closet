@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Header } from "../_components/Header";
+import { useCurrentMember } from "../_lib/MemberContext";
 import { BottomNav, BottomNavSpacer } from "../_components/BottomNav";
 import type { Member } from "../_lib/clothes";
 import { getFamilyMembers } from "../actions/members";
@@ -20,6 +21,7 @@ function SettingsPageContent() {
   const [settings, setSettings] = useState<SettingsData | null>(null);
   const [loading, setLoading] = useState(true);
   const { t } = useSettingsLanguage();
+  const { setMemberName: setHeaderMemberName } = useCurrentMember();
 
   useEffect(() => {
     let cancelled = false;
@@ -84,6 +86,7 @@ function SettingsPageContent() {
               setMembers((prev) =>
                 prev.map((member) => (member.id === settings.memberDbId ? { ...member, name } : member))
               );
+              setHeaderMemberName(name);
             }}
           />
           {settings.role === "admin" && (

@@ -85,6 +85,96 @@ export function ClothesDetailContent({
     else router.push(closeTo);
   }
 
+  function goToEdit() {
+    // モーダル（@modalスロット）内からのソフトナビゲーションだと編集ページへ正しく遷移できないため、通常のページ遷移にする
+    window.location.href = `/clothes/${item.id}/edit`;
+  }
+
+  if (compact) {
+    return (
+      <>
+        <div className="relative aspect-square">
+          <NavArrow direction="prev" id={prevId} label={t.detail.prevAria} />
+
+          {item.photoDataUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={item.photoDataUrl} alt={item.name} className="h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-sand">
+              <span className="text-7xl">{getCategoryIcon(item.category)}</span>
+            </div>
+          )}
+
+          <NavArrow direction="next" id={nextId} label={t.detail.nextAria} />
+
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label={t.detail.close}
+            className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-cream/80 text-ink shadow-lg backdrop-blur-md"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="px-6 py-5 text-ink">
+          <div className="mb-1 flex items-start justify-between gap-4">
+            <h2 className="min-w-0 flex-1 truncate font-serif text-2xl font-bold text-ink">{item.name}</h2>
+            <span
+              className={`shrink-0 rounded-xl px-3 py-1.5 text-xs font-bold ${STATUS_BADGE_CLASS[item.status]}`}
+            >
+              {dashboardT.statuses[item.status]}
+            </span>
+          </div>
+
+          <div className="mt-1 grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-sand px-4 py-1.5">
+              <p className="mb-0.5 text-[10px] font-bold uppercase text-ink-faint">{t.fields.category.label}</p>
+              <p className="font-bold text-ink">{item.category || "-"}</p>
+            </div>
+            <div className="rounded-xl bg-sand px-4 py-1.5">
+              <p className="mb-0.5 text-[10px] font-bold uppercase text-ink-faint">{t.fields.size}</p>
+              <p className="font-bold text-ink">{item.size}</p>
+            </div>
+            <div className="rounded-xl bg-sand px-4 py-1.5">
+              <p className="mb-0.5 text-[10px] font-bold uppercase text-ink-faint">{t.fields.season}</p>
+              <p className="font-bold text-ink">{dashboardT.seasons[item.season]}</p>
+            </div>
+            <div className="rounded-xl bg-sand px-4 py-1.5">
+              <p className="mb-0.5 text-[10px] font-bold uppercase text-ink-faint">{t.fields.owner}</p>
+              <p className="font-bold text-ink">{ownerName}</p>
+            </div>
+            <div className="col-span-2 rounded-xl bg-sand px-4 py-1.5">
+              <p className="mb-0.5 text-[10px] font-bold uppercase text-ink-faint">{t.fields.memo}</p>
+              <p className="whitespace-pre-wrap font-bold text-ink">{item.memo || "-"}</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={goToEdit}
+            className="mt-5 w-full rounded-2xl bg-espresso py-3 text-center text-sm font-bold text-on-espresso shadow-lg shadow-espresso/20 transition-transform active:scale-[0.98]"
+          >
+            {t.detail.editButton}
+          </button>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <header className="flex h-14 shrink-0 items-center justify-between bg-espresso px-4">
@@ -103,9 +193,7 @@ export function ClothesDetailContent({
         <div className="relative">
           <NavArrow direction="prev" id={prevId} label={t.detail.prevAria} />
 
-          <div
-            className={`flex w-full items-center justify-center overflow-hidden rounded-lg bg-sand ${compact ? "h-48" : "aspect-square"}`}
-          >
+          <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-sand">
             {item.photoDataUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.photoDataUrl} alt={item.name} className="h-full w-full object-contain" />
@@ -137,10 +225,7 @@ export function ClothesDetailContent({
         <div className="mt-6">
           <button
             type="button"
-            onClick={() => {
-              // モーダル（@modalスロット）内からのソフトナビゲーションだと編集ページへ正しく遷移できないため、通常のページ遷移にする
-              window.location.href = `/clothes/${item.id}/edit`;
-            }}
+            onClick={goToEdit}
             className="block w-full rounded-md bg-espresso py-2.5 text-center text-sm font-medium text-on-espresso"
           >
             {t.detail.editButton}

@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../_lib/LanguageContext";
+import { useCurrentMember } from "../_lib/MemberContext";
 import { getDashboardDictionary } from "../dashboard/_lib/i18n";
-
-const CURRENT_MEMBER_ID = "dad";
 
 type HeaderProps = {
   title?: string;
@@ -15,8 +14,10 @@ export function Header({ title }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
+  const { memberName, canLogout } = useCurrentMember();
   const t = getDashboardDictionary(language);
   const displayTitle = title ?? t.appName;
+  const avatarInitial = memberName ? memberName.trim().charAt(0).toUpperCase() : "";
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -38,16 +39,25 @@ export function Header({ title }: HeaderProps) {
       </Link>
 
       <div className="relative" ref={menuRef}>
-        <button
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-on-espresso text-sm font-semibold text-espresso"
-          aria-label={t.header.userMenu}
-        >
-          {CURRENT_MEMBER_ID.charAt(0).toUpperCase()}
-        </button>
+        {canLogout ? (
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-on-espresso text-sm font-semibold text-espresso"
+            aria-label={t.header.userMenu}
+          >
+            {avatarInitial}
+          </button>
+        ) : (
+          <span
+            aria-hidden
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-on-espresso text-sm font-semibold text-espresso"
+          >
+            {avatarInitial}
+          </span>
+        )}
 
-        {menuOpen && (
+        {canLogout && menuOpen && (
           <div className="absolute right-0 mt-2 w-36 overflow-hidden rounded-lg border border-linen bg-cream shadow-lg">
             <button
               type="button"
