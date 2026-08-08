@@ -11,7 +11,7 @@ export function BottomNav() {
 
   const navItems = [
     { href: "/list", label: t.nav.dashboard, Icon: LayoutGrid },
-    { href: "/items/create", label: t.nav.add, Icon: Plus },
+    { href: "/item/create", label: t.nav.add, Icon: Plus },
     { href: "/settings", label: t.nav.settings, Icon: Settings },
   ];
 

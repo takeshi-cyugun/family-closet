@@ -1,6 +1,6 @@
 import { BottomNav, BottomNavSpacer } from "../../_components/BottomNav";
-import { ClothesForm } from "../_components/ClothesForm";
-import { NewPageHeader } from "../_components/NewPageHeader";
+import { ClothesForm } from "../../items/_components/ClothesForm";
+import { NewPageHeader } from "../../items/_components/NewPageHeader";
 
 export default function NewClothesPage() {
   return (

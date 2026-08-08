@@ -19,7 +19,7 @@ function EmptyStateContent() {
   );
 }
 
-// ゲストが一度も/items/createを訪れておらず、まだfamiliesレコードが作られていない場合の案内
+// ゲストが一度も/item/createを訪れておらず、まだfamiliesレコードが作られていない場合の案内
 export function SettingsEmptyState() {
   return (
     <SettingsLanguageProvider>
