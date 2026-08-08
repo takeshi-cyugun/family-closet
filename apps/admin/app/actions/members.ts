@@ -5,6 +5,7 @@ import { and, desc, eq, isNotNull } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { isAdminAuthenticated } from "./auth";
+import { DEFAULT_PAGE_SIZE, type PageSize } from "../_lib/pagination";
 
 const RESTORE_GRACE_PERIOD_DAYS = 14;
 
@@ -20,8 +21,18 @@ export type MemberHistoryItem = {
   isRestorable: boolean;
 };
 
+export type MemberHistoryPage = {
+  items: MemberHistoryItem[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+};
+
 // 全ファミリーのメンバー追加・削除履歴を取得する（削除後14日以内なら復元可能として返す）
-export async function getMemberHistory(): Promise<MemberHistoryItem[]> {
+export async function getMemberHistory(
+  page = 1,
+  pageSize: PageSize = DEFAULT_PAGE_SIZE,
+): Promise<MemberHistoryPage> {
   if (!(await isAdminAuthenticated())) {
     redirect("/login");
   }
@@ -34,17 +45,29 @@ export async function getMemberHistory(): Promise<MemberHistoryItem[]> {
   const familyNameById = new Map(allFamilies.map((f) => [f.id, f.name]));
   const cutoff = Date.now() - RESTORE_GRACE_PERIOD_DAYS * 24 * 60 * 60 * 1000;
 
-  return allMembers.map((member) => ({
+  const items = allMembers.map((member) => ({
     memberDbId: member.id,
     familyId: member.familyId,
     familyName: familyNameById.get(member.familyId) ?? member.familyId,
     memberId: member.memberId,
     displayName: member.displayName,
     role: member.role,
-    createdAt: member.createdAt.toISOString().slice(0, 10),
-    deletedAt: member.deletedAt ? member.deletedAt.toISOString().slice(0, 10) : null,
+    createdAt: member.createdAt.toISOString(),
+    deletedAt: member.deletedAt ? member.deletedAt.toISOString() : null,
     isRestorable: member.deletedAt !== null && member.deletedAt.getTime() >= cutoff,
   }));
+
+  const totalCount = items.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * pageSize;
+
+  return {
+    items: items.slice(start, start + pageSize),
+    totalCount,
+    page: safePage,
+    pageSize,
+  };
 }
 
 export type RestoreMemberResult = { success: true } | { success: false; error: string };

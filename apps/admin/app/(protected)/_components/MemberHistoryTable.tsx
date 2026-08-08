@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { restoreMember, type MemberHistoryItem } from "../../actions/members";
+import { formatDateTime } from "../../_lib/format";
+import { CopyableId } from "./CopyableId";
 
 const ROLE_LABEL: Record<MemberHistoryItem["role"], string> = {
   owner: "代表者",
@@ -98,8 +100,8 @@ export function MemberHistoryTable({ members }: { members: MemberHistoryItem[] }
             <th className="px-4 py-3 font-medium">ファミリー</th>
             <th className="px-4 py-3 font-medium">メンバー</th>
             <th className="px-4 py-3 font-medium">役割</th>
-            <th className="px-4 py-3 font-medium">追加日</th>
-            <th className="px-4 py-3 font-medium">削除日</th>
+            <th className="px-4 py-3 font-medium">追加日時</th>
+            <th className="px-4 py-3 font-medium">削除日時</th>
             <th className="px-4 py-3 font-medium">状態</th>
             <th className="px-4 py-3 font-medium">操作</th>
           </tr>
@@ -109,15 +111,15 @@ export function MemberHistoryTable({ members }: { members: MemberHistoryItem[] }
             <tr key={member.memberDbId} className="border-b border-black/5 last:border-0">
               <td className="px-4 py-3">
                 <div>{member.familyName}</div>
-                <div className="font-mono text-xs text-neutral-400">{member.familyId}</div>
+                <CopyableId fullId={member.familyId} />
               </td>
               <td className="px-4 py-3">
                 <div>{member.displayName}</div>
                 <div className="font-mono text-xs text-neutral-400">{member.memberId}</div>
               </td>
               <td className="px-4 py-3">{ROLE_LABEL[member.role]}</td>
-              <td className="px-4 py-3 text-neutral-500">{member.createdAt}</td>
-              <td className="px-4 py-3 text-neutral-500">{member.deletedAt ?? "—"}</td>
+              <td className="px-4 py-3 text-neutral-500">{formatDateTime(member.createdAt)}</td>
+              <td className="px-4 py-3 text-neutral-500">{member.deletedAt ? formatDateTime(member.deletedAt) : "—"}</td>
               <td className="px-4 py-3">
                 <StatusBadge member={member} />
               </td>

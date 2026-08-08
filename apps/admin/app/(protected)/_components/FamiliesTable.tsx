@@ -1,10 +1,11 @@
-import type { FamilyListItem } from "../../actions/families";
+"use client";
 
-const PLAN_LABEL: Record<string, string> = {
-  fitting: "フィッティング（ゲスト）",
-  chest: "チェスト",
-  walk_in: "ウォークイン",
-};
+import { useRouter } from "next/navigation";
+import type { FamilyListItem } from "../../actions/families";
+import { formatDateTime } from "../../_lib/format";
+import { LANGUAGE_FLAGS, LANGUAGE_LABEL } from "../../_lib/languageFlags";
+import { PLAN_LABEL } from "../../_lib/plans";
+import { CopyableId } from "./CopyableId";
 
 function PlanBadge({ planType }: { planType: string }) {
   return (
@@ -14,7 +15,16 @@ function PlanBadge({ planType }: { planType: string }) {
   );
 }
 
+function LanguageFlag({ language }: { language: string | null }) {
+  if (!language) return <span className="text-neutral-300">—</span>;
+  const Flag = LANGUAGE_FLAGS[language];
+  if (!Flag) return <span className="text-xs text-neutral-500">{language}</span>;
+  return <Flag title={LANGUAGE_LABEL[language] ?? language} className="h-4 w-6 rounded-sm" />;
+}
+
 export function FamiliesTable({ families }: { families: FamilyListItem[] }) {
+  const router = useRouter();
+
   if (families.length === 0) {
     return (
       <div className="rounded-lg border border-black/10 bg-white p-10 text-center text-sm text-neutral-500">
@@ -28,33 +38,37 @@ export function FamiliesTable({ families }: { families: FamilyListItem[] }) {
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="border-b border-black/10 bg-neutral-50 text-left text-xs text-neutral-500">
+            <th className="px-4 py-3 font-medium">ファミリー名</th>
             <th className="px-4 py-3 font-medium">ファミリーID</th>
             <th className="px-4 py-3 font-medium">代表者</th>
             <th className="px-4 py-3 font-medium">メールアドレス</th>
             <th className="px-4 py-3 font-medium">メンバー数</th>
+            <th className="px-4 py-3 font-medium">言語</th>
             <th className="px-4 py-3 font-medium">プラン</th>
-            <th className="px-4 py-3 font-medium">区分</th>
-            <th className="px-4 py-3 font-medium">登録日</th>
+            <th className="px-4 py-3 font-medium">登録日時</th>
           </tr>
         </thead>
         <tbody>
           {families.map((family) => (
-            <tr key={family.familyId} className="border-b border-black/5 last:border-0">
-              <td className="px-4 py-3 font-mono text-xs">{family.familyId}</td>
+            <tr
+              key={family.familyId}
+              onClick={() => router.push(`/families/${family.familyId}`)}
+              className="cursor-pointer border-b border-black/5 last:border-0 hover:bg-neutral-50"
+            >
+              <td className="px-4 py-3">{family.familyName}</td>
+              <td className="px-4 py-3">
+                <CopyableId fullId={family.familyId} />
+              </td>
               <td className="px-4 py-3">{family.ownerName ?? "—"}</td>
               <td className="px-4 py-3 text-neutral-600">{family.ownerEmail ?? "—"}</td>
               <td className="px-4 py-3">{family.memberCount}</td>
               <td className="px-4 py-3">
-                <PlanBadge planType={family.planType} />
+                <LanguageFlag language={family.ownerLanguage} />
               </td>
               <td className="px-4 py-3">
-                {family.isGuest ? (
-                  <span className="text-amber-700">ゲスト</span>
-                ) : (
-                  <span className="text-emerald-700">本登録</span>
-                )}
+                <PlanBadge planType={family.planType} />
               </td>
-              <td className="px-4 py-3 text-neutral-500">{family.createdAt}</td>
+              <td className="px-4 py-3 text-neutral-500">{formatDateTime(family.createdAt)}</td>
             </tr>
           ))}
         </tbody>
