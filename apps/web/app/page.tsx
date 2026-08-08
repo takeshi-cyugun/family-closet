@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -122,8 +123,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-1 flex-col bg-cream text-ink">
-      <section className="flex flex-col items-center gap-5 px-6 pb-4 pt-16 text-center">
-        <span className="text-5xl">🧺</span>
+      <section className="flex flex-col items-center gap-5 px-6 pb-4 pt-10 text-center">
+        <Image
+          src="/top.png"
+          alt={t.appName}
+          width={848}
+          height={1009}
+          priority
+          className="h-auto w-52 sm:w-60"
+        />
         <h1 className="font-serif text-3xl font-bold tracking-tight">{t.appName}</h1>
         <p className="max-w-sm text-sm text-ink-soft">{t.tagline}</p>
 
