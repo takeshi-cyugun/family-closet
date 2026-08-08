@@ -8,16 +8,13 @@ const nextConfig: NextConfig = {
   // (=apps/web)だとその外側にある実体ファイルが出力ファイルトレーシングの対象外になり、
   // Vercel(本番, linux-x64)で "ERR_DLOPEN_FAILED: libvips-cpp.so.8.18.3: cannot open shared
   // object file" となってuploadClothesImage()が本番でのみ失敗していた。トレーシングルートを
-  // モノレポルートまで広げ、念のためsharp関連パッケージを明示的にも含める
-  // （Next.js公式ドキュメント記載の定番対処）。
+  // モノレポルートまで広げるだけで、sharp/**/* のシンボリックリンクを辿って@img配下の
+  // 実バイナリまで正しくトレースされることをローカルビルドで確認済み（Next.js公式ドキュメント
+  // 記載の定番対処。存在しないパスを推測でincludesに書くとビルド自体がENOENTで失敗するため、
+  // 個別のパスは列挙しない）。
   outputFileTracingRoot: path.join(__dirname, "../.."),
   outputFileTracingIncludes: {
-    "/*": [
-      "node_modules/sharp/**/*",
-      "../../node_modules/.pnpm/sharp@*/node_modules/@img/**/*",
-      "../../node_modules/.pnpm/@img+sharp-linux-x64@*/**/*",
-      "../../node_modules/.pnpm/@img+sharp-libvips-linux-x64@*/**/*",
-    ],
+    "/*": ["node_modules/sharp/**/*"],
   },
   experimental: {
     // ダッシュボードはcookies()を読むため常に動的レンダリングになり、既定(0秒)だと
