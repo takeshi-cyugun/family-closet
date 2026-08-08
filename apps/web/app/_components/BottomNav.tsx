@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { LayoutGrid, Plus, Settings } from "lucide-react";
 import { useLanguage } from "../_lib/LanguageContext";
-import { getDashboardDictionary } from "../dashboard/_lib/i18n";
+import { getDashboardDictionary } from "../list/_lib/i18n";
 
 export function BottomNav() {
   const { language } = useLanguage();
   const t = getDashboardDictionary(language);
 
   const navItems = [
-    { href: "/dashboard", label: t.nav.dashboard, Icon: LayoutGrid },
-    { href: "/clothes-new", label: t.nav.add, Icon: Plus },
+    { href: "/list", label: t.nav.dashboard, Icon: LayoutGrid },
+    { href: "/items/create", label: t.nav.add, Icon: Plus },
     { href: "/settings", label: t.nav.settings, Icon: Settings },
   ];
 

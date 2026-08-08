@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // ダッシュボードはcookies()を読むため常に動的レンダリングになり、既定(0秒)だと
     // 詳細画面から戻るたびにRSCを毎回サーバーへ取りに行ってしまう。作成/更新/削除アクションは
-    // revalidatePath('/dashboard')を呼んでいるので、このキャッシュがあっても更新は即座に反映される。
+    // revalidatePath('/list')を呼んでいるので、このキャッシュがあっても更新は即座に反映される。
     staleTimes: {
       dynamic: 30,
     },

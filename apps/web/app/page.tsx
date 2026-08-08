@@ -117,7 +117,7 @@ export default function Home() {
 
   function handleGuestStart() {
     startGuestSession();
-    router.push("/dashboard");
+    router.push("/list");
   }
 
   return (
@@ -131,7 +131,7 @@ export default function Home() {
           {session.active ? (
             <>
               <Link
-                href="/dashboard"
+                href="/list"
                 className="rounded-md bg-espresso py-3 text-center text-sm font-semibold text-on-espresso"
               >
                 {t.dashboardCta}

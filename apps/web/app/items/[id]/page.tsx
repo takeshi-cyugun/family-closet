@@ -14,7 +14,7 @@ export default async function ClothesDetailPage({ params }: { params: Promise<{ 
         ownerName={data.ownerName}
         prevId={data.prevId}
         nextId={data.nextId}
-        closeTo="/dashboard"
+        closeTo="/list"
       />
     </div>
   );

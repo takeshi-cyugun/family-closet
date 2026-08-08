@@ -68,7 +68,7 @@ export function LoginForm({ t }: LoginFormProps) {
     if (result.firstLogin) {
       router.push("/change-password");
     } else {
-      router.push("/dashboard");
+      router.push("/list");
     }
   }
 

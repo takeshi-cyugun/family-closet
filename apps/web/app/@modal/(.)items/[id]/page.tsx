@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getClothesDetail } from "../../../actions/clothes";
 import { Modal } from "../../../_components/Modal";
-import { ClothesDetailContent } from "../../../clothes/[id]/_components/ClothesDetailContent";
+import { ClothesDetailContent } from "../../../items/[id]/_components/ClothesDetailContent";
 
 export default async function InterceptedClothesDetailPage({
   params,

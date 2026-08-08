@@ -30,7 +30,7 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
 
   return (
     <Link
-      href={`/clothes/${item.id}`}
+      href={`/items/${item.id}`}
       className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-[0_4px_10px_rgba(60,47,43,0.14),0_1px_3px_rgba(60,47,43,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(60,47,43,0.2),0_2px_4px_rgba(60,47,43,0.14)]"
     >
       <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-cream text-5xl">

@@ -65,7 +65,7 @@ export function OwnerLoginForm({ t }: OwnerLoginFormProps) {
     if (result.firstLogin) {
       router.push("/change-password");
     } else {
-      router.push("/dashboard");
+      router.push("/list");
     }
   }
 

@@ -49,7 +49,7 @@ export function ChangePasswordForm() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push("/list");
   }
 
   return (

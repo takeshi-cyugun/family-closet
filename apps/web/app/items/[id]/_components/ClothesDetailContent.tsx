@@ -6,7 +6,7 @@ import { getCategoryIcon } from "../../../_lib/clothes";
 import type { ClothesItem, ClothesStatus } from "../../../_lib/clothes";
 import { useLanguage } from "../../../_lib/LanguageContext";
 import { getClothesFormDictionary } from "../../_lib/i18n";
-import { getDashboardDictionary } from "../../../dashboard/_lib/i18n";
+import { getDashboardDictionary } from "../../../list/_lib/i18n";
 
 type ClothesDetailProps = {
   item: ClothesItem;
@@ -49,7 +49,7 @@ function NavArrow({
 
   return (
     <Link
-      href={`/clothes/${id}`}
+      href={`/items/${id}`}
       replace
       aria-label={label}
       className={`absolute ${side} top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-espresso/70 text-lg text-on-espresso`}
@@ -88,7 +88,7 @@ export function ClothesDetailContent({
 
   function goToEdit() {
     // モーダル（@modalスロット）内からのソフトナビゲーションだと編集ページへ正しく遷移できないため、通常のページ遷移にする
-    window.location.href = `/clothes/${item.id}/edit`;
+    window.location.href = `/items/${item.id}/edit`;
   }
 
   if (compact) {

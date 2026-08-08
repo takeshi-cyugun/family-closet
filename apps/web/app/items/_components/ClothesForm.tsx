@@ -12,7 +12,7 @@ import { SEASONS, SIZES, STATUSES, mapUiStatusToDbStatus, mapAiSeasonToSeason } 
 import type { ClothesItem, ClothesStatus, Member, Season, Size } from "../../_lib/clothes";
 import { useLanguage } from "../../_lib/LanguageContext";
 import { getClothesFormDictionary } from "../_lib/i18n";
-import { getDashboardDictionary } from "../../dashboard/_lib/i18n";
+import { getDashboardDictionary } from "../../list/_lib/i18n";
 
 type ClothesFormProps = {
   mode: "new" | "edit";
@@ -263,7 +263,7 @@ export function ClothesForm({ mode, initialItem, compact, initialFamilyId, initi
         }
         return;
       }
-      router.push("/dashboard");
+      router.push("/list");
       return;
     }
 
@@ -290,7 +290,7 @@ export function ClothesForm({ mode, initialItem, compact, initialFamilyId, initi
       setSubmitError(result.error);
       return;
     }
-    router.push("/dashboard");
+    router.push("/list");
   }
 
   async function handleDelete() {
@@ -299,7 +299,7 @@ export function ClothesForm({ mode, initialItem, compact, initialFamilyId, initi
     const session = familyId ? { familyId } : await ensureGuestFamily(language);
     const result = await deleteClothes(initialItem.id, session.familyId);
     if (result.success) {
-      router.push("/dashboard");
+      router.push("/list");
     } else {
       setDeleting(false);
     }

@@ -89,7 +89,7 @@ export async function createClothes(input: CreateClothesInput) {
       })
       .returning();
 
-    revalidatePath('/dashboard');
+    revalidatePath('/list');
     return { success: true as const, data: newCloth };
   } catch (error) {
     console.error('Failed to create clothes:', error);
@@ -222,8 +222,8 @@ export async function updateClothes(clothesId: string, familyId: string, input: 
       })
       .where(and(eq(clothes.id, clothesId), eq(clothes.familyId, familyId)));
 
-    revalidatePath('/dashboard');
-    revalidatePath(`/clothes/${clothesId}`);
+    revalidatePath('/list');
+    revalidatePath(`/items/${clothesId}`);
     return { success: true as const };
   } catch (error) {
     console.error('Failed to update clothes:', error);
@@ -243,7 +243,7 @@ export async function updateClothesStatus(
       .set({ status, updatedAt: new Date() })
       .where(and(eq(clothes.id, clothesId), eq(clothes.familyId, familyId)));
 
-    revalidatePath('/dashboard');
+    revalidatePath('/list');
     return { success: true as const };
   } catch (error) {
     console.error('Failed to update status:', error);
@@ -258,7 +258,7 @@ export async function deleteClothes(clothesId: string, familyId: string) {
       .delete(clothes)
       .where(and(eq(clothes.id, clothesId), eq(clothes.familyId, familyId)));
 
-    revalidatePath('/dashboard');
+    revalidatePath('/list');
     return { success: true as const };
   } catch (error) {
     console.error('Failed to delete clothes:', error);

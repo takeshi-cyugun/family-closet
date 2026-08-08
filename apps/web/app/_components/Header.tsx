@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../_lib/LanguageContext";
 import { useCurrentMember } from "../_lib/MemberContext";
-import { getDashboardDictionary } from "../dashboard/_lib/i18n";
+import { getDashboardDictionary } from "../list/_lib/i18n";
 import { logout } from "../actions/logout";
 
 type HeaderProps = {
@@ -36,7 +36,7 @@ export function Header({ title }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center justify-between bg-espresso px-4">
-      <Link href="/dashboard" className="font-serif text-lg font-semibold tracking-tight text-on-espresso">
+      <Link href="/list" className="font-serif text-lg font-semibold tracking-tight text-on-espresso">
         {displayTitle}
       </Link>
 

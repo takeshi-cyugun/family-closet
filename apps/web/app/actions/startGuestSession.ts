@@ -7,5 +7,5 @@ export async function startGuestSession() {
   await ensureGuestFamily();
 
   // ダッシュボードへ手動リダイレクト
-  redirect('/dashboard');
+  redirect('/list');
 }

@@ -34,7 +34,7 @@ export function JoinForm({ token, t }: JoinFormProps) {
       return;
     }
 
-    router.push("/dashboard");
+    router.push("/list");
   }
 
   return (
