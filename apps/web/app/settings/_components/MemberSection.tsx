@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { Trash2 } from "lucide-react";
 import type { Member } from "../../_lib/clothes";
 import { useSettingsLanguage } from "../_lib/LanguageContext";
 import { getOrCreateInviteToken } from "../../actions/invite";
+import { getMemberItemCount, deleteMember } from "../../actions/deleteMember";
 import { InviteQrCode } from "./InviteQrCode";
 
 type MemberSectionProps = {
@@ -14,7 +16,7 @@ type MemberSectionProps = {
 
 type InviteTab = "qr" | "url";
 
-export function MemberSection({ members, memberLimit }: MemberSectionProps) {
+export function MemberSection({ members, memberLimit, onMembersChange }: MemberSectionProps) {
   const { t } = useSettingsLanguage();
 
   const atLimit = members.length >= memberLimit;
@@ -24,6 +26,13 @@ export function MemberSection({ members, memberLimit }: MemberSectionProps) {
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [tab, setTab] = useState<InviteTab>("qr");
   const [copied, setCopied] = useState(false);
+
+  const [deleteTarget, setDeleteTarget] = useState<Member | null>(null);
+  const [itemCount, setItemCount] = useState<number | null>(null);
+  const [deleteLoadError, setDeleteLoadError] = useState<string | null>(null);
+  const [reassign, setReassign] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   async function openInvite() {
     setShowInvite(true);
@@ -47,6 +56,38 @@ export function MemberSection({ members, memberLimit }: MemberSectionProps) {
     setCopied(true);
   }
 
+  async function openDelete(member: Member) {
+    setDeleteTarget(member);
+    setItemCount(null);
+    setDeleteLoadError(null);
+    setDeleteError(null);
+    setReassign(true);
+    const result = await getMemberItemCount(member.id);
+    if (!result.success) {
+      setDeleteLoadError(t.memberSection.deleteModal.loadError);
+      return;
+    }
+    setItemCount(result.itemCount);
+  }
+
+  function closeDelete() {
+    setDeleteTarget(null);
+  }
+
+  async function handleDeleteConfirm() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setDeleteError(null);
+    const result = await deleteMember(deleteTarget.id, reassign);
+    setDeleting(false);
+    if (!result.success) {
+      setDeleteError(t.memberSection.deleteModal.deleteError);
+      return;
+    }
+    onMembersChange(members.filter((member) => member.id !== deleteTarget.id));
+    setDeleteTarget(null);
+  }
+
   return (
     <>
       <section className="rounded-lg bg-white p-4 shadow-[0_2px_8px_rgba(60,47,43,0.08)]">
@@ -56,9 +97,21 @@ export function MemberSection({ members, memberLimit }: MemberSectionProps) {
           {members.map((member) => (
             <li key={member.id} className="flex items-center justify-between py-2 text-sm">
               <span className="text-ink">{member.name}</span>
-              <span className="rounded-full bg-sand px-2.5 py-1 text-xs font-medium text-ink-soft">
-                {t.memberSection.role[member.role]}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-sand px-2.5 py-1 text-xs font-medium text-ink-soft">
+                  {t.memberSection.role[member.role]}
+                </span>
+                {member.role !== "admin" && (
+                  <button
+                    type="button"
+                    onClick={() => openDelete(member)}
+                    aria-label={t.memberSection.deleteButton}
+                    className="text-ink-soft hover:text-red-600 dark:hover:text-red-400"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>
@@ -151,6 +204,75 @@ export function MemberSection({ members, memberLimit }: MemberSectionProps) {
             >
               {t.memberSection.qrModal.closeButton}
             </button>
+          </div>
+        </div>
+      )}
+
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label={t.memberSection.deleteModal.cancelButton}
+            className="absolute inset-0 bg-black/60"
+            onClick={closeDelete}
+          />
+          <div className="relative z-10 w-full max-w-sm rounded-2xl bg-cream p-6 text-left shadow-2xl">
+            <h2 className="text-center font-serif text-lg font-bold text-ink">
+              {t.memberSection.deleteModal.heading}
+            </h2>
+
+            {deleteLoadError ? (
+              <p className="mt-4 text-sm text-red-600 dark:text-red-400">{deleteLoadError}</p>
+            ) : itemCount === null ? (
+              <div className="mt-6 h-20 animate-pulse rounded-md bg-sand" />
+            ) : itemCount === 0 ? (
+              <p className="mt-4 text-sm text-ink-soft">{t.memberSection.deleteModal.confirmSimple}</p>
+            ) : (
+              <>
+                <p className="mt-4 text-sm text-ink-soft">{t.memberSection.deleteModal.itemsWarning(itemCount)}</p>
+                <div className="mt-3 flex flex-col gap-2">
+                  <label className="flex items-center gap-2 rounded-md border border-linen p-2 text-sm text-ink">
+                    <input
+                      type="radio"
+                      name="deleteChoice"
+                      checked={reassign}
+                      onChange={() => setReassign(true)}
+                    />
+                    {t.memberSection.deleteModal.reassignOption}
+                  </label>
+                  <label className="flex items-center gap-2 rounded-md border border-linen p-2 text-sm text-ink">
+                    <input
+                      type="radio"
+                      name="deleteChoice"
+                      checked={!reassign}
+                      onChange={() => setReassign(false)}
+                    />
+                    {t.memberSection.deleteModal.deleteItemsOption}
+                  </label>
+                </div>
+              </>
+            )}
+
+            {deleteError && <p className="mt-3 text-xs text-red-600 dark:text-red-400">{deleteError}</p>}
+
+            <div className="mt-6 flex gap-2">
+              <button
+                type="button"
+                onClick={closeDelete}
+                disabled={deleting}
+                className="flex-1 rounded-md border border-linen py-2.5 text-sm text-ink disabled:opacity-50"
+              >
+                {t.memberSection.deleteModal.cancelButton}
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteConfirm}
+                disabled={deleting || itemCount === null || !!deleteLoadError}
+                className="flex-1 rounded-md bg-red-600 py-2.5 text-sm font-medium text-white disabled:opacity-50"
+              >
+                {deleting ? t.memberSection.deleteModal.deleting : t.memberSection.deleteModal.confirmButton}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { db, members, families } from '@repo/database';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import type { Member } from '../_lib/clothes';
 
 export type CurrentMemberInfo = {
@@ -18,7 +18,10 @@ export async function getCurrentMemberInfo(): Promise<CurrentMemberInfo> {
   const memberDbId = cookieStore.get('member_db_id')?.value;
   if (!familyId || !memberDbId) return { name: null, role: null, isGuest: false };
 
-  const [row] = await db.select().from(members).where(eq(members.id, memberDbId));
+  const [row] = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.id, memberDbId), isNull(members.deletedAt)));
   const [family] = await db.select().from(families).where(eq(families.id, familyId));
 
   return {
@@ -34,7 +37,10 @@ export async function getFamilyMembers(): Promise<Member[]> {
   const familyId = cookieStore.get('family_id')?.value;
   if (!familyId) return [];
 
-  const rows = await db.select().from(members).where(eq(members.familyId, familyId));
+  const rows = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.familyId, familyId), isNull(members.deletedAt)));
 
   return rows.map((row) => ({
     id: row.id,

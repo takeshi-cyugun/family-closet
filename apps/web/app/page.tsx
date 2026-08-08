@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { OwnerLoginForm } from "./_components/OwnerLoginForm";
-import { hasActiveSession } from "./actions/session";
+import { getSessionStatus, type SessionStatus } from "./actions/session";
 import { startGuestSession } from "./_lib/session";
 import { LANGUAGES } from "./_lib/i18n";
 import type { LanguageCode } from "./_lib/i18n";
@@ -103,12 +103,12 @@ export default function Home() {
   const router = useRouter();
   const { language, setLanguage } = useLanguage();
   const t = getHomeDictionary(language);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [session, setSession] = useState<SessionStatus>({ active: false, isGuest: false });
 
   useEffect(() => {
     let cancelled = false;
-    hasActiveSession().then((active) => {
-      if (!cancelled) setLoggedIn(active);
+    getSessionStatus().then((status) => {
+      if (!cancelled) setSession(status);
     });
     return () => {
       cancelled = true;
@@ -128,13 +128,23 @@ export default function Home() {
         <p className="max-w-sm text-sm text-ink-soft">{t.tagline}</p>
 
         <div className="mt-2 flex w-full max-w-xs flex-col gap-3">
-          {loggedIn ? (
-            <Link
-              href="/dashboard"
-              className="rounded-md bg-espresso py-3 text-center text-sm font-semibold text-on-espresso"
-            >
-              {t.dashboardCta}
-            </Link>
+          {session.active ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="rounded-md bg-espresso py-3 text-center text-sm font-semibold text-on-espresso"
+              >
+                {t.dashboardCta}
+              </Link>
+              {session.isGuest && (
+                <Link
+                  href="/signup"
+                  className="rounded-md border border-linen py-3 text-center text-sm font-medium text-ink"
+                >
+                  {t.registerCta}
+                </Link>
+              )}
+            </>
           ) : (
             <>
               <button
@@ -170,7 +180,7 @@ export default function Home() {
         ))}
       </section>
 
-      {!loggedIn && (
+      {!session.active && (
         <section className="mx-auto w-full max-w-sm px-6 py-8">
           <h2 className="mb-4 font-serif text-base font-bold text-ink">{t.loginHeading}</h2>
           <OwnerLoginForm t={t.ownerLoginForm} />

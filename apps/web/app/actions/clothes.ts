@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { db, clothes, members, subscriptions } from '@repo/database';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, isNull } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { mapDbStatusToUiStatus } from '../_lib/clothes';
 import type { ClothesItem, DbClothesStatus, Season, Size } from '../_lib/clothes';
@@ -61,7 +61,7 @@ export async function createClothes(input: CreateClothesInput) {
     const existingClothes = await db
       .select({ id: clothes.id })
       .from(clothes)
-      .where(eq(clothes.familyId, input.familyId));
+      .where(and(eq(clothes.familyId, input.familyId), isNull(clothes.deletedAt)));
     if (existingClothes.length >= limit) {
       return {
         success: false as const,
@@ -104,7 +104,7 @@ export async function getClothesForFamily(): Promise<ClothesItem[]> {
   const rows = await db
     .select()
     .from(clothes)
-    .where(eq(clothes.familyId, familyId))
+    .where(and(eq(clothes.familyId, familyId), isNull(clothes.deletedAt)))
     .orderBy(desc(clothes.createdAt));
 
   return rows.map(toClothesItem);
@@ -127,7 +127,7 @@ export async function getClothesDetail(id: string): Promise<ClothesDetail | null
   const rows = await db
     .select()
     .from(clothes)
-    .where(eq(clothes.familyId, familyId))
+    .where(and(eq(clothes.familyId, familyId), isNull(clothes.deletedAt)))
     .orderBy(desc(clothes.createdAt));
 
   const index = rows.findIndex((row) => row.id === id);

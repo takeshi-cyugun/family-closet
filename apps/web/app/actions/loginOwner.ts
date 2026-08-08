@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { db, members, createSupabaseAuthClient } from '@repo/database';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { isLocked, recordFailure, clearAttempts, getClientIp } from './_lib/loginLockout';
 
 export type LoginOwnerResult =
@@ -47,7 +47,7 @@ export async function loginOwner(email: string, password: string): Promise<Login
   const [member] = await db
     .select()
     .from(members)
-    .where(eq(members.authUserId, authData.user.id));
+    .where(and(eq(members.authUserId, authData.user.id), isNull(members.deletedAt)));
 
   if (!member) {
     return recordFailureAndReject();

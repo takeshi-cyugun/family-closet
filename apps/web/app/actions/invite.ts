@@ -3,7 +3,7 @@
 import { randomBytes } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { db, families, members } from '@repo/database';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 
 export type GetInviteTokenResult = { success: true; token: string } | { success: false; error: string };
 
@@ -20,7 +20,10 @@ export async function getOrCreateInviteToken(): Promise<GetInviteTokenResult> {
     return { success: false, error: 'ログイン情報が見つかりません。再度ログインしてください。' };
   }
 
-  const [currentMember] = await db.select().from(members).where(eq(members.id, memberDbId));
+  const [currentMember] = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.id, memberDbId), isNull(members.deletedAt)));
   if (!currentMember || currentMember.familyId !== familyId || currentMember.role !== 'owner') {
     return { success: false, error: 'この操作には代表者権限が必要です。' };
   }

@@ -7,7 +7,7 @@ import {
   createSupabaseServerClient,
   createSupabaseAuthClient,
 } from '@repo/database';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, isNull } from 'drizzle-orm';
 import { isLocked, recordFailure, clearAttempts, getClientIp } from './_lib/loginLockout';
 
 export type LoginResult =
@@ -42,7 +42,7 @@ export async function loginFamily(
   const [member] = await db
     .select()
     .from(members)
-    .where(and(eq(members.familyId, familyId), eq(members.memberId, memberId)));
+    .where(and(eq(members.familyId, familyId), eq(members.memberId, memberId), isNull(members.deletedAt)));
 
   if (!member || !member.authUserId) {
     return recordFailureAndReject();

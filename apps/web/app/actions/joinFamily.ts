@@ -3,7 +3,7 @@
 import { randomBytes } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { db, families, members, subscriptions } from '@repo/database';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { PLAN_LIMITS, mapPlanTypeToTier } from '../settings/_data/constants';
 
 export type JoinFamilyLookupResult =
@@ -22,7 +22,10 @@ export async function lookupInviteToken(token: string): Promise<JoinFamilyLookup
     .where(eq(subscriptions.familyId, family.id));
   const limit = PLAN_LIMITS[mapPlanTypeToTier(subscription?.planType ?? 'fitting')].memberLimit;
 
-  const familyMembers = await db.select({ id: members.id }).from(members).where(eq(members.familyId, family.id));
+  const familyMembers = await db
+    .select({ id: members.id })
+    .from(members)
+    .where(and(eq(members.familyId, family.id), isNull(members.deletedAt)));
   if (familyMembers.length >= limit) {
     return { status: 'limit_reached' };
   }
@@ -57,7 +60,7 @@ export async function joinFamily(token: string, displayName: string): Promise<Jo
   const familyMembers = await db
     .select({ memberId: members.memberId })
     .from(members)
-    .where(eq(members.familyId, family.id));
+    .where(and(eq(members.familyId, family.id), isNull(members.deletedAt)));
   if (familyMembers.length >= limit) {
     return { success: false, error: 'メンバー数の上限に達しています。' };
   }

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { db, families, subscriptions, members, clothes, createSupabaseServerClient } from '@repo/database';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { mapPlanTypeToTier } from '../settings/_data/constants';
 import type { PlanTier } from '../settings/_data/constants';
 
@@ -43,12 +43,15 @@ export async function getSettingsData(): Promise<SettingsData | null> {
     .select()
     .from(subscriptions)
     .where(eq(subscriptions.familyId, familyId));
-  const familyMembers = await db.select().from(members).where(eq(members.familyId, familyId));
+  const familyMembers = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.familyId, familyId), isNull(members.deletedAt)));
   const currentMember = familyMembers.find((member) => member.id === memberDbId);
   const familyClothes = await db
     .select({ id: clothes.id })
     .from(clothes)
-    .where(eq(clothes.familyId, familyId));
+    .where(and(eq(clothes.familyId, familyId), isNull(clothes.deletedAt)));
 
   const guestDaysLeft =
     family.isGuest && family.guestExpiresAt
@@ -102,7 +105,10 @@ export async function updateMemberDisplayName(name: string): Promise<UpdateNameR
     return { success: false, error: 'ログイン情報が見つかりません。再度ログインしてください。' };
   }
 
-  const [currentMember] = await db.select().from(members).where(eq(members.id, memberDbId));
+  const [currentMember] = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.id, memberDbId), isNull(members.deletedAt)));
   if (!currentMember || currentMember.familyId !== familyId) {
     return { success: false, error: 'メンバー情報が見つかりません。' };
   }

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { db, members, createSupabaseServerClient, createSupabaseAuthClient } from '@repo/database';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 
 export type ChangePasswordResult = { success: true } | { success: false; error: string };
 
@@ -18,7 +18,10 @@ export async function changePassword(
     return { success: false, error: 'ログイン情報が見つかりません。再度ログインしてください。' };
   }
 
-  const [member] = await db.select().from(members).where(eq(members.id, memberDbId));
+  const [member] = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.id, memberDbId), isNull(members.deletedAt)));
   if (!member || member.familyId !== familyId || !member.authUserId) {
     return { success: false, error: 'ログイン情報が見つかりません。再度ログインしてください。' };
   }

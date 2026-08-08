@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { db, families, members, subscriptions, createSupabaseServerClient } from '@repo/database';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { PLAN_LIMITS, mapPlanTypeToTier } from '../settings/_data/constants';
 
 const PASSWORD_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
@@ -33,7 +33,10 @@ export async function addMember(input: AddMemberInput): Promise<AddMemberResult>
     return { success: false, error: 'ログイン情報が見つかりません。再度ログインしてください。' };
   }
 
-  const [currentMember] = await db.select().from(members).where(eq(members.id, memberDbId));
+  const [currentMember] = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.id, memberDbId), isNull(members.deletedAt)));
   if (!currentMember || currentMember.familyId !== familyId || currentMember.role !== 'owner') {
     return { success: false, error: 'この操作には代表者権限が必要です。' };
   }
@@ -49,7 +52,10 @@ export async function addMember(input: AddMemberInput): Promise<AddMemberResult>
     .where(eq(subscriptions.familyId, familyId));
   const limit = PLAN_LIMITS[mapPlanTypeToTier(subscription?.planType ?? 'fitting')].memberLimit;
 
-  const familyMembers = await db.select().from(members).where(eq(members.familyId, familyId));
+  const familyMembers = await db
+    .select()
+    .from(members)
+    .where(and(eq(members.familyId, familyId), isNull(members.deletedAt)));
   if (familyMembers.length >= limit) {
     return { success: false, error: 'メンバー数の上限に達しています。プランのアップグレードが必要です。' };
   }

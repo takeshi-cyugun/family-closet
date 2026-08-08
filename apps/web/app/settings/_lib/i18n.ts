@@ -36,10 +36,23 @@ export type SettingsDictionary = {
     memberIdPlaceholder: string;
     submitButton: string;
     qrButton: string;
+    deleteButton: string;
     errors: {
       nameRequired: string;
       invalidMemberId: string;
       duplicateMemberId: string;
+    };
+    deleteModal: {
+      heading: string;
+      confirmSimple: string;
+      itemsWarning: (count: number) => string;
+      reassignOption: string;
+      deleteItemsOption: string;
+      confirmButton: string;
+      cancelButton: string;
+      deleting: string;
+      loadError: string;
+      deleteError: string;
     };
     qrModal: {
       heading: string;
@@ -100,10 +113,23 @@ const ja: SettingsDictionary = {
     memberIdPlaceholder: "例: jijo",
     submitButton: "メンバーを追加",
     qrButton: "QRコード表示",
+    deleteButton: "削除",
     errors: {
       nameRequired: "表示名を入力してください",
       invalidMemberId: "メンバーIDは半角英数字・アンダースコア・ハイフンで2〜20文字",
       duplicateMemberId: "このメンバーIDは既に使用されています",
+    },
+    deleteModal: {
+      heading: "メンバーを削除",
+      confirmSimple: "このメンバーを削除しますか？この操作は取り消せません。",
+      itemsWarning: (count) => `このメンバーは${count}着のアイテムを所有しています。削除前にどうするか選んでください。`,
+      reassignOption: "アイテムを代表者名義に引き継ぐ",
+      deleteItemsOption: "アイテムも一緒に削除する",
+      confirmButton: "削除する",
+      cancelButton: "キャンセル",
+      deleting: "削除中...",
+      loadError: "情報の取得に失敗しました。",
+      deleteError: "削除に失敗しました。",
     },
     qrModal: {
       heading: "メンバーを招待",
@@ -168,10 +194,23 @@ const en: SettingsDictionary = {
     memberIdPlaceholder: "e.g. jijo",
     submitButton: "Add member",
     qrButton: "Show QR code",
+    deleteButton: "Remove",
     errors: {
       nameRequired: "Please enter a display name",
       invalidMemberId: "Member ID must be 2-20 alphanumeric characters, underscores, or hyphens",
       duplicateMemberId: "This member ID is already in use",
+    },
+    deleteModal: {
+      heading: "Remove member",
+      confirmSimple: "Remove this member? This action cannot be undone.",
+      itemsWarning: (count) => `This member owns ${count} item(s). Choose what to do with them before removing.`,
+      reassignOption: "Transfer items to the owner",
+      deleteItemsOption: "Delete the items too",
+      confirmButton: "Remove",
+      cancelButton: "Cancel",
+      deleting: "Removing...",
+      loadError: "Failed to load info.",
+      deleteError: "Failed to remove member.",
     },
     qrModal: {
       heading: "Invite a member",
@@ -236,10 +275,23 @@ const zhCN: SettingsDictionary = {
     memberIdPlaceholder: "例：jijo",
     submitButton: "添加成员",
     qrButton: "显示二维码",
+    deleteButton: "删除",
     errors: {
       nameRequired: "请输入显示名称",
       invalidMemberId: "成员ID须为2〜20位的半角英数字、下划线或连字符",
       duplicateMemberId: "该成员ID已被使用",
+    },
+    deleteModal: {
+      heading: "删除成员",
+      confirmSimple: "确定要删除该成员吗？此操作无法撤销。",
+      itemsWarning: (count) => `该成员拥有 ${count} 件物品。请选择删除前的处理方式。`,
+      reassignOption: "将物品转移给代表人",
+      deleteItemsOption: "同时删除物品",
+      confirmButton: "删除",
+      cancelButton: "取消",
+      deleting: "删除中...",
+      loadError: "获取信息失败。",
+      deleteError: "删除失败。",
     },
     qrModal: {
       heading: "邀请成员",
@@ -304,10 +356,23 @@ const zhTW: SettingsDictionary = {
     memberIdPlaceholder: "例：jijo",
     submitButton: "新增成員",
     qrButton: "顯示QR碼",
+    deleteButton: "刪除",
     errors: {
       nameRequired: "請輸入顯示名稱",
       invalidMemberId: "成員ID須為2〜20位的半形英數字、底線或連字號",
       duplicateMemberId: "該成員ID已被使用",
+    },
+    deleteModal: {
+      heading: "刪除成員",
+      confirmSimple: "確定要刪除該成員嗎？此操作無法復原。",
+      itemsWarning: (count) => `該成員擁有 ${count} 件物品。請選擇刪除前的處理方式。`,
+      reassignOption: "將物品轉移給代表人",
+      deleteItemsOption: "同時刪除物品",
+      confirmButton: "刪除",
+      cancelButton: "取消",
+      deleting: "刪除中...",
+      loadError: "取得資訊失敗。",
+      deleteError: "刪除失敗。",
     },
     qrModal: {
       heading: "邀請成員",

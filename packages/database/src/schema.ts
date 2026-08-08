@@ -42,6 +42,7 @@ export const members = pgTable('members', {
   role: memberRoleEnum('role').default('member').notNull(), // 'owner': 代表者 / 'member': 一般メンバー
   preferredLanguage: text('preferred_language').default('ja').notNull(), // パターンB用 (ja, en, zh-CN)
   isFirstLogin: boolean('is_first_login').default(true).notNull(),
+  deletedAt: timestamp('deleted_at'), // ソフトデリート日時（削除後14日はバッチ削除待ちの猶予期間、管理画面から復元可能）
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -64,6 +65,7 @@ export const clothes = pgTable('clothes', {
   season: text('season'), // 例: "春", "秋冬", "通年"
   status: clothesStatusEnum('status').default('in_use').notNull(),
   memo: text('memo'),
+  deletedAt: timestamp('deleted_at'), // ソフトデリート日時（所有メンバー削除に連動、14日後にバッチ物理削除）
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
