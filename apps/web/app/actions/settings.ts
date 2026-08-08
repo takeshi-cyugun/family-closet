@@ -2,9 +2,10 @@
 
 import { cookies } from 'next/headers';
 import { db, families, subscriptions, members, clothes, createSupabaseServerClient } from '@repo/database';
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, count } from 'drizzle-orm';
 import { mapPlanTypeToTier } from '../settings/_data/constants';
 import type { PlanTier } from '../settings/_data/constants';
+import type { Member } from '../_lib/clothes';
 
 export type SettingsData = {
   familyName: string;
@@ -16,6 +17,7 @@ export type SettingsData = {
   planTier: PlanTier;
   memberCount: number;
   itemCount: number;
+  members: Member[];
 };
 
 // 表示名が未設定の場合のフォールバック（メールアドレスの@より前を使う）
@@ -48,8 +50,8 @@ export async function getSettingsData(): Promise<SettingsData | null> {
     .from(members)
     .where(and(eq(members.familyId, familyId), isNull(members.deletedAt)));
   const currentMember = familyMembers.find((member) => member.id === memberDbId);
-  const familyClothes = await db
-    .select({ id: clothes.id })
+  const [itemCountRow] = await db
+    .select({ value: count() })
     .from(clothes)
     .where(and(eq(clothes.familyId, familyId), isNull(clothes.deletedAt)));
 
@@ -71,7 +73,13 @@ export async function getSettingsData(): Promise<SettingsData | null> {
     guestDaysLeft,
     planTier: mapPlanTypeToTier(subscription?.planType ?? 'fitting'),
     memberCount: familyMembers.length,
-    itemCount: familyClothes.length,
+    itemCount: itemCountRow?.value ?? 0,
+    members: familyMembers.map((row) => ({
+      id: row.id,
+      memberId: row.memberId,
+      name: row.displayName,
+      role: row.role === 'owner' ? 'admin' : 'member',
+    })),
   };
 }
 

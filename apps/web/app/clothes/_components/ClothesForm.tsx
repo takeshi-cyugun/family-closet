@@ -6,7 +6,6 @@ import { useEffect, useState, type FormEvent } from "react";
 import { PhotoPicker } from "./PhotoPicker";
 import { uploadClothesImage } from "../../actions/uploadImage";
 import { ensureGuestFamily } from "../../actions/ensureGuestFamily";
-import { getFamilyMembers } from "../../actions/members";
 import { getSettingsData } from "../../actions/settings";
 import { createClothes, deleteClothes, updateClothes } from "../../actions/clothes";
 import { SEASONS, SIZES, STATUSES, mapUiStatusToDbStatus, mapAiSeasonToSeason } from "../../_lib/clothes";
@@ -99,8 +98,9 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
   useEffect(() => {
     let cancelled = false;
     ensureGuestFamily(language).then(async (session) => {
-      const [familyMembers, settings] = await Promise.all([getFamilyMembers(), getSettingsData()]);
+      const settings = await getSettingsData();
       if (cancelled) return;
+      const familyMembers = settings?.members ?? [];
       setFamilyId(session.familyId);
       setMembers(familyMembers);
       setIsGuest(settings?.isGuest ?? false);

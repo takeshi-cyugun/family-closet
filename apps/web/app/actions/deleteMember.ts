@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { db, members, clothes } from '@repo/database';
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, count } from 'drizzle-orm';
 
 async function requireOwner(): Promise<
   { ok: true; familyId: string; ownerMemberId: string } | { ok: false; error: string }
@@ -43,12 +43,12 @@ export async function getMemberItemCount(targetMemberId: string): Promise<Member
     return { success: false, error: '代表者は削除できません。' };
   }
 
-  const items = await db
-    .select({ id: clothes.id })
+  const [itemCountRow] = await db
+    .select({ value: count() })
     .from(clothes)
     .where(and(eq(clothes.ownerMemberId, targetMemberId), isNull(clothes.deletedAt)));
 
-  return { success: true, itemCount: items.length };
+  return { success: true, itemCount: itemCountRow?.value ?? 0 };
 }
 
 export type DeleteMemberResult = { success: true } | { success: false; error: string };
