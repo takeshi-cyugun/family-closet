@@ -25,6 +25,7 @@ export const families = pgTable('families', {
   name: text('name').default('ファミリー名').notNull(), // 設定画面で表示・編集する表示用のファミリー名（ログインIDとは別）
   isGuest: boolean('is_guest').default(false).notNull(),
   guestExpiresAt: timestamp('guest_expires_at'), // フィッティングプラン用（14日間）
+  inviteToken: text('invite_token').unique(), // メンバー招待用の固定トークン（QRコード/招待URL、代表者が発行するまではnull）
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

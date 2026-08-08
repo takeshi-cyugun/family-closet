@@ -41,6 +41,16 @@ export type SettingsDictionary = {
       invalidMemberId: string;
       duplicateMemberId: string;
     };
+    qrModal: {
+      heading: string;
+      description: string;
+      qrTab: string;
+      urlTab: string;
+      copyButton: string;
+      copiedNotice: string;
+      closeButton: string;
+      loadError: string;
+    };
   };
   languageSection: {
     label: string;
@@ -94,6 +104,16 @@ const ja: SettingsDictionary = {
       nameRequired: "表示名を入力してください",
       invalidMemberId: "メンバーIDは半角英数字・アンダースコア・ハイフンで2〜20文字",
       duplicateMemberId: "このメンバーIDは既に使用されています",
+    },
+    qrModal: {
+      heading: "メンバーを招待",
+      description: "このQRコードまたはURLを招待したい家族に共有してください。読み取る（開く）と表示名の入力だけで参加できます。",
+      qrTab: "QRコード",
+      urlTab: "招待URL",
+      copyButton: "コピー",
+      copiedNotice: "コピーしました",
+      closeButton: "閉じる",
+      loadError: "招待情報の取得に失敗しました。",
     },
   },
   languageSection: {
@@ -153,6 +173,16 @@ const en: SettingsDictionary = {
       invalidMemberId: "Member ID must be 2-20 alphanumeric characters, underscores, or hyphens",
       duplicateMemberId: "This member ID is already in use",
     },
+    qrModal: {
+      heading: "Invite a member",
+      description: "Share this QR code or URL with the family member you'd like to invite. Scanning or opening it lets them join by just entering a display name.",
+      qrTab: "QR code",
+      urlTab: "Invite URL",
+      copyButton: "Copy",
+      copiedNotice: "Copied",
+      closeButton: "Close",
+      loadError: "Failed to load invite info.",
+    },
   },
   languageSection: {
     label: "Display language",
@@ -211,6 +241,16 @@ const zhCN: SettingsDictionary = {
       invalidMemberId: "成员ID须为2〜20位的半角英数字、下划线或连字符",
       duplicateMemberId: "该成员ID已被使用",
     },
+    qrModal: {
+      heading: "邀请成员",
+      description: "将此二维码或链接分享给想邀请的家人。扫描或打开后，只需输入显示名称即可加入。",
+      qrTab: "二维码",
+      urlTab: "邀请链接",
+      copyButton: "复制",
+      copiedNotice: "已复制",
+      closeButton: "关闭",
+      loadError: "获取邀请信息失败。",
+    },
   },
   languageSection: {
     label: "显示语言",
@@ -268,6 +308,16 @@ const zhTW: SettingsDictionary = {
       nameRequired: "請輸入顯示名稱",
       invalidMemberId: "成員ID須為2〜20位的半形英數字、底線或連字號",
       duplicateMemberId: "該成員ID已被使用",
+    },
+    qrModal: {
+      heading: "邀請成員",
+      description: "將此QR碼或連結分享給想邀請的家人。掃描或開啟後，只需輸入顯示名稱即可加入。",
+      qrTab: "QR碼",
+      urlTab: "邀請連結",
+      copyButton: "複製",
+      copiedNotice: "已複製",
+      closeButton: "關閉",
+      loadError: "取得邀請資訊失敗。",
     },
   },
   languageSection: {
