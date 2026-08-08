@@ -5,6 +5,7 @@ export type HomeDictionary = {
   tagline: string;
   guestCta: string;
   registerCta: string;
+  dashboardCta: string;
   features: { icon: string; title: string; description: string }[];
   loginHeading: string;
   loginForm: {
@@ -37,6 +38,7 @@ const ja: HomeDictionary = {
     "誰のどの服が、どこにあるか。写真を撮るだけでAIが自動整理。家族みんなで共有できるクローゼット管理アプリです。",
   guestCta: "まずはお試し（登録不要）",
   registerCta: "ファミリーを新規作成",
+  dashboardCta: "マイ家族のクローゼットへ",
   features: [
     {
       icon: "👨‍👩‍👧‍👦",
@@ -80,6 +82,7 @@ const en: HomeDictionary = {
     "See whose clothes are where at a glance. Just snap a photo and AI organizes it for you. A closet management app the whole family can share.",
   guestCta: "Try it now (no sign-up)",
   registerCta: "Create a new family",
+  dashboardCta: "Go to my closet",
   features: [
     {
       icon: "👨‍👩‍👧‍👦",
@@ -122,6 +125,7 @@ const zhCN: HomeDictionary = {
   tagline: "谁的哪件衣服放在哪里，一目了然。只需拍照，AI 自动整理。家人可共同使用的衣橱管理应用。",
   guestCta: "立即试用（无需注册）",
   registerCta: "创建新家庭",
+  dashboardCta: "前往我的衣橱",
   features: [
     {
       icon: "👨‍👩‍👧‍👦",
@@ -164,6 +168,7 @@ const zhTW: HomeDictionary = {
   tagline: "誰的哪件衣服放在哪裡，一目瞭然。只需拍照，AI 自動整理。家人可共同使用的衣櫥管理應用程式。",
   guestCta: "立即試用（無需註冊）",
   registerCta: "建立新家庭",
+  dashboardCta: "前往我的衣櫥",
   features: [
     {
       icon: "👨‍👩‍👧‍👦",
