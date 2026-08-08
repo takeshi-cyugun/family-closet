@@ -185,6 +185,23 @@ export async function getClothesDetail(id: string): Promise<ClothesDetail | null
   };
 }
 
+// 編集画面用: 対象1件のみを取得する軽量版（前後ナビゲーションが不要なため、getClothesDetailと違いファミリー全件は読まない）
+export async function getClothesForEdit(id: string): Promise<{ item: ClothesItem; familyId: string } | null> {
+  const cookieStore = await cookies();
+  const familyId = cookieStore.get('family_id')?.value;
+  if (!familyId) return null;
+
+  const [row] = await db
+    .select()
+    .from(clothes)
+    .where(and(eq(clothes.id, id), eq(clothes.familyId, familyId), isNull(clothes.deletedAt)))
+    .limit(1);
+
+  if (!row) return null;
+
+  return { item: toClothesItem(row), familyId };
+}
+
 // 洋服の全項目更新（編集フォーム用）
 export async function updateClothes(clothesId: string, familyId: string, input: UpdateClothesInput) {
   try {

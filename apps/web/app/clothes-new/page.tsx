@@ -1,18 +1,11 @@
-"use client";
-
-import { Header } from "../_components/Header";
 import { BottomNav, BottomNavSpacer } from "../_components/BottomNav";
 import { ClothesForm } from "../clothes/_components/ClothesForm";
-import { useLanguage } from "../_lib/LanguageContext";
-import { getClothesFormDictionary } from "../clothes/_lib/i18n";
+import { NewPageHeader } from "../clothes/_components/NewPageHeader";
 
 export default function NewClothesPage() {
-  const { language } = useLanguage();
-  const t = getClothesFormDictionary(language);
-
   return (
     <div className="flex min-h-dvh flex-col bg-cream text-ink">
-      <Header title={t.headerTitle} />
+      <NewPageHeader />
 
       <main className="flex-1 px-4 py-6">
         <ClothesForm mode="new" />

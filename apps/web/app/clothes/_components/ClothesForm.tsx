@@ -6,7 +6,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { PhotoPicker } from "./PhotoPicker";
 import { uploadClothesImage } from "../../actions/uploadImage";
 import { ensureGuestFamily } from "../../actions/ensureGuestFamily";
-import { getSettingsData } from "../../actions/settings";
+import { getFamilyMembers, getCurrentMemberInfo } from "../../actions/members";
 import { createClothes, deleteClothes, updateClothes } from "../../actions/clothes";
 import { SEASONS, SIZES, STATUSES, mapUiStatusToDbStatus, mapAiSeasonToSeason } from "../../_lib/clothes";
 import type { ClothesItem, ClothesStatus, Member, Season, Size } from "../../_lib/clothes";
@@ -18,6 +18,8 @@ type ClothesFormProps = {
   mode: "new" | "edit";
   initialItem?: ClothesItem;
   compact?: boolean;
+  initialFamilyId?: string;
+  initialMembers?: Member[];
 };
 
 type Errors = Partial<Record<"photo" | "name" | "color", string>>;
@@ -58,7 +60,7 @@ function SelectField<T extends string>({
   );
 }
 
-export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
+export function ClothesForm({ mode, initialItem, compact, initialFamilyId, initialMembers }: ClothesFormProps) {
   const router = useRouter();
   const { language } = useLanguage();
   const t = getClothesFormDictionary(language);
@@ -90,20 +92,23 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const [familyId, setFamilyId] = useState<string | null>(null);
-  const [members, setMembers] = useState<Member[]>([]);
+  const [familyId, setFamilyId] = useState<string | null>(initialFamilyId ?? null);
+  const [members, setMembers] = useState<Member[]>(initialMembers ?? []);
   const [isGuest, setIsGuest] = useState(false);
   const [showLimitModal, setShowLimitModal] = useState(false);
 
   useEffect(() => {
+    // 編集画面はサーバー側(page.tsx)で取得済みのfamilyId/membersをpropsで受け取っているので、
+    // ゲストファミリー作成やsettings相当の取得をここで重ねて行う必要はない
+    if (mode === "edit") return;
+
     let cancelled = false;
     ensureGuestFamily(language).then(async (session) => {
-      const settings = await getSettingsData();
+      const [familyMembers, memberInfo] = await Promise.all([getFamilyMembers(), getCurrentMemberInfo()]);
       if (cancelled) return;
-      const familyMembers = settings?.members ?? [];
       setFamilyId(session.familyId);
       setMembers(familyMembers);
-      setIsGuest(settings?.isGuest ?? false);
+      setIsGuest(memberInfo.isGuest);
       setOwnerId((prev) => prev || session.memberId || familyMembers[0]?.id);
     });
     return () => {
@@ -234,7 +239,7 @@ export function ClothesForm({ mode, initialItem, compact }: ClothesFormProps) {
         return;
       }
 
-      const session = await ensureGuestFamily(language);
+      const session = familyId ? { familyId, memberId: ownerId } : await ensureGuestFamily(language);
       const result = await createClothes({
         familyId: session.familyId,
         ownerMemberId: ownerId || session.memberId,
