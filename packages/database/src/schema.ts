@@ -6,6 +6,7 @@ import {
   integer,
   uuid,
   pgEnum,
+  index,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -48,27 +49,34 @@ export const members = pgTable('members', {
 });
 
 // 3. 洋服 (clothes)
-export const clothes = pgTable('clothes', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  familyId: text('family_id')
-    .references(() => families.id, { onDelete: 'cascade' })
-    .notNull(),
-  ownerMemberId: uuid('owner_member_id')
-    .references(() => members.id, { onDelete: 'cascade' })
-    .notNull(),
-  name: text('name').notNull(),
-  imageUrl: text('image_url').notNull(),
-  thumbnailUrl: text('thumbnail_url'),
-  category: text('category').notNull(), // 例: "コート", "トップス"
-  color: text('color').notNull(), // 例: "ネイビー"
-  size: text('size'), // 例: "110", "M"
-  season: text('season'), // 例: "春", "秋冬", "通年"
-  status: clothesStatusEnum('status').default('in_use').notNull(),
-  memo: text('memo'),
-  deletedAt: timestamp('deleted_at'), // ソフトデリート日時（所有メンバー削除に連動、14日後にバッチ物理削除）
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
+export const clothes = pgTable(
+  'clothes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    familyId: text('family_id')
+      .references(() => families.id, { onDelete: 'cascade' })
+      .notNull(),
+    ownerMemberId: uuid('owner_member_id')
+      .references(() => members.id, { onDelete: 'cascade' })
+      .notNull(),
+    name: text('name').notNull(),
+    imageUrl: text('image_url').notNull(),
+    thumbnailUrl: text('thumbnail_url'),
+    category: text('category').notNull(), // 例: "コート", "トップス"
+    color: text('color').notNull(), // 例: "ネイビー"
+    size: text('size'), // 例: "110", "M"
+    season: text('season'), // 例: "春", "秋冬", "通年"
+    status: clothesStatusEnum('status').default('in_use').notNull(),
+    memo: text('memo'),
+    deletedAt: timestamp('deleted_at'), // ソフトデリート日時（所有メンバー削除に連動、14日後にバッチ物理削除）
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [
+    // 一覧画面: family_id絞り込み + created_at降順ソートが常に発生するため複合インデックスでカバー
+    index('clothes_family_id_created_at_idx').on(table.familyId, table.createdAt),
+  ]
+);
 
 // 4. サブスクリプション・プラン契約 (subscriptions)
 export const subscriptions = pgTable('subscriptions', {

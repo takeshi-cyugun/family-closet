@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { getCategoryIcon } from "../../_lib/clothes";
+import { CLOTHES_IMAGE_BLUR_DATA_URL, getCategoryIcon } from "../../_lib/clothes";
 import type { ClothesItem, Member } from "../../_lib/clothes";
 import { useLanguage } from "../../_lib/LanguageContext";
 import { getDashboardDictionary } from "../_lib/i18n";
@@ -34,12 +35,14 @@ export function ClothesCard({ item, owner }: ClothesCardProps) {
     >
       <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-cream text-5xl">
         {item.thumbnailDataUrl || item.photoDataUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={item.thumbnailDataUrl || item.photoDataUrl}
+          <Image
+            src={item.thumbnailDataUrl || item.photoDataUrl || ""}
             alt={item.name}
-            loading="lazy"
-            className="h-full w-full object-cover"
+            fill
+            sizes="(max-width: 640px) 50vw, 300px"
+            placeholder="blur"
+            blurDataURL={CLOTHES_IMAGE_BLUR_DATA_URL}
+            className="object-cover"
           />
         ) : (
           getCategoryIcon(item.category)

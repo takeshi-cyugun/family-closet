@@ -105,6 +105,10 @@ export function getCategoryIcon(category: string): string {
   return CATEGORY_ICON[category as Category] ?? DEFAULT_CATEGORY_ICON;
 }
 
+// 洋服画像のnext/imageブラー読み込み用プレースホルダー（sand背景色の単色8x8px、画像ごとのLQIP生成はまだ行っていない）
+export const CLOTHES_IMAGE_BLUR_DATA_URL =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEUlEQVQImWP4+OIWVsQwtCQAhXWswaH0DicAAAAASUVORK5CYII=";
+
 export const mockMembers: Member[] = [
   { id: "dad", memberId: "dad", name: "パパ", role: "admin" },
   { id: "mom", memberId: "mom", name: "ママ", role: "member" },

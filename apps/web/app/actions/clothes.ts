@@ -2,10 +2,10 @@
 
 import { cookies } from 'next/headers';
 import { db, clothes, members, subscriptions } from '@repo/database';
-import { eq, and, desc, isNull } from 'drizzle-orm';
+import { eq, and, desc, isNull, ilike, or, count } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
-import { mapDbStatusToUiStatus } from '../_lib/clothes';
-import type { ClothesItem, DbClothesStatus, Season, Size } from '../_lib/clothes';
+import { mapDbStatusToUiStatus, mapUiStatusToDbStatus } from '../_lib/clothes';
+import type { ClothesItem, ClothesStatus, DbClothesStatus, Season, Size } from '../_lib/clothes';
 import { PLAN_LIMITS, mapPlanTypeToTier } from '../settings/_data/constants';
 
 export interface CreateClothesInput {
@@ -97,19 +97,57 @@ export async function createClothes(input: CreateClothesInput) {
   }
 }
 
-// ログイン中（ゲスト）ファミリーの洋服一覧を取得（CookieのfamilyIdにスコープ）
-export async function getClothesForFamily(): Promise<ClothesItem[]> {
+export interface ClothesPageFilter {
+  ownerMemberId?: string;
+  category?: string;
+  status?: ClothesStatus;
+  season?: string;
+  size?: string;
+  keyword?: string;
+}
+
+export interface ClothesPageResult {
+  items: ClothesItem[];
+  total: number;
+}
+
+// 一覧画面向け: 絞り込み・ページングをDBクエリ側で行う（CookieのfamilyIdにスコープ）
+export async function getClothesPage(
+  filter: ClothesPageFilter,
+  page: number,
+  pageSize: number
+): Promise<ClothesPageResult> {
   const cookieStore = await cookies();
   const familyId = cookieStore.get('family_id')?.value;
-  if (!familyId) return [];
+  if (!familyId) return { items: [], total: 0 };
 
-  const rows = await db
-    .select()
-    .from(clothes)
-    .where(and(eq(clothes.familyId, familyId), isNull(clothes.deletedAt)))
-    .orderBy(desc(clothes.createdAt));
+  const conditions = [eq(clothes.familyId, familyId), isNull(clothes.deletedAt)];
+  if (filter.ownerMemberId) conditions.push(eq(clothes.ownerMemberId, filter.ownerMemberId));
+  if (filter.category) conditions.push(eq(clothes.category, filter.category));
+  if (filter.status) conditions.push(eq(clothes.status, mapUiStatusToDbStatus(filter.status)));
+  if (filter.season) conditions.push(eq(clothes.season, filter.season));
+  if (filter.size) conditions.push(eq(clothes.size, filter.size));
 
-  return rows.map(toClothesItem);
+  const keyword = filter.keyword?.trim();
+  if (keyword) {
+    const pattern = `%${keyword}%`;
+    conditions.push(or(ilike(clothes.name, pattern), ilike(clothes.color, pattern), ilike(clothes.memo, pattern))!);
+  }
+
+  const where = and(...conditions);
+
+  const [rows, totalRows] = await Promise.all([
+    db
+      .select()
+      .from(clothes)
+      .where(where)
+      .orderBy(desc(clothes.createdAt))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize),
+    db.select({ value: count() }).from(clothes).where(where),
+  ]);
+
+  return { items: rows.map(toClothesItem), total: totalRows[0]?.value ?? 0 };
 }
 
 export type ClothesDetail = {

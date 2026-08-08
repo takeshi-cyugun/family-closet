@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl *)",
+      "Bash(pnpm --filter web lint *)",
+      "Bash(pnpm lint *)",
+      "Bash(npx tsc *)",
+      "Bash(pnpm --filter admin lint *)"
+    ]
+  }
+}
