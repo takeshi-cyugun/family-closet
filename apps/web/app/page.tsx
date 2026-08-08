@@ -16,6 +16,9 @@ import { getHomeDictionary } from "./_lib/homeI18n";
 // トップページの言語切替のみ、日本語を末尾に表示する
 const FOOTER_LANGUAGES = [...LANGUAGES.filter((lang) => lang.code !== "ja"), LANGUAGES.find((lang) => lang.code === "ja")!];
 
+// features配列の並び（家族で共有 → AI自動タグ付け）に対応するアイコン画像
+const FEATURE_ICON_IMAGES = ["/share.png", "/ai.png"];
+
 function LanguageSelect({
   language,
   onChange,
@@ -176,12 +179,18 @@ export default function Home() {
       </section>
 
       <section className="mx-auto grid w-full max-w-xl gap-4 px-6 py-8 sm:grid-cols-2">
-        {t.features.map((feature) => (
+        {t.features.map((feature, index) => (
           <div
             key={feature.title}
             className="rounded-lg bg-white p-4 text-center shadow-[0_2px_8px_rgba(60,47,43,0.08)]"
           >
-            <span className="text-3xl">{feature.icon}</span>
+            <Image
+              src={FEATURE_ICON_IMAGES[index]}
+              alt=""
+              width={64}
+              height={64}
+              className="mx-auto h-14 w-14 object-contain"
+            />
             <h2 className="mt-2 font-serif text-sm font-semibold text-ink">{feature.title}</h2>
             <p className="mt-1 text-xs text-ink-soft">{feature.description}</p>
           </div>
