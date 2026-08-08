@@ -7,11 +7,12 @@ const nextConfig: NextConfig = {
   // @img/sharp-libvips-linux-x64 等のネイティブバイナリを含む）にある。既定のトレーシングルート
   // (=apps/web)だとその外側にある実体ファイルが出力ファイルトレーシングの対象外になり、
   // Vercel(本番, linux-x64)で "ERR_DLOPEN_FAILED: libvips-cpp.so.8.18.3: cannot open shared
-  // object file" となってuploadClothesImage()が本番でのみ失敗していた。トレーシングルートを
-  // モノレポルートまで広げるだけで、sharp/**/* のシンボリックリンクを辿って@img配下の
-  // 実バイナリまで正しくトレースされることをローカルビルドで確認済み（Next.js公式ドキュメント
-  // 記載の定番対処。存在しないパスを推測でincludesに書くとビルド自体がENOENTで失敗するため、
-  // 個別のパスは列挙しない）。
+  // object file" となってuploadClothesImage()が本番でのみ失敗していた。加えて、Next.js 16の既定
+  // ビルドバンドラであるTurbopackはこの多段シンボリックリンク(sharp→@img/sharp-linux-x64→
+  // @img/sharp-libvips-linux-x64)を最後まで辿り切れておらず、outputFileTracingRootだけでは
+  // 解決しなかったため、`package.json`のbuildを`next build --webpack`に変更した
+  // （webpackの.nft.jsonトレースでlibvips本体まで正しく含まれることをローカルビルドで確認済み）。
+  // 存在しないパスを推測でincludesに書くとビルド自体がENOENTで失敗するため、個別のパスは列挙しない。
   outputFileTracingRoot: path.join(__dirname, "../.."),
   outputFileTracingIncludes: {
     "/*": ["node_modules/sharp/**/*"],
@@ -22,6 +23,11 @@ const nextConfig: NextConfig = {
     // revalidatePath('/list')を呼んでいるので、このキャッシュがあっても更新は即座に反映される。
     staleTimes: {
       dynamic: 30,
+    },
+    serverActions: {
+      // 既定1MBだとスマホ撮影のオリジナル写真（リサイズはサーバー側でsharpが行うため未圧縮のまま送る）
+      // で容易に超過し、"Body exceeded 1 MB limit"でuploadClothesImage()が失敗するため引き上げる。
+      bodySizeLimit: "10mb",
     },
   },
   images: {
