@@ -6,6 +6,7 @@ import { db, families, members, createSupabaseAuthClient } from '@repo/database'
 import { and, eq, isNull } from 'drizzle-orm';
 import { convertGuestToFamily } from './convertGuestToFamily';
 import { sendFamilyCreatedEmail } from '../_lib/mail';
+import type { LanguageCode } from '../_lib/i18n';
 
 export type LoginGoogleResult = { success: false; error: string };
 
@@ -17,7 +18,8 @@ const INVALID_TOKEN_MESSAGE = 'Google認証の検証に失敗しました。も�
 // isFirstLogin/強制パスワード変更の対象にはしない。
 export async function loginWithGoogle(
   accessToken: string,
-  plan: 'chest' | 'walk_in'
+  plan: 'chest' | 'walk_in',
+  language: LanguageCode
 ): Promise<LoginGoogleResult> {
   const authClient = createSupabaseAuthClient();
   const { data: userData, error: userError } = await authClient.auth.getUser(accessToken);
@@ -68,6 +70,7 @@ export async function loginWithGoogle(
     ownerDisplayName,
     authUserId: user.id,
     selectedPlan: plan,
+    preferredLanguage: language,
   });
 
   if (!result.success) {

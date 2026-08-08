@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { loginWithGoogle } from "../../../actions/loginGoogle";
+import { LANGUAGES, type LanguageCode } from "../../../_lib/i18n";
 
 type Status = "processing" | "error";
 
@@ -17,6 +18,10 @@ export default function GoogleCallbackPage() {
     // 返ってくる（クエリの?code=ではない）。/auth/confirmedの確認リンク処理と同じ形式。
     const url = new URL(window.location.href);
     const plan = url.searchParams.get("plan") === "walk_in" ? "walk_in" : "chest";
+    const languageParam = url.searchParams.get("language");
+    const language: LanguageCode = LANGUAGES.some((lang) => lang.code === languageParam)
+      ? (languageParam as LanguageCode)
+      : "ja";
 
     const rawHash = window.location.hash.startsWith("#")
       ? window.location.hash.slice(1)
@@ -38,7 +43,7 @@ export default function GoogleCallbackPage() {
     }
 
     // 成功時はloginWithGoogle内でredirect('/list')するため、ここに結果が返ってくるのは失敗時のみ
-    loginWithGoogle(accessToken, plan).then((result) => {
+    loginWithGoogle(accessToken, plan, language).then((result) => {
       setStatus("error");
       setErrorMessage(result.error);
     });

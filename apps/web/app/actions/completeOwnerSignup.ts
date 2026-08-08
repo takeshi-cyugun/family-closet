@@ -10,6 +10,7 @@ export type CompleteOwnerSignupResult = { success: true } | { success: false; er
 type SignupMetadata = {
   plan?: 'chest' | 'walk_in';
   guestFamilyId?: string;
+  language?: string;
 };
 
 // メール確認リンク（#access_token=...）を検証し、ファミリー・代表メンバーをDBに作成する。
@@ -47,6 +48,7 @@ export async function completeOwnerSignup(accessToken: string): Promise<Complete
     ownerDisplayName,
     authUserId: user.id,
     selectedPlan: plan,
+    preferredLanguage: metadata.language,
   });
 
   if (!result.success) {

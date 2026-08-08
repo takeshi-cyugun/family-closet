@@ -4,6 +4,7 @@ import { getFamilyDetail } from "../../../actions/families";
 import { formatDateTime } from "../../../_lib/format";
 import { PLAN_LABEL } from "../../../_lib/plans";
 import { CopyableId } from "../../_components/CopyableId";
+import { DeleteFamilyButton } from "../../_components/DeleteFamilyButton";
 
 const ROLE_LABEL: Record<string, string> = {
   owner: "代表者",
@@ -42,12 +43,12 @@ export default async function FamilyDetailPage({ params }: { params: Promise<{ i
           >
             編集する
           </button>
-          <button
-            type="button"
-            className="rounded-md border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
-          >
-            削除する
-          </button>
+          <DeleteFamilyButton
+            familyId={family.familyId}
+            familyName={family.familyName}
+            memberCount={family.members.length}
+            clothesCount={family.clothesCount}
+          />
         </div>
       </div>
 

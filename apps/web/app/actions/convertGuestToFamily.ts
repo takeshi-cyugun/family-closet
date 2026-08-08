@@ -10,6 +10,7 @@ export interface ConvertGuestToFamilyInput {
   ownerDisplayName: string;
   authUserId: string;
   selectedPlan: 'chest' | 'walk_in';
+  preferredLanguage?: string;
 }
 
 // 新規ファミリー・代表者メンバーを作成する。guestFamilyIdが指定された場合はゲストデータを引き継ぐ
@@ -32,6 +33,7 @@ export async function convertGuestToFamily(input: ConvertGuestToFamilyInput) {
           role: 'owner',
           isFirstLogin: false,
           authUserId: input.authUserId,
+          ...(input.preferredLanguage ? { preferredLanguage: input.preferredLanguage } : {}),
         })
         .returning({ id: members.id });
 

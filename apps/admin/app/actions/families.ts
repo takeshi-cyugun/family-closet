@@ -1,8 +1,17 @@
 "use server";
 
-import { db, families, members, subscriptions, clothes, createSupabaseServerClient } from "@repo/database";
+import {
+  db,
+  families,
+  members,
+  subscriptions,
+  clothes,
+  createSupabaseServerClient,
+  CLOTHES_STORAGE_BUCKET,
+} from "@repo/database";
 import { desc, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { isAdminAuthenticated } from "./auth";
 import { DEFAULT_PAGE_SIZE, type PageSize } from "../_lib/pagination";
 
@@ -163,4 +172,65 @@ export async function getFamilyDetail(familyId: string): Promise<FamilyDetail | 
       createdAt: m.createdAt.toISOString(),
     })),
   };
+}
+
+export type DeleteFamilyResult = { success: false; error: string };
+
+// ファミリーを完全に削除する（配下メンバー・アイテム・サブスクはON DELETE CASCADEで連動削除、
+// Storage上の画像・紐づくSupabase Authユーザーも即時削除する）。
+// TODO: 現状はハードデリート。将来的にはfamiliesにもソフトデリート（14日間の復元猶予）を導入予定。
+export async function deleteFamily(familyId: string): Promise<DeleteFamilyResult> {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/login");
+  }
+
+  try {
+    const [family] = await db.select({ id: families.id }).from(families).where(eq(families.id, familyId));
+    if (!family) {
+      return { success: false, error: "対象のファミリーが見つかりません。" };
+    }
+
+    const familyMembers = await db
+      .select({ authUserId: members.authUserId })
+      .from(members)
+      .where(eq(members.familyId, familyId));
+
+    const adminClient = createSupabaseServerClient();
+
+    const { data: storageObjects, error: listError } = await adminClient.storage
+      .from(CLOTHES_STORAGE_BUCKET)
+      .list(familyId);
+    if (listError) {
+      console.error("Failed to list storage objects for family:", familyId, listError);
+    } else if (storageObjects && storageObjects.length > 0) {
+      const paths = storageObjects.map((object) => `${familyId}/${object.name}`);
+      const { error: removeError } = await adminClient.storage.from(CLOTHES_STORAGE_BUCKET).remove(paths);
+      if (removeError) {
+        console.error("Failed to remove storage objects for family:", familyId, removeError);
+      }
+    }
+
+    await Promise.all(
+      familyMembers
+        .filter((m) => m.authUserId)
+        .map(async (m) => {
+          const { error } = await adminClient.auth.admin.deleteUser(m.authUserId!);
+          if (error) {
+            console.error("Failed to delete auth user:", m.authUserId, error);
+          }
+        })
+    );
+
+    await db.delete(families).where(eq(families.id, familyId));
+
+    revalidatePath("/");
+    revalidatePath("/members");
+  } catch (error) {
+    console.error("Failed to delete family:", familyId, error);
+    return { success: false, error: "削除に失敗しました。時間をおいて再度お試しください。" };
+  }
+
+  // redirect()は内部的に例外を投げてナビゲーションするため、上のtry/catchの外で呼ぶ
+  // （catch内で捕捉するとリダイレクトがエラー扱いされてしまう）
+  redirect("/");
 }

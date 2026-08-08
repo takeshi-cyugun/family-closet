@@ -8,6 +8,7 @@ export interface SignupOwnerInput {
   email: string;
   password: string;
   plan: 'chest' | 'walk_in';
+  language: string;
 }
 
 export type SignupOwnerResult = { success: true } | { success: false; error: string };
@@ -41,6 +42,7 @@ export async function signupOwner(input: SignupOwnerInput): Promise<SignupOwnerR
       data: {
         plan: input.plan,
         guestFamilyId,
+        language: input.language,
       },
     },
   });

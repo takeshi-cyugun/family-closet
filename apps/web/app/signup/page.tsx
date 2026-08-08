@@ -64,6 +64,7 @@ export default function SignupPage() {
     const supabase = getSupabaseBrowserClient();
     const redirectTo = new URL("/auth/google/callback", window.location.origin);
     redirectTo.searchParams.set("plan", plan);
+    redirectTo.searchParams.set("language", language);
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -100,7 +101,7 @@ export default function SignupPage() {
 
     setSubmitError(null);
     setSubmitting(true);
-    const result = await signupOwner({ email, password, plan });
+    const result = await signupOwner({ email, password, plan, language });
     setSubmitting(false);
 
     if (!result.success) {
