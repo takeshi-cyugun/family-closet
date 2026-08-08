@@ -102,7 +102,7 @@ const ja: SettingsDictionary = {
   memberSection: {
     heading: "家族メンバー管理",
     role: { admin: "代表者", member: "メンバー" },
-    countLabel: (count, limit) => `${count} / ${limit}名`,
+    countLabel: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}名` : `${count} / 無制限`,
     addedNotice: (memberId) => `メンバー「${memberId}」を追加しました。`,
     initialPasswordLabel: "初期パスワード：",
     passwordNotice: "このパスワードをメンバーに伝えてください。初回ログイン時に変更が必要です。",
@@ -154,8 +154,8 @@ const ja: SettingsDictionary = {
     },
     memberCountLabel: "メンバー数",
     itemCountLabel: "登録着数",
-    memberCountValue: (count, limit) => `${count} / ${limit}名`,
-    itemCountValue: (count, limit) => `${count} / ${limit}着`,
+    memberCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}名` : `${count} / 無制限`,
+    itemCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}着` : `${count} / 無制限`,
     upgradeCta: "プランをアップグレード",
   },
 };
@@ -183,7 +183,7 @@ const en: SettingsDictionary = {
   memberSection: {
     heading: "Family Members",
     role: { admin: "Owner", member: "Member" },
-    countLabel: (count, limit) => `${count} / ${limit} members`,
+    countLabel: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit} members` : `${count} / Unlimited members`,
     addedNotice: (memberId) => `Member "${memberId}" has been added.`,
     initialPasswordLabel: "Initial password: ",
     passwordNotice: "Share this password with the member. It must be changed at first login.",
@@ -235,8 +235,8 @@ const en: SettingsDictionary = {
     },
     memberCountLabel: "Members",
     itemCountLabel: "Registered items",
-    memberCountValue: (count, limit) => `${count} / ${limit} members`,
-    itemCountValue: (count, limit) => `${count} / ${limit} items`,
+    memberCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit} members` : `${count} / Unlimited members`,
+    itemCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit} items` : `${count} / Unlimited items`,
     upgradeCta: "Upgrade plan",
   },
 };
@@ -264,7 +264,7 @@ const zhCN: SettingsDictionary = {
   memberSection: {
     heading: "家庭成员管理",
     role: { admin: "代表人", member: "成员" },
-    countLabel: (count, limit) => `${count} / ${limit}人`,
+    countLabel: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}人` : `${count} / 无限`,
     addedNotice: (memberId) => `已添加成员「${memberId}」。`,
     initialPasswordLabel: "初始密码：",
     passwordNotice: "请将此密码告知该成员。首次登录时需要修改密码。",
@@ -316,8 +316,8 @@ const zhCN: SettingsDictionary = {
     },
     memberCountLabel: "成员数",
     itemCountLabel: "登记衣物数",
-    memberCountValue: (count, limit) => `${count} / ${limit}人`,
-    itemCountValue: (count, limit) => `${count} / ${limit}件`,
+    memberCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}人` : `${count} / 无限`,
+    itemCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}件` : `${count} / 无限`,
     upgradeCta: "升级套餐",
   },
 };
@@ -345,7 +345,7 @@ const zhTW: SettingsDictionary = {
   memberSection: {
     heading: "家庭成員管理",
     role: { admin: "代表人", member: "成員" },
-    countLabel: (count, limit) => `${count} / ${limit}人`,
+    countLabel: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}人` : `${count} / 無限`,
     addedNotice: (memberId) => `已新增成員「${memberId}」。`,
     initialPasswordLabel: "初始密碼：",
     passwordNotice: "請將此密碼告知該成員。首次登入時需要修改密碼。",
@@ -397,8 +397,8 @@ const zhTW: SettingsDictionary = {
     },
     memberCountLabel: "成員數",
     itemCountLabel: "登記衣物數",
-    memberCountValue: (count, limit) => `${count} / ${limit}人`,
-    itemCountValue: (count, limit) => `${count} / ${limit}件`,
+    memberCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}人` : `${count} / 無限`,
+    itemCountValue: (count, limit) => Number.isFinite(limit) ? `${count} / ${limit}件` : `${count} / 無限`,
     upgradeCta: "升級方案",
   },
 };

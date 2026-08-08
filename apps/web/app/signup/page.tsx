@@ -6,6 +6,7 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { useLanguage } from "../_lib/LanguageContext";
 import { getSignupDictionary } from "./_lib/i18n";
 import { signupOwner } from "../actions/signupOwner";
+import { getSupabaseBrowserClient } from "../_lib/supabaseBrowserClient";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
@@ -38,7 +39,8 @@ export default function SignupPage() {
   const t = getSignupDictionary(language);
 
   const [step, setStep] = useState<Step>("choose");
-  const [googleNotice, setGoogleNotice] = useState(false);
+  const [googleSubmitting, setGoogleSubmitting] = useState(false);
+  const [googleError, setGoogleError] = useState<string | null>(null);
   const [agreeTerms, setAgreeTerms] = useState(false);
 
   const [email, setEmail] = useState("");
@@ -51,12 +53,28 @@ export default function SignupPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   function handleChooseEmail() {
-    setGoogleNotice(false);
+    setGoogleError(null);
     setStep("email");
   }
 
-  function handleChooseGoogle() {
-    setGoogleNotice(true);
+  async function handleChooseGoogle() {
+    setGoogleError(null);
+    setGoogleSubmitting(true);
+
+    const supabase = getSupabaseBrowserClient();
+    const redirectTo = new URL("/auth/google/callback", window.location.origin);
+    redirectTo.searchParams.set("plan", plan);
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: redirectTo.toString() },
+    });
+
+    if (error) {
+      setGoogleSubmitting(false);
+      setGoogleError(t.methodChoice.googleError);
+    }
+    // 成功時はブラウザがGoogleへリダイレクトするため、ここでは何もしない
   }
 
   function handleBack() {
@@ -213,7 +231,7 @@ export default function SignupPage() {
               <button
                 type="button"
                 onClick={handleChooseGoogle}
-                disabled={!agreeTerms}
+                disabled={!agreeTerms || googleSubmitting}
                 className="flex flex-col items-center justify-center gap-2 rounded-lg border border-linen bg-white px-3 py-8 text-center disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <span
@@ -222,12 +240,14 @@ export default function SignupPage() {
                 >
                   G
                 </span>
-                <span className="text-sm font-medium text-ink">{t.methodChoice.googleButton}</span>
+                <span className="text-sm font-medium text-ink">
+                  {googleSubmitting ? t.methodChoice.googleRedirecting : t.methodChoice.googleButton}
+                </span>
                 <span className="text-xs text-ink-soft">{t.methodChoice.googleDescription}</span>
               </button>
             </div>
 
-            {googleNotice && <p className="text-xs text-ink-faint">{t.methodChoice.googlePlaceholder}</p>}
+            {googleError && <p className="text-xs text-red-600 dark:text-red-400">{googleError}</p>}
           </div>
         </AnimatedPanel>
 

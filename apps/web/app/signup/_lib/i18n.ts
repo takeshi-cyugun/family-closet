@@ -10,7 +10,8 @@ export type SignupDictionary = {
     emailDescription: string;
     googleButton: string;
     googleDescription: string;
-    googlePlaceholder: string;
+    googleRedirecting: string;
+    googleError: string;
   };
   agree: {
     prefix: string;
@@ -63,7 +64,8 @@ const ja: SignupDictionary = {
     emailDescription: "自分で決めたパスワードでしっかり管理できます",
     googleButton: "Googleで登録",
     googleDescription: "パスワード入力不要、ワンタップですぐ始められます",
-    googlePlaceholder: "Google認証は準備中です（このページはUIトライアルです）",
+    googleRedirecting: "Googleに接続中...",
+    googleError: "Google認証を開始できませんでした。もう一度お試しください。",
   },
   agree: {
     prefix: "",
@@ -116,7 +118,8 @@ const en: SignupDictionary = {
     emailDescription: "Set your own password and stay in full control",
     googleButton: "Sign up with Google",
     googleDescription: "No password needed — get started in one tap",
-    googlePlaceholder: "Google sign-in is coming soon (this page is a UI trial).",
+    googleRedirecting: "Connecting to Google...",
+    googleError: "Couldn't start Google sign-in. Please try again.",
   },
   agree: {
     prefix: "I agree to the ",
@@ -169,7 +172,8 @@ const zhCN: SignupDictionary = {
     emailDescription: "自行设置密码，安全可控",
     googleButton: "使用Google注册",
     googleDescription: "无需输入密码，一键即可开始",
-    googlePlaceholder: "Google登录功能正在开发中（此页面为UI试用）。",
+    googleRedirecting: "正在连接Google...",
+    googleError: "无法启动Google登录，请重试。",
   },
   agree: {
     prefix: "我同意",
@@ -222,7 +226,8 @@ const zhTW: SignupDictionary = {
     emailDescription: "自行設定密碼，安全可控",
     googleButton: "使用Google註冊",
     googleDescription: "無需輸入密碼，一鍵即可開始",
-    googlePlaceholder: "Google登入功能開發中（此頁面為UI試用）。",
+    googleRedirecting: "正在連接Google...",
+    googleError: "無法啟動Google登入，請重試。",
   },
   agree: {
     prefix: "我同意",
