@@ -15,6 +15,34 @@ function PlanBadge({ planType }: { planType: string }) {
   );
 }
 
+const SUBSCRIPTION_STATUS_LABEL: Record<string, string> = {
+  active: "契約中",
+  canceled: "退会",
+  cancelled: "退会",
+  past_due: "支払い遅延",
+};
+
+function StatusBadge({ isGuest, subscriptionStatus }: { isGuest: boolean; subscriptionStatus: string | null }) {
+  if (isGuest) {
+    return (
+      <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">お試し中</span>
+    );
+  }
+
+  const status = subscriptionStatus ?? "";
+  const label = SUBSCRIPTION_STATUS_LABEL[status] ?? status ?? "—";
+  const colorClass =
+    status === "active"
+      ? "bg-emerald-100 text-emerald-700"
+      : status === "canceled" || status === "cancelled"
+        ? "bg-neutral-200 text-neutral-600"
+        : status === "past_due"
+          ? "bg-red-100 text-red-700"
+          : "bg-neutral-100 text-neutral-700";
+
+  return <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${colorClass}`}>{label}</span>;
+}
+
 function LanguageFlag({ language }: { language: string | null }) {
   if (!language) return <span className="text-neutral-300">—</span>;
   const Flag = LANGUAGE_FLAGS[language];
@@ -45,6 +73,7 @@ export function FamiliesTable({ families }: { families: FamilyListItem[] }) {
             <th className="px-4 py-3 font-medium">メンバー数</th>
             <th className="px-4 py-3 font-medium">言語</th>
             <th className="px-4 py-3 font-medium">プラン</th>
+            <th className="px-4 py-3 font-medium">状態</th>
             <th className="px-4 py-3 font-medium">登録日時</th>
           </tr>
         </thead>
@@ -67,6 +96,9 @@ export function FamiliesTable({ families }: { families: FamilyListItem[] }) {
               </td>
               <td className="px-4 py-3">
                 <PlanBadge planType={family.planType} />
+              </td>
+              <td className="px-4 py-3">
+                <StatusBadge isGuest={family.isGuest} subscriptionStatus={family.subscriptionStatus} />
               </td>
               <td className="px-4 py-3 text-neutral-500">{formatDateTime(family.createdAt)}</td>
             </tr>

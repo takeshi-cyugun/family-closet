@@ -223,7 +223,7 @@ export async function deleteFamily(familyId: string): Promise<DeleteFamilyResult
 
     await db.delete(families).where(eq(families.id, familyId));
 
-    revalidatePath("/");
+    revalidatePath("/families");
     revalidatePath("/members");
   } catch (error) {
     console.error("Failed to delete family:", familyId, error);
@@ -232,5 +232,5 @@ export async function deleteFamily(familyId: string): Promise<DeleteFamilyResult
 
   // redirect()は内部的に例外を投げてナビゲーションするため、上のtry/catchの外で呼ぶ
   // （catch内で捕捉するとリダイレクトがエラー扱いされてしまう）
-  redirect("/");
+  redirect("/families");
 }

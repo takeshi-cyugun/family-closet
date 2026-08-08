@@ -1,40 +1,39 @@
-import { getFamilies, type FamilyFilters as FamilyFiltersType } from "../actions/families";
-import { parsePageSize } from "../_lib/pagination";
-import { FamiliesTable } from "./_components/FamiliesTable";
-import { FamilyFilters } from "./_components/FamilyFilters";
-import { PageSizeSelect } from "./_components/PageSizeSelect";
-import { Pagination } from "./_components/Pagination";
+import { getDashboardStats } from "../actions/dashboard";
+import { HorizontalBarChart, TrendBarChart } from "./_components/charts/BarChart";
+import { ChartCard } from "./_components/charts/ChartCard";
+import { PieChart } from "./_components/charts/PieChart";
+import { StatTile } from "./_components/charts/StatTile";
 
-export default async function FamiliesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    page?: string;
-    pageSize?: string;
-    keyword?: string;
-    planType?: string;
-  }>;
-}) {
-  const { page: pageParam, pageSize: pageSizeParam, keyword, planType } = await searchParams;
-  const requestedPage = Math.max(1, Number(pageParam) || 1);
-  const requestedPageSize = parsePageSize(pageSizeParam);
-  const filters: FamilyFiltersType = {
-    keyword: keyword || undefined,
-    planType: planType || undefined,
-  };
-  const { items, totalCount, page, pageSize } = await getFamilies(requestedPage, requestedPageSize, filters);
-  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
-  const filterQuery = { keyword: filters.keyword, planType: filters.planType };
+export default async function DashboardPage() {
+  const stats = await getDashboardStats();
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold">ファミリー一覧（{totalCount}件）</h2>
-        <PageSizeSelect pageSize={pageSize} basePath="/" filters={filterQuery} />
+      <h2 className="mb-4 text-xl font-bold">ダッシュボード</h2>
+
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <StatTile label="総ファミリー数" value={stats.totalFamilies} />
+        <StatTile label="総メンバー数" value={stats.totalMembers} />
+        <StatTile label="総登録アイテム数" value={stats.totalClothes} />
       </div>
-      <FamilyFilters keyword={filters.keyword} planType={filters.planType} pageSize={pageSize} />
-      <FamiliesTable families={items} />
-      <Pagination currentPage={page} totalPages={totalPages} pageSize={pageSize} basePath="/" filters={filterQuery} />
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <ChartCard title="プラン別ファミリー数" data={stats.planCounts}>
+          <PieChart data={stats.planCounts} />
+        </ChartCard>
+
+        <ChartCard title="状態別ファミリー数" data={stats.statusCounts}>
+          <PieChart data={stats.statusCounts} />
+        </ChartCard>
+
+        <ChartCard title="言語別ファミリー数" data={stats.languageCounts}>
+          <HorizontalBarChart data={stats.languageCounts} />
+        </ChartCard>
+
+        <ChartCard title="新規ファミリー登録数（直近14日間）" data={stats.registrationsByDay}>
+          <TrendBarChart data={stats.registrationsByDay} />
+        </ChartCard>
+      </div>
     </div>
   );
 }

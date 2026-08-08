@@ -19,6 +19,8 @@ export const clothesStatusEnum = pgEnum('clothes_status', [
   'disposed',
 ]);
 export const planTypeEnum = pgEnum('plan_type', ['fitting', 'chest', 'walk_in']);
+export const systemLogTypeEnum = pgEnum('system_log_type', ['notification', 'incident']);
+export const systemLogSeverityEnum = pgEnum('system_log_severity', ['info', 'warning', 'critical']);
 
 // 1. ファミリー (families)
 export const families = pgTable('families', {
@@ -98,6 +100,16 @@ export const subscriptions = pgTable('subscriptions', {
 export const loginAttempts = pgTable('login_attempts', {
   id: uuid('id').primaryKey().defaultRandom(),
   identifier: text('identifier').notNull(), // 例: "account:familyId:memberId" / "ip:1.2.3.4"
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// 6. 通知・障害ログ (system_logs) — 運営者(App Admin)が手動で記録するお知らせ・障害の履歴
+export const systemLogs = pgTable('system_logs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  type: systemLogTypeEnum('type').notNull(), // 'notification': お知らせ通知 / 'incident': 障害
+  severity: systemLogSeverityEnum('severity').default('info').notNull(),
+  title: text('title').notNull(),
+  body: text('body'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 

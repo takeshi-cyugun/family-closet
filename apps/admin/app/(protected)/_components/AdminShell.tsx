@@ -6,8 +6,10 @@ import { useState } from "react";
 import { useMaintenanceStatus } from "./MaintenanceStatusContext";
 
 const NAV_ITEMS = [
-  { href: "/", label: "ファミリー一覧" },
+  { href: "/", label: "ダッシュボード" },
+  { href: "/families", label: "ファミリー一覧" },
   { href: "/members", label: "メンバー履歴" },
+  { href: "/logs", label: "通知・障害ログ" },
   { href: "/maintenance", label: "メンテナンスモード" },
 ];
 
@@ -35,15 +37,15 @@ export function AdminShell({
   const { isMaintenanceActive } = useMaintenanceStatus();
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <header className="flex items-center justify-between border-b border-black/10 bg-white px-4 py-4">
+    <div className="min-h-screen bg-sky-50">
+      <header className="flex items-center justify-between border-b border-sky-200 bg-sky-100 px-4 py-4">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setSidebarOpen((prev) => !prev)}
             aria-label="メニューを開閉"
             aria-expanded={sidebarOpen}
-            className="rounded-md p-2 text-neutral-500 hover:bg-neutral-100 hover:text-black"
+            className="rounded-md p-2 text-neutral-500 hover:bg-sky-200/60 hover:text-black"
           >
             <HamburgerIcon />
           </button>
@@ -66,7 +68,7 @@ export function AdminShell({
       <div className="flex">
         <aside
           aria-hidden={!sidebarOpen}
-          className={`shrink-0 overflow-hidden border-black/10 bg-white transition-[width,padding,opacity] duration-500 ease-in-out ${
+          className={`shrink-0 overflow-hidden border-sky-200 bg-white transition-[width,padding,opacity] duration-500 ease-in-out ${
             sidebarOpen ? "w-56 border-r p-4 opacity-100" : "w-0 border-r-0 p-0 opacity-0"
           }`}
         >
@@ -79,7 +81,7 @@ export function AdminShell({
                   href={item.href}
                   tabIndex={sidebarOpen ? undefined : -1}
                   className={`rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap ${
-                    active ? "bg-neutral-900 text-white" : "text-neutral-600 hover:bg-neutral-100"
+                    active ? "bg-sky-600 text-white" : "text-neutral-600 hover:bg-sky-50"
                   }`}
                 >
                   {item.label}

@@ -21,7 +21,7 @@ export default async function FamilyDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div className="mx-auto max-w-4xl">
-      <Link href="/" className="text-sm text-neutral-500 hover:text-black">
+      <Link href="/families" className="text-sm text-neutral-500 hover:text-black">
         ← ファミリー一覧に戻る
       </Link>
 

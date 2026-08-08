@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-100">
+    <div className="flex min-h-screen items-center justify-center bg-sky-50">
       <form
         onSubmit={handleSubmit}
         noValidate
